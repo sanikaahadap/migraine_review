@@ -1,0 +1,64 @@
+import 'package:flutter/material.dart';
+import 'package:neurooooo/intro_screens/intro_page_1.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+
+import 'package:neurooooo/intro_screens/intro_page_2.dart';
+import 'package:neurooooo/intro_screens/intro_page_3.dart';
+import 'package:neurooooo/intro_screens/intro_page_4.dart';
+import 'package:neurooooo/intro_screens/intro_page_5.dart';
+
+class OnBoardingScreen extends StatefulWidget{
+  const OnBoardingScreen({Key? key}) : super(key: key);
+
+  _OnBoardingScreenState createState() => _OnBoardingScreenState();
+}
+
+
+class _OnBoardingScreenState extends State<OnBoardingScreen> {
+
+  //controller to keep track of which page we're on
+  PageController _controller = PageController();
+
+  Widget build(BuildContext context){
+    return Scaffold(
+      body: Stack(
+        children: [
+          PageView(
+            controller: _controller,
+            children: [
+              IntroPage1(),
+              IntroPage2(),
+              IntroPage3(),
+              IntroPage4(),
+              IntroPage5(),
+
+
+            ],
+          ),
+
+          //dot indicator
+          Container(
+              alignment: Alignment(0,0.75),
+
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+
+                children: [
+
+                  SmoothPageIndicator(
+                      controller: _controller,
+                      count: 5,
+                      effect: WormEffect(
+                        dotWidth: 10.0, // Set the width of the dots
+                        dotHeight: 10.0, // Set the height of the dots
+                        )
+                  ),
+                ],
+              )
+          ),
+        ],
+      ),
+    );
+  }
+
+}
