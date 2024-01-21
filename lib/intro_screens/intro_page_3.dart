@@ -22,7 +22,7 @@ class IntroPage3 extends StatelessWidget {
               padding: const EdgeInsets.all(0.0),
               child: Text(
                 textAlign: TextAlign.center,
-                'Personalised Reminders',
+                'Personalized Reminders',
                 style: TextStyle(
                   decoration: TextDecoration.none,
                   fontWeight: FontWeight.bold,
@@ -40,7 +40,7 @@ class IntroPage3 extends StatelessWidget {
                 style: TextStyle(
                   decoration: TextDecoration.none,
                   color: Colors.grey[700], // Adjust the text color as needed
-                  fontSize: 15.0,
+                  fontSize: 12.0,
                 ),
               ),
             ),
