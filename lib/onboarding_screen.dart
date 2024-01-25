@@ -38,7 +38,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
 
           //dot indicator
           Container(
-              alignment: Alignment(0,0.75),
+              alignment: const Alignment(0,0.75),
 
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -48,7 +48,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                   SmoothPageIndicator(
                       controller: _controller,
                       count: 5,
-                      effect: WormEffect(
+                      effect: const WormEffect(
                         dotWidth: 10.0, // Set the width of the dots
                         dotHeight: 10.0, // Set the height of the dots
                         )

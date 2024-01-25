@@ -15,12 +15,12 @@ class _SlideButtonState extends State<SlideButton>
   void initState() {
     super.initState();
     _controller = AnimationController(
-      duration: Duration(seconds: 1),
+      duration: const Duration(seconds: 1),
       vsync: this,
     );
 
     _offsetAnimation = Tween<Offset>(
-      begin: Offset(0.0, 1.0),
+      begin: const Offset(0.0, 1.0),
       end: Offset.zero,
     ).animate(
       CurvedAnimation(
@@ -45,10 +45,10 @@ class _SlideButtonState extends State<SlideButton>
           );
         },
         style: ElevatedButton.styleFrom(
-          padding: EdgeInsets.symmetric(horizontal: 25.0, vertical: 12.0),
-          backgroundColor: Color(0xFF16666B),
+          padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 12.0),
+          backgroundColor: const Color(0xFF16666B),
         ),
-        child: Text(
+        child: const Text(
           'Get Started',
           style: TextStyle(
             color: Colors.white,

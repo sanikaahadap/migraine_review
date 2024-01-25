@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatefulWidget {
+class SignUpPage extends StatefulWidget {
   @override
-  _LoginPageState createState() => _LoginPageState();
+  _SignUpPageState createState() => _SignUpPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _SignUpPageState extends State<SignUpPage> {
   bool _isButtonPressed = false;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _dobController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -25,16 +28,31 @@ class _LoginPageState extends State<LoginPage> {
               key: _formKey,
               child: Column(
                 children: [
-                  const SizedBox(height: 20.0),
                   // Logo image
                   Image.asset(
                     'assets/images/logo.png',
                     height: MediaQuery.of(context).size.height * 0.15,
                     fit: BoxFit.contain,
                   ),
-
                   const SizedBox(height: 30.0),
-
+                  // Name field
+                  TextFormField(
+                    controller: _nameController,
+                    decoration: const InputDecoration(
+                      labelText: 'Name',
+                      border: OutlineInputBorder(),
+                      filled: true,
+                      fillColor: Color(0x80B2EBF2),
+                      contentPadding: EdgeInsets.fromLTRB(12.0, 15.0, 12.0, 15.0),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your name';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 16.0),
                   // Email field
                   TextFormField(
                     controller: _emailController,
@@ -42,7 +60,7 @@ class _LoginPageState extends State<LoginPage> {
                       labelText: 'Email',
                       border: OutlineInputBorder(),
                       filled: true,
-                      fillColor: Color(0x80B2EBF2), // Half lighter tint of the background color
+                      fillColor: Color(0x80B2EBF2),
                       contentPadding: EdgeInsets.fromLTRB(12.0, 15.0, 12.0, 15.0),
                     ),
                     keyboardType: TextInputType.emailAddress,
@@ -53,9 +71,27 @@ class _LoginPageState extends State<LoginPage> {
                       return null;
                     },
                   ),
-
                   const SizedBox(height: 16.0),
-
+                  // Date of Birth field
+                  TextFormField(
+                    controller: _dobController,
+                    decoration: const InputDecoration(
+                      labelText: 'Date of Birth',
+                      border: OutlineInputBorder(),
+                      filled: true,
+                      fillColor: Color(0x80B2EBF2),
+                      contentPadding: EdgeInsets.fromLTRB(12.0, 15.0, 12.0, 15.0),
+                    ),
+                    keyboardType: TextInputType.datetime,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your date of birth';
+                      }
+                      // You can add more specific validation for date format here if needed
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 16.0),
                   // Password field
                   TextFormField(
                     controller: _passwordController,
@@ -63,35 +99,45 @@ class _LoginPageState extends State<LoginPage> {
                       labelText: 'Password',
                       border: OutlineInputBorder(),
                       filled: true,
-                      fillColor: Color(0x80B2EBF2), // Half lighter tint of the background color
+                      fillColor: Color(0x80B2EBF2),
                       contentPadding: EdgeInsets.fromLTRB(12.0, 15.0, 12.0, 15.0),
                     ),
                     obscureText: true,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Enter a valid password';
+                        return 'Please enter a password';
                       } else if (value.length < 8) {
                         return 'Password must be at least 8 characters long';
-                      } else if (!RegExp(r'(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+{}|:;<>,.?/~`]).{8,}').hasMatch(value)) {
-                        String error = '';
-                        if (!RegExp(r'(?=.*[0-9])').hasMatch(value)) {
-                          error += 'At least one number required.\n';
-                        }
-                        if (!RegExp(r'(?=.*[!@#$%^&*()_+{}|:;<>,.?/~`])').hasMatch(value)) {
-                          error += 'At least one special symbol required.\n';
-                        }
-                        return error.trim();
                       }
                       return null;
                     },
                   ),
-
+                  const SizedBox(height: 16.0),
+                  // Confirm Password field
+                  TextFormField(
+                    controller: _confirmPasswordController,
+                    decoration: const InputDecoration(
+                      labelText: 'Confirm Password',
+                      border: OutlineInputBorder(),
+                      filled: true,
+                      fillColor: Color(0x80B2EBF2),
+                      contentPadding: EdgeInsets.fromLTRB(12.0, 15.0, 12.0, 15.0),
+                    ),
+                    obscureText: true,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please confirm your password';
+                      } else if (value != _passwordController.text) {
+                        return 'Passwords do not match';
+                      }
+                      return null;
+                    },
+                  ),
                   const SizedBox(height: 40.0),
-
-                  // Login button without affecting email and password fields
+                  // Sign Up button
                   InkWell(
                     onTap: () {
-                      _onLoginButtonPressed();
+                      _onSignUpButtonPressed();
                     },
                     onTapDown: (_) {
                       setState(() {
@@ -109,7 +155,6 @@ class _LoginPageState extends State<LoginPage> {
                       });
                     },
                     child: AnimatedContainer(
-
                       duration: const Duration(milliseconds: 300),
                       width: 170.0,
                       height: 45.0,
@@ -119,26 +164,13 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       child: Center(
                         child: Text(
-                          'Login',
+                          'Sign Up',
                           style: TextStyle(
                             fontSize: 17.0,
                             color: _isButtonPressed ? const Color(0xFF16666B) : Colors.white,
                           ),
                         ),
                       ),
-                    ),
-                  ),
-
-                  const SizedBox(height: 20.0),
-
-                  // Forgot Password text link
-                  GestureDetector(
-                    onTap: () {
-                      // Add logic for navigating to the forgot password page
-                    },
-                    child: const Text(
-                      'Forgot Password?',
-                      style: TextStyle(color: Color(0xFF16666B)),
                     ),
                   ),
                 ],
@@ -150,9 +182,9 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  void _onLoginButtonPressed() {
+  void _onSignUpButtonPressed() {
     if (_formKey.currentState!.validate()) {
-      // Perform login logic here using _emailController.text and _passwordController.text
+      // Perform sign up logic here using form field controllers
     }
   }
 }

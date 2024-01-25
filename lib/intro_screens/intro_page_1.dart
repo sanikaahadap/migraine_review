@@ -8,7 +8,7 @@ class IntroPage1 extends StatelessWidget {
       appBar: AppBar(
         automaticallyImplyLeading: true,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -24,8 +24,8 @@ class IntroPage1 extends StatelessWidget {
               width: 250,
               height: 250,
             ),
-            SizedBox(height: 5),
-            Padding(
+            const SizedBox(height: 5),
+            const Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Text(
                 'Track And Assess',
@@ -37,7 +37,7 @@ class IntroPage1 extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Text(
@@ -49,7 +49,7 @@ class IntroPage1 extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             TextButton(
               onPressed: () {
                 Navigator.push(
@@ -57,7 +57,7 @@ class IntroPage1 extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => LoginSignupPage()), // Navigate to login_signup_page.dart
                 );
               },
-              child: Text(
+              child: const Text(
                 'Login/Sign Up',
                 style: TextStyle(
                   color: Color.fromRGBO(22, 102, 107, 1.0),
