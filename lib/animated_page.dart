@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:neurooooo/slide_button.dart';
 
 class AnimatedPage extends StatefulWidget {
@@ -46,23 +45,15 @@ class _AnimatedPageState extends State<AnimatedPage>
                   children: [
                     Image.asset(
                       'assets/images/logo.png',
-                      height: 200,
-                      width: 200,
+                      height: 190,
+                      width: 190,
+                      fit: BoxFit.contain,
                     ),
                     SizedBox(height: 0), // Adjust the spacing as needed
-                    AnimatedTextKit(
-                      animatedTexts: [
-                        TyperAnimatedText(
-                          'NeuroCare',
-                          textStyle: TextStyle(
-                            fontSize: 50.0,
-                            fontWeight: FontWeight.bold,
-                            fontStyle: FontStyle.italic,
-                            color: Color(0xFF16666B), // Text color
-                          ),
-                          speed: Duration(milliseconds: 200),
-                        ),
-                      ],
+                    Text(
+                      'NeuroCare',
+                      style: TextStyle(fontSize: 50.0, fontWeight: FontWeight.bold, color: Color(0xFF16666B)),
+                      textAlign: TextAlign.center,
                     ),
                   ],
                 ),
@@ -76,10 +67,7 @@ class _AnimatedPageState extends State<AnimatedPage>
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // Animated special shape
-
-                    // SlideButton with modified width, height, and font color
-                    SizedBox(height: 20.0), // Adjust the spacing as needed
+                     // Adjust the spacing as needed
                     SlideButton(),
                   ],
                 ),
