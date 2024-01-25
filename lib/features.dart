@@ -14,7 +14,7 @@ class Features extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Container(
-            padding: EdgeInsets.only(top: 40.0), // Adjust the top padding as needed
+            padding: const EdgeInsets.only(top: 40.0), // Adjust the top padding as needed
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -24,13 +24,13 @@ class Features extends StatelessWidget {
                   style: TextStyle(fontSize: 14.0, color: Colors.grey[700]),
                   textAlign: TextAlign.center,
                 ),
-                SizedBox(height: 16.0),
-                Text(
+                const SizedBox(height: 16.0),
+                const Text(
                   'Features Offered',
                   style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold, color: Color(0xFF16666B)),
                   textAlign: TextAlign.center,
                 ),
-                SizedBox(height: 16.0),
+                const SizedBox(height: 16.0),
                 FeatureButton(
                   imagePath: 'assets/intro_images/intro_1.png',
                   buttonText: 'Track & Assess',
@@ -81,7 +81,7 @@ class Features extends StatelessWidget {
                     );
                   },
                 ),
-                SizedBox(height: 16.0),
+                const SizedBox(height: 16.0),
                 Text(
                   'Click the buttons to know more about the features',
                   style: TextStyle(fontSize: 12.0, color: Colors.grey[700]),
@@ -95,7 +95,7 @@ class Features extends StatelessWidget {
                       MaterialPageRoute(builder: (context) => LoginSignupPage()), // Navigate to login_signup_page.dart
                     );
                   },
-                  child: Text(
+                  child: const Text(
                     'Skip to Login/Signup',
                     style: TextStyle(
                       color: Color(0xFF16666B),
@@ -131,11 +131,11 @@ class FeatureButton extends StatelessWidget {
       child: TextButton(
         onPressed: onPressed,
         style: TextButton.styleFrom(
-          padding: EdgeInsets.symmetric(horizontal: 25.0, vertical: 12.0),
+          padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 12.0),
           backgroundColor: Colors.white, // White background
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8.0), // Adjust the border radius as needed
-            side: BorderSide(color: Color(0xFF16666B)), // Outline color
+            side: const BorderSide(color: Color(0xFF16666B)), // Outline color
           ),
         ),
         child: Row(
@@ -146,10 +146,10 @@ class FeatureButton extends StatelessWidget {
               width: 50.0,
               // Adjust the height and width as needed
             ),
-            SizedBox(width: 16.0),
+            const SizedBox(width: 16.0),
             Text(
               buttonText,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 18.0,
                 color: Color(0xFF16666B), // Text color
               ),

@@ -15,7 +15,7 @@ class _AnimatedPageState extends State<AnimatedPage>
     super.initState();
 
     _controller = AnimationController(
-      duration: Duration(seconds: 2),
+      duration: const Duration(seconds: 2),
       vsync: this,
     );
 
@@ -27,7 +27,7 @@ class _AnimatedPageState extends State<AnimatedPage>
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage('assets/images/background_image.png'),
             fit: BoxFit.cover,
@@ -49,8 +49,8 @@ class _AnimatedPageState extends State<AnimatedPage>
                       width: 190,
                       fit: BoxFit.contain,
                     ),
-                    SizedBox(height: 0), // Adjust the spacing as needed
-                    Text(
+                    const SizedBox(height: 0), // Adjust the spacing as needed
+                    const Text(
                       'NeuroCare',
                       style: TextStyle(fontSize: 50.0, fontWeight: FontWeight.bold, color: Color(0xFF16666B)),
                       textAlign: TextAlign.center,

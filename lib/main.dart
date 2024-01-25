@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:neurooooo/animated_page.dart';
-import 'onboarding_screen.dart';
 
 void main() {
   runApp(const MyApp());
