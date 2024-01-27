@@ -3,10 +3,10 @@ import 'package:neurooooo/slide_button.dart';
 
 class AnimatedPage extends StatefulWidget {
   @override
-  _AnimatedPageState createState() => _AnimatedPageState();
+  AnimatedPageState createState() => AnimatedPageState();
 }
 
-class _AnimatedPageState extends State<AnimatedPage>
+class AnimatedPageState extends State<AnimatedPage>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 

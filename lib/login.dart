@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:neurooooo/signup.dart';
 
 class LoginPage extends StatefulWidget {
   @override
-  _LoginPageState createState() => _LoginPageState();
+  LoginPageState createState() => LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class LoginPageState extends State<LoginPage> {
   bool _isButtonPressed = false;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -49,6 +51,29 @@ class _LoginPageState extends State<LoginPage> {
                     validator: (value) {
                       if (value == null || value.isEmpty || !value.contains('@')) {
                         return 'Enter a valid email address';
+                      }
+                      return null;
+                    },
+                  ),
+
+                  const SizedBox(height: 16.0),
+
+                  // Phone number field
+                  TextFormField(
+                    controller: _phoneController,
+                    decoration: const InputDecoration(
+                      labelText: 'Phone Number',
+                      border: OutlineInputBorder(),
+                      filled: true,
+                      fillColor: Color(0x80B2EBF2), // Half lighter tint of the background color
+                      contentPadding: EdgeInsets.fromLTRB(12.0, 15.0, 12.0, 15.0),
+                    ),
+                    keyboardType: TextInputType.phone,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter a phone number';
+                      } else if (!RegExp(r'^[0-9]{10}$').hasMatch(value)) {
+                        return 'Enter a valid 10-digit phone number';
                       }
                       return null;
                     },
@@ -109,7 +134,6 @@ class _LoginPageState extends State<LoginPage> {
                       });
                     },
                     child: AnimatedContainer(
-
                       duration: const Duration(milliseconds: 300),
                       width: 170.0,
                       height: 45.0,
@@ -140,6 +164,31 @@ class _LoginPageState extends State<LoginPage> {
                       'Forgot Password?',
                       style: TextStyle(color: Color(0xFF16666B)),
                     ),
+                  ),
+
+                  // Don't have an account? Create one text
+                  const SizedBox(height: 20.0),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Don't have an account? ",
+                        style: TextStyle(color: Colors.grey[700]), // Dark gray color
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          // Navigate to SignUpPage
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const SignUpPage()),
+                          );
+                        },
+                        child: const Text(
+                          'Create one',
+                          style: TextStyle(color: Color(0xFF16666B)), // Color #16666B
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
