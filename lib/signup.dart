@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:neurooooo/login.dart';
+import 'package:intl/intl.dart';
 
 class SignUpPage extends StatefulWidget {
+  const SignUpPage({Key? key}) : super(key: key);
   @override
-  _SignUpPageState createState() => _SignUpPageState();
+  SignUpPageState createState() => SignUpPageState();
 }
 
-class _SignUpPageState extends State<SignUpPage> {
+class SignUpPageState extends State<SignUpPage> {
   bool _isButtonPressed = false;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _nameController = TextEditingController();
@@ -13,6 +16,53 @@ class _SignUpPageState extends State<SignUpPage> {
   final TextEditingController _dobController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
+  DateTime? _selectedDate; // Nullable DateTime
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: ThemeData.light().copyWith(
+            colorScheme: const ColorScheme.light(
+              primary: Color(0xFF16666B),
+              onPrimary: Colors.white,
+              surface: Color(0xFFE6E6E6), // Use a very light tone of #16666B
+              onSurface: Colors.black, // Adjust text color if needed
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+    if (picked != null && picked != _selectedDate) {
+      setState(() {
+        _selectedDate = picked;
+        _dobController.text =
+            DateFormat('yyyy-MM-dd').format(_selectedDate!); // Formatting date
+      });
+    }
+  }
+
+  String? _validateBirthDate(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter your date of birth';
+    }
+    try {
+      DateFormat('yyyy-MM-dd').parse(value);
+    } catch (e) {
+      return 'Please enter a valid date in the format yyyy-MM-dd';
+    }
+    // Additional validation: Check if the selected date is in the past
+    if (_selectedDate == null || _selectedDate!.isAfter(DateTime.now())) {
+      return 'Please select a valid date in the past';
+    }
+    return null;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +84,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     height: MediaQuery.of(context).size.height * 0.15,
                     fit: BoxFit.contain,
                   ),
-                  const SizedBox(height: 30.0),
+                  const SizedBox(height: 20.0),
                   // Name field
                   TextFormField(
                     controller: _nameController,
@@ -72,6 +122,27 @@ class _SignUpPageState extends State<SignUpPage> {
                     },
                   ),
                   const SizedBox(height: 16.0),
+                  // Phone number field
+                  TextFormField(
+                    controller: _phoneController,
+                    decoration: const InputDecoration(
+                      labelText: 'Phone Number',
+                      border: OutlineInputBorder(),
+                      filled: true,
+                      fillColor: Color(0x80B2EBF2),
+                      contentPadding: EdgeInsets.fromLTRB(12.0, 15.0, 12.0, 15.0),
+                    ),
+                    keyboardType: TextInputType.phone,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your phone number';
+                      } else if (!RegExp(r'^[0-9]{10}$').hasMatch(value)) {
+                        return 'Enter a valid 10-digit phone number';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 16.0),
                   // Date of Birth field
                   TextFormField(
                     controller: _dobController,
@@ -83,13 +154,11 @@ class _SignUpPageState extends State<SignUpPage> {
                       contentPadding: EdgeInsets.fromLTRB(12.0, 15.0, 12.0, 15.0),
                     ),
                     keyboardType: TextInputType.datetime,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter your date of birth';
-                      }
-                      // You can add more specific validation for date format here if needed
-                      return null;
+                    onTap: () {
+                      _selectDate(context);
                     },
+                    readOnly: true,
+                    validator: _validateBirthDate,
                   ),
                   const SizedBox(height: 16.0),
                   // Password field
@@ -133,7 +202,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       return null;
                     },
                   ),
-                  const SizedBox(height: 40.0),
+                  const SizedBox(height: 12.0),
                   // Sign Up button
                   InkWell(
                     onTap: () {
@@ -172,6 +241,29 @@ class _SignUpPageState extends State<SignUpPage> {
                         ),
                       ),
                     ),
+                  ),
+                  const SizedBox(height: 1.0),
+                  // Already have an account? Login text
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        'Already have an account?',
+                        style: TextStyle(color: Colors.grey[700]), // Dark gray color
+                      ),
+
+                      TextButton(
+                        onPressed: () {
+                          // Navigate to login page
+                          Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => LoginPage()),);
+                        },
+                        child: const Text(
+                          'Login',
+                          style: TextStyle(color: Color(0xFF16666B)), // Color #16666B
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
