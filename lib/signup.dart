@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -13,6 +16,29 @@ class _SignUpPageState extends State<SignUpPage> {
   final TextEditingController _dobController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController = TextEditingController();
+
+  void createAccount() async {
+    String email = _emailController.text.trim();
+    String password = _passwordController.text.trim();
+    String cPassword = _confirmPasswordController.text.trim();
+
+    if(email == "" || password == "" || cPassword == "") {
+      log("Please fill all the details!");
+    }
+    else if(password != cPassword) {
+      log("Passwords do not match!");
+    }
+    else {
+      try {
+        UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password);
+        if(userCredential.user != null) {
+          Navigator.pop(context);
+        }
+      } on FirebaseAuthException catch(ex) {
+        log(ex.code.toString());
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -185,6 +211,7 @@ class _SignUpPageState extends State<SignUpPage> {
   void _onSignUpButtonPressed() {
     if (_formKey.currentState!.validate()) {
       // Perform sign up logic here using form field controllers
+      createAccount();
     }
   }
 }

@@ -1,4 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'dart:developer';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:neurooooo/features.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -10,6 +14,30 @@ class _LoginPageState extends State<LoginPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+
+  void login() async {
+    String email = _emailController.text.trim();
+    String password = _passwordController.text.trim();
+
+    if(email == "" || password == "") {
+      log("Please fill all the fields!");
+    }
+    else {
+      try {
+        UserCredential userCredential = await FirebaseAuth.instance
+            .signInWithEmailAndPassword(email: email, password: password);
+        if (userCredential.user != null) {
+          Navigator.popUntil(context, (route) => route.isFirst);
+          Navigator.pushReplacement(context, CupertinoPageRoute(
+              builder: (context) => Features()
+          )
+          );
+        }
+      } on FirebaseAuthException catch (ex) {
+        log(ex.code.toString());
+      }
+    }
+      }
 
   @override
   Widget build(BuildContext context) {
@@ -153,6 +181,7 @@ class _LoginPageState extends State<LoginPage> {
   void _onLoginButtonPressed() {
     if (_formKey.currentState!.validate()) {
       // Perform login logic here using _emailController.text and _passwordController.text
+      login();
     }
   }
 }

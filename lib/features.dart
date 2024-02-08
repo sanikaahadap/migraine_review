@@ -10,7 +10,8 @@ class Features extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
+      body: SingleChildScrollView(
+      child: Center(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Container(
@@ -109,6 +110,7 @@ class Features extends StatelessWidget {
           ),
         ),
       ),
+    ),
     );
   }
 }
@@ -140,11 +142,13 @@ class FeatureButton extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Image.asset(
-              imagePath,
-              height: 50.0,
-              width: 50.0,
-              // Adjust the height and width as needed
+            Flexible(
+              child : Image.asset(
+                imagePath,
+                height: 50.0,
+                width: 50.0,
+                // Adjust the height and width as needed
+              ),
             ),
             const SizedBox(width: 16.0),
             Text(
