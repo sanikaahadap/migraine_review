@@ -31,6 +31,11 @@ dependencies:
   flutter_launcher_icons: ^0.13.1
   flutter:
     sdk: flutter
+  intl: ^0.17.0
+  table_calendar: ^3.0.1
+  firebase_core: 2.25.4
+  firebase_auth: ^4.17.4
+  cloud_firestore: ^4.15.4
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -71,6 +76,9 @@ flutter:
     - assets/intro_images/intro_1.png
     - assets/images/background_image.png
     - assets/images/logo.png
+    - assets/images/home.png
+    - assets/images/plus.png
+    - assets/images/midas_bg.png
 
 
   # To add assets to your application, add an assets section, like this:

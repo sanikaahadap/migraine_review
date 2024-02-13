@@ -1,8 +1,10 @@
 import 'dart:developer';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:neurooooo/login.dart';
+import 'package:neurooooo/userinfopage.dart';
 import 'package:intl/intl.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -82,11 +84,35 @@ class SignUpPageState extends State<SignUpPage> {
       try {
         UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password);
         if(userCredential.user != null) {
-          Navigator.pop(context);
+          log("User created successfully"); // Add this log
+          Navigator.push(context, MaterialPageRoute(builder: (context) => UserInfoPage()));
         }
       } on FirebaseAuthException catch(ex) {
-        log(ex.code.toString());
+        log("FirebaseAuthException: ${ex.code}"); // Add this log
+      } catch (e) {
+        log("Error: $e"); // Add this log
       }
+    }
+  }
+
+  void saveUser(){
+    String name = _nameController.text.trim();
+    String email = _emailController.text.trim();
+    String dob = _dobController.text.trim();
+    String phone = _phoneController.text.trim();
+
+    if(name != "" && email != "" && phone != "" && dob != "") {
+      Map<String, dynamic> userData = {
+        "name": name,
+        "email": email,
+        "phone" : phone,
+        "dob" : dob
+      };
+      FirebaseFirestore.instance.collection("users").add(userData);
+      log("User created!");
+    }
+    else{
+      log("Please fill all the fields!");
     }
   }
 
@@ -304,6 +330,7 @@ class SignUpPageState extends State<SignUpPage> {
     if (_formKey.currentState!.validate()) {
       // Perform sign up logic here using form field controllers
       createAccount();
+      saveUser();
     }
   }
 }

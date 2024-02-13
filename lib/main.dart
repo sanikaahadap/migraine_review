@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:neurooooo/animated_page.dart';
 import 'package:neurooooo/firebase_options.dart';
+import 'package:neurooooo/login.dart';
 
 void main() async  {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,6 +19,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+        routes: {
+          '/login': (context) => LoginPage(),
+        },
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(

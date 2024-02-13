@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:neurooooo/features.dart';
+import 'package:neurooooo/home.dart';
+import 'package:neurooooo/signup.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -14,30 +16,35 @@ class _LoginPageState extends State<LoginPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  bool _showInvalidCredentials = false;
 
   void login() async {
     String email = _emailController.text.trim();
     String password = _passwordController.text.trim();
 
-    if(email == "" || password == "") {
+    if (email.isEmpty || password.isEmpty) {
       log("Please fill all the fields!");
-    }
-    else {
+    } else {
       try {
-        UserCredential userCredential = await FirebaseAuth.instance
-            .signInWithEmailAndPassword(email: email, password: password);
+        UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: email,
+          password: password,
+        );
         if (userCredential.user != null) {
           Navigator.popUntil(context, (route) => route.isFirst);
-          Navigator.pushReplacement(context, CupertinoPageRoute(
-              builder: (context) => Features()
-          )
+          Navigator.pushReplacement(
+            context,
+            CupertinoPageRoute(builder: (context) => HomePage()),
           );
         }
       } on FirebaseAuthException catch (ex) {
         log(ex.code.toString());
+        setState(() {
+          _showInvalidCredentials = true;
+        });
       }
     }
-      }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,9 +67,7 @@ class _LoginPageState extends State<LoginPage> {
                     height: MediaQuery.of(context).size.height * 0.15,
                     fit: BoxFit.contain,
                   ),
-
                   const SizedBox(height: 30.0),
-
                   // Email field
                   TextFormField(
                     controller: _emailController,
@@ -81,9 +86,7 @@ class _LoginPageState extends State<LoginPage> {
                       return null;
                     },
                   ),
-
                   const SizedBox(height: 16.0),
-
                   // Password field
                   TextFormField(
                     controller: _passwordController,
@@ -113,9 +116,7 @@ class _LoginPageState extends State<LoginPage> {
                       return null;
                     },
                   ),
-
                   const SizedBox(height: 40.0),
-
                   // Login button without affecting email and password fields
                   InkWell(
                     onTap: () {
@@ -137,7 +138,6 @@ class _LoginPageState extends State<LoginPage> {
                       });
                     },
                     child: AnimatedContainer(
-
                       duration: const Duration(milliseconds: 300),
                       width: 170.0,
                       height: 45.0,
@@ -156,9 +156,12 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                   ),
-
+                  if (_showInvalidCredentials)
+                    const Text(
+                      'Invalid credentials',
+                      style: TextStyle(color: Colors.red),
+                    ),
                   const SizedBox(height: 20.0),
-
                   // Forgot Password text link
                   GestureDetector(
                     onTap: () {
@@ -169,6 +172,33 @@ class _LoginPageState extends State<LoginPage> {
                       style: TextStyle(color: Color(0xFF16666B)),
                     ),
                   ),
+                  const SizedBox(height:10),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => SignUpPage()),
+                      );
+                    },
+                    child: const Text(
+                      'Create an account',
+                      style: TextStyle(color: Color(0xFF16666B)),
+                    ),
+                  ),
+                  const SizedBox(height:150),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Features()),
+                      );
+                    },
+                    child: const Text(
+                      'Go back to tour',
+                      style: TextStyle(color: Color(0xFF16666B)),
+                    ),
+                  ),
+
                 ],
               ),
             ),
