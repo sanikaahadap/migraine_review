@@ -13,7 +13,6 @@ class OnBoardingScreen extends StatefulWidget{
   OnBoardingScreenState createState() => OnBoardingScreenState();
 }
 
-
 class OnBoardingScreenState extends State<OnBoardingScreen> {
 
   //controller to keep track of which page we're on
@@ -31,11 +30,8 @@ class OnBoardingScreenState extends State<OnBoardingScreen> {
               IntroPage3(),
               IntroPage4(),
               IntroPage5(),
-
-
             ],
           ),
-
           //dot indicator
           Container(
               alignment: const Alignment(0,0.75),
@@ -60,5 +56,4 @@ class OnBoardingScreenState extends State<OnBoardingScreen> {
       ),
     );
   }
-
 }

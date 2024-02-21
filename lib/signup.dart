@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:math' as math;
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -6,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:neurooooo/login.dart';
 import 'package:neurooooo/userinfopage.dart';
 import 'package:intl/intl.dart';
+import 'package:uuid/uuid.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
@@ -95,6 +97,41 @@ class SignUpPageState extends State<SignUpPage> {
     }
   }
 
+  String generateUniqueCode() {
+    String code = generateRandomCode();
+    bool codeExists = codeExistsInDatabase(code);
+
+    while (codeExists) {
+      code = generateRandomCode();
+      codeExists = codeExistsInDatabase(code);
+    }
+
+    return code;
+  }
+
+  String generateRandomCode() {
+    math.Random random = math.Random();
+    // Generate a random 6-digit number
+    int code = random.nextInt(900000) + 100000;
+    return code.toString();
+  }
+
+  bool codeExistsInDatabase(String code) {
+    bool exists = false;
+    FirebaseFirestore.instance
+        .collection('users')
+        .where('patient_id', isEqualTo: code)
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      if (querySnapshot.docs.isNotEmpty) {
+        exists = true; // Code exists in database
+      }
+    }).catchError((error) {
+      print('Error checking code existence: $error');
+    });
+    return exists;
+  }
+
   void saveUser(){
     String name = _nameController.text.trim();
     String email = _emailController.text.trim();
@@ -102,13 +139,15 @@ class SignUpPageState extends State<SignUpPage> {
     String phone = _phoneController.text.trim();
 
     if(name != "" && email != "" && phone != "" && dob != "") {
+      String patientId = generateUniqueCode(); // Generate unique 6-digit patient ID
       Map<String, dynamic> userData = {
         "name": name,
         "email": email,
-        "phone" : phone,
-        "dob" : dob
+        "phone": phone,
+        "dob": dob,
+        "patient_id": patientId // Add patient ID to user data
       };
-      FirebaseFirestore.instance.collection("users").add(userData);
+      FirebaseFirestore.instance.collection("users").doc(patientId.toString()).set(userData);
       log("User created!");
     }
     else{

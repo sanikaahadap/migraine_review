@@ -45,6 +45,7 @@ dependencies:
   provider: any
   animated_text_kit: any
   flutter_signin_button: any
+  uuid: ^4.3.3
 
 dev_dependencies:
   flutter_test:
