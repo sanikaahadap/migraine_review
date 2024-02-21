@@ -47,7 +47,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
   final TextEditingController relationshipController = TextEditingController();
   final TextEditingController contactNumberController = TextEditingController();
 
-  late String patientId; // Variable to store patient_id
+  late String patientId = ''; // Variable to store patient_id
 
   @override
   void initState() {

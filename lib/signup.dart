@@ -138,6 +138,7 @@ class SignUpPageState extends State<SignUpPage> {
     String dob = _dobController.text.trim();
     String phone = _phoneController.text.trim();
 
+
     if(name != "" && email != "" && phone != "" && dob != "") {
       String patientId = generateUniqueCode(); // Generate unique 6-digit patient ID
       Map<String, dynamic> userData = {
@@ -147,7 +148,7 @@ class SignUpPageState extends State<SignUpPage> {
         "dob": dob,
         "patient_id": patientId // Add patient ID to user data
       };
-      FirebaseFirestore.instance.collection("users").doc(patientId.toString()).set(userData);
+      FirebaseFirestore.instance.collection("users").add(userData);
       log("User created!");
     }
     else{

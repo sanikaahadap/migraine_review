@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:neurooooo/home.dart';
+import 'package:neurooooo/notifications.dart';
 
 class SettingsPage extends StatefulWidget {
   @override
@@ -14,9 +16,15 @@ class _SettingsPageState extends State<SettingsPage> {
     });
 
     if (_selectedIndex == 0) {
-      Navigator.pop(context); // Navigate back to home page
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => HomePage()), // Navigate to notifications page
+      ); // Navigate back to home page
     } else if (_selectedIndex == 1) {
-      Navigator.pushReplacementNamed(context, '/notifications'); // Navigate to notifications page
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => NotificationsPage()), // Navigate to notifications page
+      ); // Navigate to notifications page
     }
   }
 

@@ -87,7 +87,7 @@ class _MIDASAssessmentPageState extends State<MIDASAssessmentPage> {
           children: [
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.all(20.0),
+                padding: const EdgeInsets.symmetric(horizontal :15.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
@@ -99,7 +99,7 @@ class _MIDASAssessmentPageState extends State<MIDASAssessmentPage> {
                         color: Color(0xFFFFFFFF),
                       ),
                     ),
-                    Divider( // Add a Divider widget
+                    const Divider( // Add a Divider widget
                       color: Colors.white, // Set the color to white
                       thickness: 1, // Set the thickness of the line
                       height: 20, // Set the height of the line
@@ -112,7 +112,7 @@ class _MIDASAssessmentPageState extends State<MIDASAssessmentPage> {
                         color: Color(0xFFFFFFFF),
                       ),
                     ),
-                    SizedBox(height: 95),
+                    const SizedBox(height: 95),
                     Wrap(
                       spacing: 10,
                       runSpacing: 10,
@@ -124,11 +124,11 @@ class _MIDASAssessmentPageState extends State<MIDASAssessmentPage> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8.0),
                             color: _selectedOptions[_currentPageIndex] == _options[index]
-                                ? Color(0xFF16666B) // Selected option background color
+                                ? const Color(0xFF16666B) // Selected option background color
                                 : Colors.white, // Default color
                             border: Border.all(
                               color: _selectedOptions[_currentPageIndex] == _options[index]
-                                  ? Color(0xFF16666B) // Selected option border color
+                                  ? const Color(0xFF16666B) // Selected option border color
                                   : Colors.black, // Default color
                             ),
                           ),
@@ -139,11 +139,11 @@ class _MIDASAssessmentPageState extends State<MIDASAssessmentPage> {
                             style: TextButton.styleFrom(
                               foregroundColor: _selectedOptions[_currentPageIndex] == _options[index]
                                   ? Colors.white // Selected option text color
-                                  : Color(0xFF16666B), // Default text color
+                                  : const Color(0xFF16666B), // Default text color
                             ),
                             child: Text(
                               _options[index],
-                              style: TextStyle(fontSize: 16), // Increased text size
+                              style: const TextStyle(fontSize: 16), // Increased text size
                             ),
                           ),
                         );
@@ -153,19 +153,19 @@ class _MIDASAssessmentPageState extends State<MIDASAssessmentPage> {
                 ),
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 TextButton(
                   onPressed: _currentPageIndex == 0 ? null : _previousPage,
                   child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
-                      color: Color(0xFF16666B),
+                      color: const Color(0xFF16666B),
                     ),
-                    child: Text(
+                    child: const Text(
                       'Previous',
                       style: TextStyle(
                         color: Colors.white,
@@ -176,14 +176,14 @@ class _MIDASAssessmentPageState extends State<MIDASAssessmentPage> {
                 TextButton(
                   onPressed: _nextPage,
                   child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
-                      color: Color(0xFF16666B),
+                      color: const Color(0xFF16666B),
                     ),
                     child: Text(
                       _currentPageIndex == 4 ? 'Submit' : 'Next',
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.white,
                       ),
                     ),
@@ -191,7 +191,7 @@ class _MIDASAssessmentPageState extends State<MIDASAssessmentPage> {
                 ),
               ],
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
           ],
         ),
       ),
@@ -230,10 +230,10 @@ class MIDASOutputPage extends StatelessWidget {
               borderRadius: BorderRadius.circular(16),
             ),
             child: Container(
-              padding: EdgeInsets.all(20),
+              padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(16),
-                gradient: LinearGradient(
+                gradient: const LinearGradient(
                   colors: [Color(0xFF16666B), Color(0xFF2193B0)],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
@@ -246,23 +246,23 @@ class MIDASOutputPage extends StatelessWidget {
                   Center(
                     child: Text(
                       'Your MIDAS score is: $score',
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 22.0,
                         color: Colors.white,
                       ),
                     ),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Center(
                     child: Text(
                       'Severity Level: $severityLevel',
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 22.0,
                         color: Colors.white,
                       ),
                     ),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
 
 
 
@@ -272,13 +272,13 @@ class MIDASOutputPage extends StatelessWidget {
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,
-                      foregroundColor: Color(0xFF16666B),
-                      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                      foregroundColor: const Color(0xFF16666B),
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
-                    child: Text(
+                    child: const Text(
                       'Go back to home page',
                       style: TextStyle(
                         fontSize: 18,

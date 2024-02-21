@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:neurooooo/midas.dart';
 import 'package:neurooooo/notifications.dart';
@@ -5,9 +6,45 @@ import 'package:neurooooo/settings.dart';
 import 'package:neurooooo/ehr.dart';
 import 'package:neurooooo/faqs.dart';
 import 'package:neurooooo/calendar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  String _userName = '';
+ // Initialize the user name variable
+  @override
+  void initState() {
+    super.initState();
+    _getUserData(); // Call function to get user data when the widget initializes
+  }
+
+  void _getUserData() async {
+    // Get the current user's ID
+    final String? uid = FirebaseAuth.instance.currentUser?.uid;
+
+    if (uid != null) {
+      try {
+        DocumentSnapshot userSnapshot =
+        await FirebaseFirestore.instance.collection('users').doc(uid).get();
+
+        if (userSnapshot.exists) {
+          setState(() {
+            _userName = userSnapshot['name'];
+          });
+        } else {
+          print('User document does not exist');
+        }
+      } catch (e) {
+        print('Error fetching user data: $e');
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,9 +81,9 @@ class HomePage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                const Text(
-                  'Hello User', // Added text
-                  style: TextStyle(
+                Text(
+                  'Hello $_userName', // Added text
+                  style: const TextStyle(
                     fontSize: 22.0,
                     fontWeight: FontWeight.bold, // Bold font weight
                     color: Color(0xFF16666B), // Text color
