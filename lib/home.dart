@@ -9,6 +9,8 @@ import 'package:neurooooo/profile.dart';
 import 'package:neurooooo/diary.dart';
 
 class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -74,7 +76,7 @@ class _HomePageState extends State<HomePage> {
                   margin: const EdgeInsets.symmetric(horizontal: 20.0),
                   padding: const EdgeInsets.all(20.0),
                   decoration: BoxDecoration(
-                    color: Color(0xFF16666B),
+                    color: const Color(0xFF16666B),
                     border: Border.all(color: const Color(0xFF16666B)),
                     borderRadius: BorderRadius.circular(20.0),
                   ),
@@ -281,7 +283,7 @@ class CustomButton extends StatelessWidget {
   final String buttonText;
   final VoidCallback onPressed;
 
-  const CustomButton({
+  const CustomButton({super.key,
     required this.buttonText,
     required this.onPressed,
   });

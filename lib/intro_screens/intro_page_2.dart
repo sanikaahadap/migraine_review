@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:neurooooo/login_signup_page.dart';
 
 class IntroPage2 extends StatelessWidget {
+  const IntroPage2({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,7 +28,7 @@ class IntroPage2 extends StatelessWidget {
             ),
             const SizedBox(height: 5),
             const Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              padding: EdgeInsets.symmetric(horizontal: 16.0),
               child: Text(
                 'Tailored Lifestyle Tips',
                 textAlign: TextAlign.center,

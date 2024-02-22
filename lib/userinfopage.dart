@@ -35,10 +35,10 @@ class UserInfoPage extends StatefulWidget {
 
 
   @override
-  _UserInfoPageState createState() => _UserInfoPageState();
+  UserInfoPageState createState() => UserInfoPageState();
 }
 
-class _UserInfoPageState extends State<UserInfoPage> {
+class UserInfoPageState extends State<UserInfoPage> {
   final TextEditingController genderController = TextEditingController();
   final TextEditingController medicalConditionController = TextEditingController();
   final TextEditingController medicationsController = TextEditingController();
@@ -269,32 +269,65 @@ class _UserInfoPageState extends State<UserInfoPage> {
 }
 
 class DisclaimerPage extends StatelessWidget {
-  const DisclaimerPage({super.key});
+  const DisclaimerPage({Key? key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-      ),
+      appBar: AppBar(),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text('This is the disclaimer page.'),
+            const Text(
+              'Disclaimer',
+              style: TextStyle(
+                fontSize: 30.0,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF16666B),
+              ),
+            ),
             const SizedBox(height: 16.0),
+            const Padding(
+              padding: EdgeInsets.fromLTRB(8.0, 0, 0, 0),
+              child: Text(
+                'The app is designed to help you keep track of your headache and coordinate with your physician. Your data will be kept confidential',
+                style: TextStyle(
+                  color: Color(0xFF16666B),
+                  fontSize: 15.0,
+                ),
+              ),
+            ),
+
+
+            const SizedBox(height: 170.0),
             ElevatedButton(
               onPressed: () {
-                Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => QuestionnairePage()),);// Action when the user accepts
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => QuestionnairePage()),
+                );
               },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF16666B),
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
+              ),
               child: const Text('Accept'),
             ),
             const SizedBox(height: 16.0),
             ElevatedButton(
               onPressed: () {
-                Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => QuestionnairePage()),);// Action when the user declines
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => QuestionnairePage()),
+                );
               },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF16666B),
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
+              ),
               child: const Text('Decline'),
             ),
           ],

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:neurooooo/settings.dart';
 
 class ThemeSettingsPage extends StatefulWidget {
+  const ThemeSettingsPage({super.key});
+
   @override
   _ThemeSettingsPageState createState() => _ThemeSettingsPageState();
 }
@@ -13,15 +15,15 @@ class _ThemeSettingsPageState extends State<ThemeSettingsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Change Theme'),
-        backgroundColor: Color(0xFF16666B),
+        title: const Text('Change Theme'),
+        backgroundColor: const Color(0xFF16666B),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
+            const Text(
               'Select Theme:',
               style: TextStyle(
                 fontSize: 18.0,
@@ -29,9 +31,9 @@ class _ThemeSettingsPageState extends State<ThemeSettingsPage> {
                 color: Color(0xFF16666B),
               ),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             ListTile(
-              title: Text('Light Mode'),
+              title: const Text('Light Mode'),
               leading: Radio(
                 value: false,
                 groupValue: _isDarkModeEnabled,
@@ -43,7 +45,7 @@ class _ThemeSettingsPageState extends State<ThemeSettingsPage> {
               ),
             ),
             ListTile(
-              title: Text('Dark Mode'),
+              title: const Text('Dark Mode'),
               leading: Radio(
                 value: true,
                 groupValue: _isDarkModeEnabled,
@@ -54,15 +56,15 @@ class _ThemeSettingsPageState extends State<ThemeSettingsPage> {
                 },
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
                 _applyTheme();
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0xFF16666B),
+                backgroundColor: const Color(0xFF16666B),
               ),
-              child: Text(
+              child: const Text(
                 'Apply Theme',
                 style: TextStyle(
                   color: Colors.white,

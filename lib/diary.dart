@@ -3,6 +3,8 @@ import 'package:intl/intl.dart';
 import 'package:neurooooo/home.dart';
 
 class DiaryPage extends StatefulWidget {
+  const DiaryPage({super.key});
+
   @override
   _DiaryPageState createState() => _DiaryPageState();
 }
@@ -186,15 +188,15 @@ class _DiaryPageState extends State<DiaryPage> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => SubmissionConfirmationPage()),
+                  MaterialPageRoute(builder: (context) => const SubmissionConfirmationPage()),
                 );
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF16666B),
                 foregroundColor: Colors.white,
-                padding: EdgeInsets.symmetric(vertical: 16, horizontal: 32),
+                padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
               ),
-              child: Text('Submit'),
+              child: const Text('Submit'),
             ),
           ],
         ),
@@ -211,35 +213,37 @@ class _DiaryPageState extends State<DiaryPage> {
 }
 
 class SubmissionConfirmationPage extends StatelessWidget {
+  const SubmissionConfirmationPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xFF16666B),
-        title: Text('Submission Confirmation'),
+        title: const Text('Submission Confirmation'),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
+            const Text(
               "Today's response recorded!",
               style: TextStyle(
                 fontSize: 20,
                 color: Color(0xFF16666B),
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const HomePage()));
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF16666B),
                 foregroundColor: Colors.white,
-                padding: EdgeInsets.symmetric(vertical: 16, horizontal: 32),
+                padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
               ),
-              child: Text('Go back to the home page'),
+              child: const Text('Go back to the home page'),
             ),
           ],
         ),

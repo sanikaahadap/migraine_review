@@ -3,6 +3,8 @@ import 'package:neurooooo/home.dart';
 import 'package:neurooooo/settings.dart';
 
 class NotificationsPage extends StatefulWidget {
+  const NotificationsPage({super.key});
+
   @override
   _NotificationsPageState createState() => _NotificationsPageState();
 }
@@ -18,7 +20,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
     if (_selectedIndex == 0) {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => HomePage()),
+        MaterialPageRoute(builder: (context) => const HomePage()),
       ); // Navigate back to home page
     } else if (_selectedIndex == 2) {
       Navigator.push(
@@ -32,13 +34,13 @@ class _NotificationsPageState extends State<NotificationsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Notifications'),
+        title: const Text('Notifications'),
       ),
-      body: Center(
+      body: const Center(
         child: Text('Notifications Page Content'),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        items: [
+        items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Home',
@@ -53,7 +55,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Color(0xFF16666B), // Color for the selected item
+        selectedItemColor: const Color(0xFF16666B), // Color for the selected item
         onTap: _onItemTapped,
       ),
     );
