@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:neurooooo/midas.dart';
 import 'package:neurooooo/notifications.dart';
@@ -6,7 +5,8 @@ import 'package:neurooooo/settings.dart';
 import 'package:neurooooo/ehr.dart';
 import 'package:neurooooo/faqs.dart';
 import 'package:neurooooo/calendar.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:neurooooo/profile.dart';
+import 'package:neurooooo/diary.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -17,33 +17,12 @@ class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   String _userName = '';
- // Initialize the user name variable
+
   @override
   void initState() {
     super.initState();
-    _getUserData(); // Call function to get user data when the widget initializes
-  }
-
-  void _getUserData() async {
-    // Get the current user's ID
-    final String? uid = FirebaseAuth.instance.currentUser?.uid;
-
-    if (uid != null) {
-      try {
-        DocumentSnapshot userSnapshot =
-        await FirebaseFirestore.instance.collection('users').doc(uid).get();
-
-        if (userSnapshot.exists) {
-          setState(() {
-            _userName = userSnapshot['name'];
-          });
-        } else {
-          print('User document does not exist');
-        }
-      } catch (e) {
-        print('Error fetching user data: $e');
-      }
-    }
+    // Fetch user data here
+    _userName = 'Test User'; // Placeholder user name
   }
 
   @override
@@ -66,13 +45,12 @@ class _HomePageState extends State<HomePage> {
               alignment: Alignment.topLeft,
               child: GestureDetector(
                 onTap: () {
-                  // Open drawer when icon is tapped
                   _scaffoldKey.currentState!.openDrawer();
                 },
                 child: const Icon(
-                  Icons.menu, // Placeholder icon for sidebar
-                  size: 40, // Adjust icon size as needed
-                  color: Color(0xFF16666B), // Adjust icon color
+                  Icons.menu,
+                  size: 40,
+                  color: Color(0xFF16666B),
                 ),
               ),
             ),
@@ -82,37 +60,36 @@ class _HomePageState extends State<HomePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Text(
-                  'Hello $_userName', // Added text
+                  'Hello $_userName',
                   style: const TextStyle(
                     fontSize: 22.0,
-                    fontWeight: FontWeight.bold, // Bold font weight
-                    color: Color(0xFF16666B), // Text color
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF16666B),
                   ),
                 ),
-                const SizedBox(height: 20), // Adjust spacing
+                const SizedBox(height: 20),
                 Container(
-                  width: double.infinity, // Cover entire page width
-                  height: MediaQuery.of(context).size.height / 5.5, // 1/3 of the screen height
-                  margin: const EdgeInsets.symmetric(horizontal: 20.0), // Adjust margin as needed
-                  padding: const EdgeInsets.all(20.0), // Adjust padding as needed
+                  width: double.infinity,
+                  height: MediaQuery.of(context).size.height / 5.5,
+                  margin: const EdgeInsets.symmetric(horizontal: 20.0),
+                  padding: const EdgeInsets.all(20.0),
                   decoration: BoxDecoration(
-                    color: Color(0xFF16666B), // Transparent background
-                    border: Border.all(color: const Color(0xFF16666B)), // Border color
-                    borderRadius: BorderRadius.circular(20.0), // Rounded borders
+                    color: Color(0xFF16666B),
+                    border: Border.all(color: const Color(0xFF16666B)),
+                    borderRadius: BorderRadius.circular(20.0),
                   ),
                   child: const Center(
                     child: Text(
                       'Fasting increases the risk of migraines',
                       style: TextStyle(
                         fontSize: 18.0,
-                        color: Color(0xFFFFFFFF), // Text color
-
+                        color: Color(0xFFFFFFFF),
                       ),
                       textAlign: TextAlign.center,
                     ),
                   ),
                 ),
-                const SizedBox(height: 45), // Adjust spacing between box and buttons
+                const SizedBox(height: 45),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -125,7 +102,7 @@ class _HomePageState extends State<HomePage> {
                         );
                       },
                     ),
-                    const SizedBox(width: 20), // Adjust spacing between buttons as needed
+                    const SizedBox(width: 20),
                     CustomButton(
                       buttonText: 'Calendar',
                       onPressed: () {
@@ -137,7 +114,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 20), // Adjust spacing between button rows as needed
+                const SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -150,16 +127,19 @@ class _HomePageState extends State<HomePage> {
                         );
                       },
                     ),
-                    const SizedBox(width: 20), // Adjust spacing between buttons as needed
+                    const SizedBox(width: 20),
                     CustomButton(
                       buttonText: 'Your Diary',
                       onPressed: () {
-                        // Handle Your Diary button press
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => DiaryPage()),
+                        );// Handle Your Diary button press
                       },
                     ),
                   ],
                 ),
-                const SizedBox(height: 20), // Adjust spacing between button rows as needed
+                const SizedBox(height: 20),
                 CustomButton(
                   buttonText: 'Migraine Assessment',
                   onPressed: () {
@@ -191,13 +171,72 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             ListTile(
+              title: const Text('Profile'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ProfilePage()),
+                );// Navigate to profile page
+              },
+            ),
+            ListTile(
+              title: const Text('Settings'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SettingsPage()),
+                );
+              },
+            ),
+            ListTile(
+              title: const Text('Questionnaire'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => MIDASAssessmentPage()),
+                );
+              },
+            ),
+            ListTile(
+              title: const Text('Your Diary'),
+              onTap: () {
+                // Navigate to your diary page
+              },
+            ),
+            ListTile(
+              title: const Text('Calendar'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => CalendarPage()),
+                );
+              },
+            ),
+            ListTile(
+              title: const Text('EHR'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => EHRPage()),
+                );
+              },
+            ),
+            ListTile(
+              title: const Text('FAQs'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => FAQsPage()),
+                );
+              },
+            ),
+            const Divider(),
+            ListTile(
               title: const Text('Log Out'),
               onTap: () {
                 // Implement log out functionality
-                Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false); // Navigates to the login page and removes all other routes
               },
             ),
-
           ],
         ),
       ),
@@ -254,18 +293,18 @@ class CustomButton extends StatelessWidget {
       child: TextButton(
         onPressed: onPressed,
         style: TextButton.styleFrom(
-          padding: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 16.0), // Adjust padding for width and height
-          backgroundColor: Colors.white, // White background
+          padding: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 16.0),
+          backgroundColor: Colors.white,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8.0), // Rounded borders
-            side: const BorderSide(color: Color(0xFF16666B)), // Outline color
+            borderRadius: BorderRadius.circular(8.0),
+            side: const BorderSide(color: Color(0xFF16666B)),
           ),
         ),
         child: Text(
           buttonText,
           style: const TextStyle(
             fontSize: 18.0,
-            color: Color(0xFF16666B), // Text color
+            color: Color(0xFF16666B),
           ),
         ),
       ),
