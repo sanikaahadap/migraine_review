@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:neurooooo/home.dart';
+import 'dart:developer';
 
 class MIDASAssessmentPage extends StatefulWidget {
   @override
@@ -74,6 +76,8 @@ class _MIDASAssessmentPageState extends State<MIDASAssessmentPage> {
 
   @override
   Widget build(BuildContext context) {
+
+
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
@@ -216,9 +220,25 @@ class MIDASOutputPage extends StatelessWidget {
     }
   }
 
+  void _storeData(int score, String severity) {
+    FirebaseFirestore.instance
+        .collection('midas_scores')
+        .add({
+      'score': score,
+      'severity': severity,
+      'timestamp': Timestamp.now(),
+    })
+        .then((value) => log("Score and Severity added"))
+        .catchError((error) => log("Failed to add score and severity: $error"));
+  }
+
   @override
   Widget build(BuildContext context) {
     String severityLevel = getSeverityLevel(score);
+
+    // Store data when the page is built
+    _storeData(score, severityLevel);
+
 
     return Scaffold(
       body: Center(
