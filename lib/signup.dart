@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:neurooooo/login.dart';
+import 'package:neurooooo/models/user.dart';
 import 'package:neurooooo/userinfopage.dart';
 import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
@@ -22,7 +23,8 @@ class SignUpPageState extends State<SignUpPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _dobController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   DateTime? _selectedDate; // Nullable DateTime
 
@@ -76,20 +78,21 @@ class SignUpPageState extends State<SignUpPage> {
     String password = _passwordController.text.trim();
     String cPassword = _confirmPasswordController.text.trim();
 
-    if(email == "" || password == "" || cPassword == "") {
+    if (email == "" || password == "" || cPassword == "") {
       log("Please fill all the details!");
-    }
-    else if(password != cPassword) {
+    } else if (password != cPassword) {
       log("Passwords do not match!");
-    }
-    else {
+    } else {
       try {
-        UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password);
-        if(userCredential.user != null) {
-          log("User created successfully"); // Add this log
-          Navigator.push(context, MaterialPageRoute(builder: (context) => UserInfoPage()));
+        UserCredential userCredential = await FirebaseAuth.instance
+            .createUserWithEmailAndPassword(email: email, password: password);
+        if (userCredential.user != null) {
+          log("User created successfully");
+          saveUser(); // Add this log
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => UserInfoPage()));
         }
-      } on FirebaseAuthException catch(ex) {
+      } on FirebaseAuthException catch (ex) {
         log("FirebaseAuthException: ${ex.code}"); // Add this log
       } catch (e) {
         log("Error: $e"); // Add this log
@@ -132,15 +135,15 @@ class SignUpPageState extends State<SignUpPage> {
     return exists;
   }
 
-  void saveUser(){
+  Future<void> saveUser() async {
     String name = _nameController.text.trim();
     String email = _emailController.text.trim();
     String dob = _dobController.text.trim();
     String phone = _phoneController.text.trim();
 
-
-    if(name != "" && email != "" && phone != "" && dob != "") {
-      String patientId = generateUniqueCode(); // Generate unique 6-digit patient ID
+    if (name != "" && email != "" && phone != "" && dob != "") {
+      String patientId =
+          generateUniqueCode(); // Generate unique 6-digit patient ID
       Map<String, dynamic> userData = {
         "name": name,
         "email": email,
@@ -148,20 +151,30 @@ class SignUpPageState extends State<SignUpPage> {
         "dob": dob,
         "patient_id": patientId // Add patient ID to user data
       };
-      FirebaseFirestore.instance.collection("users").add(userData);
-      log("User created!");
-    }
-    else{
+      ModelUser user=ModelUser(uid: patientId, username: name, email: email);
+      try {
+        await FirebaseFirestore.instance
+            .collection("users")
+            .doc(FirebaseAuth.instance.currentUser!.uid)
+            .set(user.toJson());
+        log("User created!");
+      } catch (err) {
+        print(err.toString());
+      }
+    } else {
       log("Please fill all the fields!");
     }
   }
+
+
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        // Your app bar content goes here
-      ),
+          // Your app bar content goes here
+          ),
       body: SingleChildScrollView(
         child: Container(
           padding: const EdgeInsets.all(16.0),
@@ -185,7 +198,8 @@ class SignUpPageState extends State<SignUpPage> {
                       border: OutlineInputBorder(),
                       filled: true,
                       fillColor: Color(0x80B2EBF2),
-                      contentPadding: EdgeInsets.fromLTRB(12.0, 15.0, 12.0, 15.0),
+                      contentPadding:
+                          EdgeInsets.fromLTRB(12.0, 15.0, 12.0, 15.0),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -203,11 +217,14 @@ class SignUpPageState extends State<SignUpPage> {
                       border: OutlineInputBorder(),
                       filled: true,
                       fillColor: Color(0x80B2EBF2),
-                      contentPadding: EdgeInsets.fromLTRB(12.0, 15.0, 12.0, 15.0),
+                      contentPadding:
+                          EdgeInsets.fromLTRB(12.0, 15.0, 12.0, 15.0),
                     ),
                     keyboardType: TextInputType.emailAddress,
                     validator: (value) {
-                      if (value == null || value.isEmpty || !value.contains('@')) {
+                      if (value == null ||
+                          value.isEmpty ||
+                          !value.contains('@')) {
                         return 'Enter a valid email address';
                       }
                       return null;
@@ -222,7 +239,8 @@ class SignUpPageState extends State<SignUpPage> {
                       border: OutlineInputBorder(),
                       filled: true,
                       fillColor: Color(0x80B2EBF2),
-                      contentPadding: EdgeInsets.fromLTRB(12.0, 15.0, 12.0, 15.0),
+                      contentPadding:
+                          EdgeInsets.fromLTRB(12.0, 15.0, 12.0, 15.0),
                     ),
                     keyboardType: TextInputType.phone,
                     validator: (value) {
@@ -243,7 +261,8 @@ class SignUpPageState extends State<SignUpPage> {
                       border: OutlineInputBorder(),
                       filled: true,
                       fillColor: Color(0x80B2EBF2),
-                      contentPadding: EdgeInsets.fromLTRB(12.0, 15.0, 12.0, 15.0),
+                      contentPadding:
+                          EdgeInsets.fromLTRB(12.0, 15.0, 12.0, 15.0),
                     ),
                     keyboardType: TextInputType.datetime,
                     onTap: () {
@@ -261,7 +280,8 @@ class SignUpPageState extends State<SignUpPage> {
                       border: OutlineInputBorder(),
                       filled: true,
                       fillColor: Color(0x80B2EBF2),
-                      contentPadding: EdgeInsets.fromLTRB(12.0, 15.0, 12.0, 15.0),
+                      contentPadding:
+                          EdgeInsets.fromLTRB(12.0, 15.0, 12.0, 15.0),
                     ),
                     obscureText: true,
                     validator: (value) {
@@ -282,7 +302,8 @@ class SignUpPageState extends State<SignUpPage> {
                       border: OutlineInputBorder(),
                       filled: true,
                       fillColor: Color(0x80B2EBF2),
-                      contentPadding: EdgeInsets.fromLTRB(12.0, 15.0, 12.0, 15.0),
+                      contentPadding:
+                          EdgeInsets.fromLTRB(12.0, 15.0, 12.0, 15.0),
                     ),
                     obscureText: true,
                     validator: (value) {
@@ -320,7 +341,9 @@ class SignUpPageState extends State<SignUpPage> {
                       width: 170.0,
                       height: 45.0,
                       decoration: BoxDecoration(
-                        color: _isButtonPressed ? Colors.white : const Color(0xFF16666B),
+                        color: _isButtonPressed
+                            ? Colors.white
+                            : const Color(0xFF16666B),
                         borderRadius: BorderRadius.circular(12.0),
                       ),
                       child: Center(
@@ -328,7 +351,9 @@ class SignUpPageState extends State<SignUpPage> {
                           'Sign Up',
                           style: TextStyle(
                             fontSize: 17.0,
-                            color: _isButtonPressed ? const Color(0xFF16666B) : Colors.white,
+                            color: _isButtonPressed
+                                ? const Color(0xFF16666B)
+                                : Colors.white,
                           ),
                         ),
                       ),
@@ -341,18 +366,22 @@ class SignUpPageState extends State<SignUpPage> {
                     children: [
                       Text(
                         'Already have an account?',
-                        style: TextStyle(color: Colors.grey[700]), // Dark gray color
+                        style: TextStyle(
+                            color: Colors.grey[700]), // Dark gray color
                       ),
-
                       TextButton(
                         onPressed: () {
                           // Navigate to login page
-                          Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => LoginPage()),);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => LoginPage()),
+                          );
                         },
                         child: const Text(
                           'Login',
-                          style: TextStyle(color: Color(0xFF16666B)), // Color #16666B
+                          style: TextStyle(
+                              color: Color(0xFF16666B)), // Color #16666B
                         ),
                       ),
                     ],

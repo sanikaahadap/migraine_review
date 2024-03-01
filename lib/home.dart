@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:neurooooo/midas.dart';
 import 'package:neurooooo/notifications.dart';
@@ -8,6 +10,8 @@ import 'package:neurooooo/calendar.dart';
 import 'package:neurooooo/profile.dart';
 import 'package:neurooooo/diary.dart';
 
+import 'models/user.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -17,14 +21,34 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
+  ModelUser user=ModelUser(email: '', username:'' , uid: '');
   String _userName = '';
 
   @override
   void initState() {
     super.initState();
-    // Fetch user data here
-    _userName = 'Test User'; // Placeholder user name
+    // Fetch user data hereF
+    _userName = 'Test User';
+    getDetails();
+    // Placeholder user name
+  }
+
+
+  void getDetails()async{
+    user=await getUserDetails();
+    setState(() {
+    });
+  }
+
+
+  Future<ModelUser> getUserDetails() async {
+    User currentUser = FirebaseAuth.instance.currentUser!;
+    FirebaseFirestore firebaseFirestore=FirebaseFirestore.instance;
+
+    DocumentSnapshot snap =
+    await firebaseFirestore.collection('users').doc(currentUser.uid).get();
+    print('sssssssss' + snap['email']);
+    return ModelUser.fromSnap(snap);
   }
 
   @override
@@ -62,7 +86,7 @@ class _HomePageState extends State<HomePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Text(
-                  'Hello $_userName',
+                  'Hello ${user.username}',
                   style: const TextStyle(
                     fontSize: 22.0,
                     fontWeight: FontWeight.bold,

@@ -7,6 +7,8 @@ import 'package:neurooooo/intro_screens/intro_page_5.dart';
 import 'package:neurooooo/login_signup_page.dart'; // Import the login/signup page
 
 class Features extends StatelessWidget {
+  const Features({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,7 +40,7 @@ class Features extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => IntroPage1()), // Navigate to intro_page_1.dart
+                      MaterialPageRoute(builder: (context) => const IntroPage1()), // Navigate to intro_page_1.dart
                     );
                   },
                 ),
@@ -48,7 +50,7 @@ class Features extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => IntroPage2()), // Navigate to intro_page_2.dart
+                      MaterialPageRoute(builder: (context) => const IntroPage2()), // Navigate to intro_page_2.dart
                     );
                   },
                 ),
@@ -120,7 +122,7 @@ class FeatureButton extends StatelessWidget {
   final String buttonText;
   final VoidCallback onPressed;
 
-  const FeatureButton({
+  const FeatureButton({super.key,
     required this.imagePath,
     required this.buttonText,
     required this.onPressed,
