@@ -8,7 +8,7 @@ import 'package:neurooooo/login.dart';
 import 'package:neurooooo/models/user.dart';
 import 'package:neurooooo/userinfopage.dart';
 import 'package:intl/intl.dart';
-import 'package:uuid/uuid.dart';
+
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
@@ -90,7 +90,7 @@ class SignUpPageState extends State<SignUpPage> {
           log("User created successfully");
           saveUser(); // Add this log
           Navigator.push(
-              context, MaterialPageRoute(builder: (context) => UserInfoPage()));
+              context, MaterialPageRoute(builder: (context) => const UserInfoPage()));
         }
       } on FirebaseAuthException catch (ex) {
         log("FirebaseAuthException: ${ex.code}"); // Add this log
@@ -130,7 +130,7 @@ class SignUpPageState extends State<SignUpPage> {
         exists = true; // Code exists in database
       }
     }).catchError((error) {
-      print('Error checking code existence: $error');
+      log('Error checking code existence: $error');
     });
     return exists;
   }
@@ -144,14 +144,14 @@ class SignUpPageState extends State<SignUpPage> {
     if (name != "" && email != "" && phone != "" && dob != "") {
       String patientId =
           generateUniqueCode(); // Generate unique 6-digit patient ID
-      Map<String, dynamic> userData = {
-        "name": name,
-        "email": email,
-        "phone": phone,
-        "dob": dob,
-        "patient_id": patientId // Add patient ID to user data
-      };
-      ModelUser user=ModelUser(uid: patientId, username: name, email: email);
+      // Map<String, dynamic> userData = {
+      //   "name": name,
+      //   "email": email,
+      //   "phone": phone,
+      //   "dob": dob,
+      //   "patient_id": patientId // Add patient ID to user data
+      // };
+      ModelUser user=ModelUser(uid: FirebaseAuth.instance.currentUser!.uid, name: name, email: email, phone: phone, dob: dob, patient_id: patientId);
       try {
         await FirebaseFirestore.instance
             .collection("users")
@@ -159,7 +159,7 @@ class SignUpPageState extends State<SignUpPage> {
             .set(user.toJson());
         log("User created!");
       } catch (err) {
-        print(err.toString());
+        log(err.toString());
       }
     } else {
       log("Please fill all the fields!");

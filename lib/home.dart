@@ -9,8 +9,8 @@ import 'package:neurooooo/faqs.dart';
 import 'package:neurooooo/calendar.dart';
 import 'package:neurooooo/profile.dart';
 import 'package:neurooooo/diary.dart';
-
 import 'models/user.dart';
+import 'dart:developer';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -21,14 +21,14 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  ModelUser user=ModelUser(email: '', username:'' , uid: '');
-  String _userName = '';
+  ModelUser user=ModelUser(email: '', name:'' , uid: '', phone: '', dob: '', patient_id: '');
+  // String _userName = '';
 
   @override
   void initState() {
     super.initState();
     // Fetch user data hereF
-    _userName = 'Test User';
+    // _userName = 'Test User';
     getDetails();
     // Placeholder user name
   }
@@ -47,7 +47,7 @@ class _HomePageState extends State<HomePage> {
 
     DocumentSnapshot snap =
     await firebaseFirestore.collection('users').doc(currentUser.uid).get();
-    print('sssssssss' + snap['email']);
+    log('sssssssss ${snap["email"]}');
     return ModelUser.fromSnap(snap);
   }
 
@@ -86,7 +86,7 @@ class _HomePageState extends State<HomePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Text(
-                  'Hello ${user.username}',
+                  'Hello ${user.name}',
                   style: const TextStyle(
                     fontSize: 22.0,
                     fontWeight: FontWeight.bold,
@@ -159,7 +159,7 @@ class _HomePageState extends State<HomePage> {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => DiaryPage()),
+                          MaterialPageRoute(builder: (context) => const DiaryPage()),
                         );// Handle Your Diary button press
                       },
                     ),
@@ -184,13 +184,13 @@ class _HomePageState extends State<HomePage> {
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
-            const DrawerHeader(
-              decoration: BoxDecoration(
+             DrawerHeader(
+              decoration: const BoxDecoration(
                 color: Color(0xFF16666B),
               ),
               child: Text(
-                'Test user',
-                style: TextStyle(
+                user.name.isNotEmpty ? user.name : 'Hello User', // Display user's name if not empty
+                style: const TextStyle(
                   color: Colors.white,
                   fontSize: 24,
                 ),
@@ -201,7 +201,7 @@ class _HomePageState extends State<HomePage> {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => ProfilePage()),
+                  MaterialPageRoute(builder: (context) => const ProfilePage()),
                 );// Navigate to profile page
               },
             ),
@@ -210,7 +210,7 @@ class _HomePageState extends State<HomePage> {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => SettingsPage()),
+                  MaterialPageRoute(builder: (context) => const SettingsPage()),
                 );
               },
             ),
@@ -289,12 +289,12 @@ class _HomePageState extends State<HomePage> {
           } else if (index == 1) {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => NotificationsPage()),
+              MaterialPageRoute(builder: (context) => const NotificationsPage()),
             );
           } else if (index == 2) {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => SettingsPage()),
+              MaterialPageRoute(builder: (context) => const SettingsPage()),
             );
           }
         },

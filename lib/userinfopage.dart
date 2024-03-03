@@ -47,30 +47,30 @@ class UserInfoPageState extends State<UserInfoPage> {
   final TextEditingController relationshipController = TextEditingController();
   final TextEditingController contactNumberController = TextEditingController();
 
-  late String patientId = ''; // Variable to store patient_id
-
-  @override
-  void initState() {
-    super.initState();
-    fetchPatientId(); // Fetch patient_id when the page initializes
-  }
-
-  void fetchPatientId() async {
-    String? uid = FirebaseAuth.instance.currentUser?.uid;
-    if (uid != null) {
-      try {
-        DocumentSnapshot userInfoDoc = await FirebaseFirestore.instance.collection('users').doc(uid).get();
-        if (userInfoDoc.exists) {
-          setState(() {
-            patientId = userInfoDoc['patient_id'];
-            log('Fetched patientId: $patientId'); // Add this for debugging
-          });
-        }
-      } catch (e) {
-        log("Error fetching patient_id: $e");
-      }
-    }
-  }
+  // late String patientId = ''; // Variable to store patient_id
+  //
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   fetchPatientId(); // Fetch patient_id when the page initializes
+  // }
+  //
+  // void fetchPatientId() async {
+  //   String? uid = FirebaseAuth.instance.currentUser?.uid;
+  //   if (uid != null) {
+  //     try {
+  //       DocumentSnapshot userInfoDoc = await FirebaseFirestore.instance.collection('users').doc(uid).get();
+  //       if (userInfoDoc.exists) {
+  //         setState(() {
+  //           patientId = userInfoDoc['patient_id'];
+  //           log('Fetched patientId: $patientId'); // Add this for debugging
+  //         });
+  //       }
+  //     } catch (e) {
+  //       log("Error fetching patient_id: $e");
+  //     }
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -231,8 +231,8 @@ class UserInfoPageState extends State<UserInfoPage> {
 
                       if (uid != null) {
                         // Store data in Firestore
-                        FirebaseFirestore.instance.collection('user_info').doc(uid).set({
-                          'patient_id' : patientId,
+                        FirebaseFirestore.instance.collection('user_info').doc(FirebaseAuth.instance.currentUser?.uid).set({
+                          'uid': FirebaseAuth.instance.currentUser?.uid,
                           'gender': genderController.text,
                           'medicalCondition': medicalConditionController.text,
                           'medications': medicationsController.text,
