@@ -1,11 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:developer';
+import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:neurooooo/features.dart';
 import 'package:neurooooo/forgotpassword.dart';
 import 'package:neurooooo/home.dart';
+import 'package:neurooooo/nav_bar.dart';
 import 'package:neurooooo/signup.dart';
+import 'package:crypto/crypto.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -26,6 +29,8 @@ class _LoginPageState extends State<LoginPage> {
     if (email.isEmpty || password.isEmpty) {
       log("Please fill all the fields!");
     } else {
+      String hashedPassword = hashPassword(password);
+
       try {
         UserCredential userCredential =
             await FirebaseAuth.instance.signInWithEmailAndPassword(
@@ -36,7 +41,8 @@ class _LoginPageState extends State<LoginPage> {
           Navigator.popUntil(context, (route) => route.isFirst);
           Navigator.pushReplacement(
             context,
-            CupertinoPageRoute(builder: (context) => HomePage()),
+            CupertinoPageRoute(
+                builder: (context) => CustomBottomNavigationBar()),
           );
         }
       } on FirebaseAuthException catch (ex) {
@@ -223,6 +229,12 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
+  }
+
+  String hashPassword(String password) {
+    var bytes = utf8.encode(password);
+    var digest = sha256.convert(bytes);
+    return digest.toString();
   }
 
   void _onLoginButtonPressed() {

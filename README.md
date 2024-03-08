@@ -1,16 +1,40 @@
-# neurooooo
+# Comprehensive Migraine Care Flutter Project
 
-A new Flutter project.
+This Flutter project aims to provide comprehensive care for individuals suffering from migraines. It includes various functionalities such as MIDAS assessment, personal diary, migraine logs, electronic health records (EHR), and personalized notifications.
+
+## Tech Stack
+
+- Flutter (Dart)
+- Docker
+
+## Functionalities
+
+- **MIDAS Assessment:** Assess migraine disability using the Migraine Disability Assessment (MIDAS) questionnaire.
+- **Personal Diary:** Keep a personal diary to track symptoms, triggers, and experiences related to migraines.
+- **Migraine Logs:** Log migraine episodes including duration, severity, location, and characteristics.
+- **Electronic Health Records (EHR):** Maintain electronic health records related to migraines, including treatment history and medical reports.
+- **Personalized Notifications:** Receive personalized notifications for medication reminders, doctor appointments, and health-related tips.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+To use this project, follow these steps:
 
-A few resources to get you started if this is your first Flutter project:
+1. **Clone the repository:**
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+   ```bash
+   git clone https://github.com/sanikaahadap/migraine_review
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+2. **Navigate to the project directory:**
+
+   ```bash
+   cd comprehensive_migraine_care_flutter
+
+3. **Run your project using flutter**
+
+   ```bash
+   flutter run
+   
+The project will start running on your connected device or emulator.
+   
+
+

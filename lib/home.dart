@@ -9,6 +9,7 @@ import 'package:neurooooo/faqs.dart';
 import 'package:neurooooo/calendar.dart';
 import 'package:neurooooo/profile.dart';
 import 'package:neurooooo/diary.dart';
+import 'package:neurooooo/miglog.dart';
 import 'models/user.dart';
 import 'dart:developer';
 
@@ -181,6 +182,17 @@ class _HomePageState extends State<HomePage> {
                     );
                   },
                 ),
+                const SizedBox(height: 20),
+                CustomButton(
+                  buttonText: 'Migraine logs',
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => MigraineLogsPage()),
+                    );
+                  },
+                ),
               ],
             ),
           ),
@@ -235,7 +247,11 @@ class _HomePageState extends State<HomePage> {
             ListTile(
               title: const Text('Your Diary'),
               onTap: () {
-                // Navigate to your diary page
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => DiaryPage()),
+                );
               },
             ),
             ListTile(
@@ -269,40 +285,6 @@ class _HomePageState extends State<HomePage> {
             ListTile(title: const Text('Log Out'), onTap: signUserOut),
           ],
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.notifications),
-            label: 'Notifications',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Settings',
-          ),
-        ],
-        currentIndex: 0,
-        selectedItemColor: const Color(0xFF16666B),
-        onTap: (int index) {
-          if (index == 0) {
-            // Navigate to home page
-          } else if (index == 1) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => const NotificationsPage()),
-            );
-          } else if (index == 2) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const SettingsPage()),
-            );
-          }
-        },
       ),
     );
   }
