@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:convert';
 import 'dart:math' as math;
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -8,7 +9,7 @@ import 'package:neurooooo/login.dart';
 import 'package:neurooooo/models/user.dart';
 import 'package:neurooooo/userinfopage.dart';
 import 'package:intl/intl.dart';
-
+import 'package:crypto/crypto.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
@@ -83,14 +84,16 @@ class SignUpPageState extends State<SignUpPage> {
     } else if (password != cPassword) {
       log("Passwords do not match!");
     } else {
+      String hashedPassword = hashPassword(password);
+
       try {
         UserCredential userCredential = await FirebaseAuth.instance
             .createUserWithEmailAndPassword(email: email, password: password);
         if (userCredential.user != null) {
           log("User created successfully");
           saveUser(); // Add this log
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => const UserInfoPage()));
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const UserInfoPage()));
         }
       } on FirebaseAuthException catch (ex) {
         log("FirebaseAuthException: ${ex.code}"); // Add this log
@@ -151,7 +154,13 @@ class SignUpPageState extends State<SignUpPage> {
       //   "dob": dob,
       //   "patient_id": patientId // Add patient ID to user data
       // };
-      ModelUser user=ModelUser(uid: FirebaseAuth.instance.currentUser!.uid, name: name, email: email, phone: phone, dob: dob, patient_id: patientId);
+      ModelUser user = ModelUser(
+          uid: FirebaseAuth.instance.currentUser!.uid,
+          name: name,
+          email: email,
+          phone: phone,
+          dob: dob,
+          patient_id: patientId);
       try {
         await FirebaseFirestore.instance
             .collection("users")
@@ -166,8 +175,11 @@ class SignUpPageState extends State<SignUpPage> {
     }
   }
 
-
-
+  String hashPassword(String password) {
+    var bytes = utf8.encode(password);
+    var digest = sha256.convert(bytes);
+    return digest.toString();
+  }
 
   @override
   Widget build(BuildContext context) {
