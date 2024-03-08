@@ -39,25 +39,6 @@ class _NotificationsPageState extends State<NotificationsPage> {
       body: const Center(
         child: Text('Notifications Page Content'),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.notifications),
-            label: 'Notifications',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Settings',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: const Color(0xFF16666B), // Color for the selected item
-        onTap: _onItemTapped,
-      ),
     );
   }
 }
