@@ -1,4 +1,6 @@
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:neurooooo/home.dart';
 import 'dart:developer';
@@ -227,6 +229,7 @@ class MIDASOutputPage extends StatelessWidget {
       'score': score,
       'severity': severity,
       'timestamp': Timestamp.now(),
+      'uid' : FirebaseAuth.instance.currentUser!.uid,
     })
         .then((value) => log("Score and Severity added"))
         .catchError((error) => log("Failed to add score and severity: $error"));

@@ -1,0 +1,195 @@
+import 'dart:developer';
+import 'dart:io';
+import 'package:flutter/material.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:path/path.dart' as path;
+import 'package:encrypt/encrypt.dart' as encrypt;
+import 'package:file_picker/file_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
+
+
+class EHRPage extends StatefulWidget {
+  const EHRPage({super.key});
+
+  @override
+  _EHRPageState createState() => _EHRPageState();
+}
+
+class _EHRPageState extends State<EHRPage> {
+  List<String> fileUrls = []; // List to store uploaded file URLs
+  Map<String, String> filePasswords = {}; // Map to store file URLs and corresponding passwords
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('EHR'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              onPressed: _uploadFile,
+              child: const Text('Upload File'),
+            ),
+            const SizedBox(height: 20),
+            if (fileUrls.isNotEmpty)
+              Expanded(
+                child: ListView.builder(
+                  itemCount: fileUrls.length,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      title: Text('File $index'),
+                      onTap: () => _viewFile(index),
+                    );
+                  },
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<void> _uploadFile() async {
+    File? pickedFile = await _pickFile();
+    if (pickedFile != null) {
+      File file = pickedFile;
+      String? password = await _showPasswordDialog(); // Use String? for nullable String
+      if (password != null && password.isNotEmpty) {
+        String fileUrl = await _uploadEncryptedFile(file, password);
+        setState(() {
+          fileUrls.add(fileUrl);
+          filePasswords[fileUrl] = _hashPassword(password);
+        });
+      }
+    } else {
+      // Handle the case when _pickFile() returns null
+      log('No file picked');
+    }
+  }
+
+  Future<String?> _showPasswordDialog() async {
+    TextEditingController passwordController = TextEditingController();
+    return showDialog<String>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Enter Password'),
+          content: TextField(
+            controller: passwordController,
+            obscureText: true,
+            decoration: const InputDecoration(
+              hintText: 'Password',
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('Cancel'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context, passwordController.text);
+              },
+              child: const Text('Confirm'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<File?> _pickFile() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
+
+    if (result != null) {
+      PlatformFile file = result.files.first;
+      return File(file.path!);
+    } else {
+      print('File picking cancelled');
+      return null;
+    }
+  }
+
+  Future<String> _uploadEncryptedFile(File file, String password) async {
+    final plainText = file.readAsBytesSync();
+    final key = encrypt.Key.fromUtf8(password); // Use encrypt.Key here
+    final iv = encrypt.IV.fromLength(16); // Use encrypt.IV here
+
+    final encrypter = encrypt.Encrypter(encrypt.AES(key));
+    final encrypted = encrypter.encryptBytes(plainText, iv: iv);
+
+    FirebaseStorage storage = FirebaseStorage.instance;
+    String fileName = path.basename(file.path);
+    Reference ref = storage.ref().child(fileName);
+    UploadTask uploadTask = ref.putData(encrypted.bytes);
+    TaskSnapshot snapshot = await uploadTask;
+    return await snapshot.ref.getDownloadURL();
+  }
+
+
+  String _hashPassword(String password) {
+    // Hashing the password using a simple hash function (replace with stronger hash)
+    return password.hashCode.toString();
+  }
+
+  void _viewFile(int index) {
+    String fileUrl = fileUrls[index];
+    String? filePasswordNullable = filePasswords[fileUrl];
+    String filePassword = filePasswordNullable ?? ''; // Use empty string if null
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        TextEditingController passwordController = TextEditingController();
+        return AlertDialog(
+          title: const Text('Enter Password to View'),
+          content: TextField(
+            controller: passwordController,
+            obscureText: true,
+            decoration: const InputDecoration(
+              hintText: 'Password',
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('Cancel'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                String enteredPassword = passwordController.text;
+                if (_hashPassword(enteredPassword) == filePassword) {
+                  // Decrypt and view the file
+                  _decryptAndOpenFile(fileUrl, enteredPassword);
+                  Navigator.pop(context);
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Incorrect Password'),
+                    ),
+                  );
+                }
+              },
+              child: const Text('Confirm'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+
+  void _decryptAndOpenFile(String fileUrl, String password) {
+    // Decrypt the file using the provided password and open it
+    // Implement this based on your file handling requirements
+    log('Decrypting and Opening File: $fileUrl with Password: $password');
+  }
+}
+

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:neurooooo/home.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class DiaryPage extends StatefulWidget {
   const DiaryPage({super.key});
@@ -14,6 +16,32 @@ class _DiaryPageState extends State<DiaryPage> {
   double _glassesOfWater = 0;
   bool? _didExerciseToday;
   bool? _productiveObstacles;
+
+  void _submitDiary() async {
+    // Create a map with the values to be stored
+    Map<String, dynamic> diaryData = {
+      'didMissMeals': _didMissMeals,
+      'glassesOfWater': _glassesOfWater,
+      'didExerciseToday': _didExerciseToday,
+      'productiveObstacles': _productiveObstacles,
+      'timestamp': DateTime.now(),
+      'uid': FirebaseAuth.instance.currentUser?.uid,
+    };
+
+    try {
+      // Add the data to the Firestore collection 'personal_diary'
+      await FirebaseFirestore.instance.collection('personal_diary').add(diaryData);
+
+      // Navigate to the submission confirmation page
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const SubmissionConfirmationPage()),
+      );
+    } catch (e) {
+      // Handle errors here
+      print('Error adding diary entry: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +75,8 @@ class _DiaryPageState extends State<DiaryPage> {
               ),
             ),
             const SizedBox(height: 20),
+
+
 
             Row(
               children: [
@@ -185,12 +215,7 @@ class _DiaryPageState extends State<DiaryPage> {
             ),
             const Spacer(),
             ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const SubmissionConfirmationPage()),
-                );
-              },
+               onPressed: _submitDiary,
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF16666B),
                 foregroundColor: Colors.white,
