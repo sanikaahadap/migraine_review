@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:neurooooo/features.dart';
+import 'package:neurooooo/forgotpassword.dart';
 import 'package:neurooooo/home.dart';
 import 'package:neurooooo/signup.dart';
 
@@ -26,7 +27,8 @@ class _LoginPageState extends State<LoginPage> {
       log("Please fill all the fields!");
     } else {
       try {
-        UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+        UserCredential userCredential =
+            await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: email,
           password: password,
         );
@@ -50,8 +52,8 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        // Your app bar content goes here
-      ),
+          // Your app bar content goes here
+          ),
       body: SingleChildScrollView(
         child: Container(
           padding: const EdgeInsets.all(16.0),
@@ -75,12 +77,16 @@ class _LoginPageState extends State<LoginPage> {
                       labelText: 'Email',
                       border: OutlineInputBorder(),
                       filled: true,
-                      fillColor: Color(0x80B2EBF2), // Half lighter tint of the background color
-                      contentPadding: EdgeInsets.fromLTRB(12.0, 15.0, 12.0, 15.0),
+                      fillColor: Color(
+                          0x80B2EBF2), // Half lighter tint of the background color
+                      contentPadding:
+                          EdgeInsets.fromLTRB(12.0, 15.0, 12.0, 15.0),
                     ),
                     keyboardType: TextInputType.emailAddress,
                     validator: (value) {
-                      if (value == null || value.isEmpty || !value.contains('@')) {
+                      if (value == null ||
+                          value.isEmpty ||
+                          !value.contains('@')) {
                         return 'Enter a valid email address';
                       }
                       return null;
@@ -94,8 +100,10 @@ class _LoginPageState extends State<LoginPage> {
                       labelText: 'Password',
                       border: OutlineInputBorder(),
                       filled: true,
-                      fillColor: Color(0x80B2EBF2), // Half lighter tint of the background color
-                      contentPadding: EdgeInsets.fromLTRB(12.0, 15.0, 12.0, 15.0),
+                      fillColor: Color(
+                          0x80B2EBF2), // Half lighter tint of the background color
+                      contentPadding:
+                          EdgeInsets.fromLTRB(12.0, 15.0, 12.0, 15.0),
                     ),
                     obscureText: true,
                     validator: (value) {
@@ -103,12 +111,15 @@ class _LoginPageState extends State<LoginPage> {
                         return 'Enter a valid password';
                       } else if (value.length < 8) {
                         return 'Password must be at least 8 characters long';
-                      } else if (!RegExp(r'(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+{}|:;<>,.?/~`]).{8,}').hasMatch(value)) {
+                      } else if (!RegExp(
+                              r'(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+{}|:;<>,.?/~`]).{8,}')
+                          .hasMatch(value)) {
                         String error = '';
                         if (!RegExp(r'(?=.*[0-9])').hasMatch(value)) {
                           error += 'At least one number required.\n';
                         }
-                        if (!RegExp(r'(?=.*[!@#$%^&*()_+{}|:;<>,.?/~`])').hasMatch(value)) {
+                        if (!RegExp(r'(?=.*[!@#$%^&*()_+{}|:;<>,.?/~`])')
+                            .hasMatch(value)) {
                           error += 'At least one special symbol required.\n';
                         }
                         return error.trim();
@@ -142,7 +153,9 @@ class _LoginPageState extends State<LoginPage> {
                       width: 170.0,
                       height: 45.0,
                       decoration: BoxDecoration(
-                        color: _isButtonPressed ? Colors.white : const Color(0xFF16666B),
+                        color: _isButtonPressed
+                            ? Colors.white
+                            : const Color(0xFF16666B),
                         borderRadius: BorderRadius.circular(12.0),
                       ),
                       child: Center(
@@ -150,7 +163,9 @@ class _LoginPageState extends State<LoginPage> {
                           'Login',
                           style: TextStyle(
                             fontSize: 17.0,
-                            color: _isButtonPressed ? const Color(0xFF16666B) : Colors.white,
+                            color: _isButtonPressed
+                                ? const Color(0xFF16666B)
+                                : Colors.white,
                           ),
                         ),
                       ),
@@ -165,14 +180,17 @@ class _LoginPageState extends State<LoginPage> {
                   // Forgot Password text link
                   GestureDetector(
                     onTap: () {
-                      // Add logic for navigating to the forgot password page
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => forgotpasspg()));
                     },
                     child: const Text(
                       'Forgot Password?',
                       style: TextStyle(color: Color(0xFF16666B)),
                     ),
                   ),
-                  const SizedBox(height:10),
+                  const SizedBox(height: 10),
                   GestureDetector(
                     onTap: () {
                       Navigator.push(
@@ -185,7 +203,7 @@ class _LoginPageState extends State<LoginPage> {
                       style: TextStyle(color: Color(0xFF16666B)),
                     ),
                   ),
-                  const SizedBox(height:150),
+                  const SizedBox(height: 150),
                   GestureDetector(
                     onTap: () {
                       Navigator.push(
@@ -198,7 +216,6 @@ class _LoginPageState extends State<LoginPage> {
                       style: TextStyle(color: Color(0xFF16666B)),
                     ),
                   ),
-
                 ],
               ),
             ),

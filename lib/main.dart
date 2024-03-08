@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:neurooooo/animated_page.dart';
 import 'package:neurooooo/firebase_options.dart';
 import 'package:neurooooo/login.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:neurooooo/validation.dart';
 
-void main() async  {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const MyApp());
 }
 
@@ -19,9 +19,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        routes: {
-          '/login': (context) => LoginPage(),
-        },
+      routes: {
+        '/login': (context) => validate(),
+      },
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
@@ -44,9 +44,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: AnimatedPage(
-
-      ),
+      home: validate(),
     );
   }
 }
