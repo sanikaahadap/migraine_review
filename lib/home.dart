@@ -21,7 +21,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  ModelUser user=ModelUser(email: '', name:'' , uid: '', phone: '', dob: '', patient_id: '');
+  ModelUser user = ModelUser(
+      email: '', name: '', uid: '', phone: '', dob: '', patient_id: '');
   // String _userName = '';
 
   @override
@@ -33,20 +34,21 @@ class _HomePageState extends State<HomePage> {
     // Placeholder user name
   }
 
-
-  void getDetails()async{
-    user=await getUserDetails();
-    setState(() {
-    });
+  void getDetails() async {
+    user = await getUserDetails();
+    setState(() {});
   }
 
+  void signUserOut() {
+    FirebaseAuth.instance.signOut();
+  }
 
   Future<ModelUser> getUserDetails() async {
     User currentUser = FirebaseAuth.instance.currentUser!;
-    FirebaseFirestore firebaseFirestore=FirebaseFirestore.instance;
+    FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
 
     DocumentSnapshot snap =
-    await firebaseFirestore.collection('users').doc(currentUser.uid).get();
+        await firebaseFirestore.collection('users').doc(currentUser.uid).get();
     log('sssssssss ${snap["email"]}');
     return ModelUser.fromSnap(snap);
   }
@@ -66,7 +68,8 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(left: 0, top: 35), // Adjust left padding as needed
+            padding: const EdgeInsets.only(
+                left: 0, top: 35), // Adjust left padding as needed
             child: Align(
               alignment: Alignment.topLeft,
               child: GestureDetector(
@@ -134,7 +137,8 @@ class _HomePageState extends State<HomePage> {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => CalendarPage()),
+                          MaterialPageRoute(
+                              builder: (context) => CalendarPage()),
                         );
                       },
                     ),
@@ -159,8 +163,9 @@ class _HomePageState extends State<HomePage> {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const DiaryPage()),
-                        );// Handle Your Diary button press
+                          MaterialPageRoute(
+                              builder: (context) => const DiaryPage()),
+                        ); // Handle Your Diary button press
                       },
                     ),
                   ],
@@ -171,7 +176,8 @@ class _HomePageState extends State<HomePage> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => MIDASAssessmentPage()),
+                      MaterialPageRoute(
+                          builder: (context) => MIDASAssessmentPage()),
                     );
                   },
                 ),
@@ -184,12 +190,14 @@ class _HomePageState extends State<HomePage> {
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
-             DrawerHeader(
+            DrawerHeader(
               decoration: const BoxDecoration(
                 color: Color(0xFF16666B),
               ),
               child: Text(
-                user.name.isNotEmpty ? user.name : 'Hello User', // Display user's name if not empty
+                user.name.isNotEmpty
+                    ? user.name
+                    : 'Hello User', // Display user's name if not empty
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 24,
@@ -202,7 +210,7 @@ class _HomePageState extends State<HomePage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => const ProfilePage()),
-                );// Navigate to profile page
+                ); // Navigate to profile page
               },
             ),
             ListTile(
@@ -219,7 +227,8 @@ class _HomePageState extends State<HomePage> {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => MIDASAssessmentPage()),
+                  MaterialPageRoute(
+                      builder: (context) => MIDASAssessmentPage()),
                 );
               },
             ),
@@ -257,12 +266,7 @@ class _HomePageState extends State<HomePage> {
               },
             ),
             const Divider(),
-            ListTile(
-              title: const Text('Log Out'),
-              onTap: () {
-                // Implement log out functionality
-              },
-            ),
+            ListTile(title: const Text('Log Out'), onTap: signUserOut),
           ],
         ),
       ),
@@ -289,7 +293,8 @@ class _HomePageState extends State<HomePage> {
           } else if (index == 1) {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const NotificationsPage()),
+              MaterialPageRoute(
+                  builder: (context) => const NotificationsPage()),
             );
           } else if (index == 2) {
             Navigator.push(
@@ -307,7 +312,8 @@ class CustomButton extends StatelessWidget {
   final String buttonText;
   final VoidCallback onPressed;
 
-  const CustomButton({super.key,
+  const CustomButton({
+    super.key,
     required this.buttonText,
     required this.onPressed,
   });
