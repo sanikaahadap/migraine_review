@@ -9,6 +9,7 @@ import 'package:neurooooo/faqs.dart';
 import 'package:neurooooo/calendar.dart';
 import 'package:neurooooo/profile.dart';
 import 'package:neurooooo/diary.dart';
+import 'package:neurooooo/miglog.dart';
 import 'models/user.dart';
 import 'dart:developer';
 
@@ -178,6 +179,17 @@ class _HomePageState extends State<HomePage> {
                       context,
                       MaterialPageRoute(
                           builder: (context) => MIDASAssessmentPage()),
+                    );
+                  },
+                ),
+                const SizedBox(height: 20),
+                CustomButton(
+                  buttonText: 'Migraine logs',
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => MigraineLogsPage()),
                     );
                   },
                 ),
