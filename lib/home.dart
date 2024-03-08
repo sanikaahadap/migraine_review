@@ -247,7 +247,11 @@ class _HomePageState extends State<HomePage> {
             ListTile(
               title: const Text('Your Diary'),
               onTap: () {
-                // Navigate to your diary page
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => DiaryPage()),
+                );
               },
             ),
             ListTile(
