@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:neurooooo/ehr_entry.dart';
 import 'package:neurooooo/midas.dart';
 import 'package:neurooooo/notifications.dart';
 import 'package:neurooooo/settings.dart';
@@ -128,7 +129,7 @@ class _HomePageState extends State<HomePage> {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => EHRPage()),
+                          MaterialPageRoute(builder: (context) => ehrmainpg()),
                         );
                       },
                     ),
@@ -249,8 +250,7 @@ class _HomePageState extends State<HomePage> {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) => DiaryPage()),
+                  MaterialPageRoute(builder: (context) => DiaryPage()),
                 );
               },
             ),

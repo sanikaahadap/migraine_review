@@ -30,7 +30,7 @@ class _LoginPageState extends State<LoginPage> {
       log("Please fill all the fields!");
     } else {
       String hashedPassword = hashPassword(password);
-
+      log(hashedPassword);
       try {
         UserCredential userCredential =
             await FirebaseAuth.instance.signInWithEmailAndPassword(
