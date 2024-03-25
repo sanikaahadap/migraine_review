@@ -22,16 +22,16 @@ class ehrmainpg extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => ehrrec()),
                 );
               },
-              child: Text('Go to Page One'),
+              child: Text('View MIDAS records'),
             ),
             ElevatedButton(
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => EHRPage()),
+                  MaterialPageRoute(builder: (context) => const PDFUploader()),
                 );
               },
-              child: Text('Go to Page Two'),
+              child: Text('upload pdf'),
             ),
           ],
         ),

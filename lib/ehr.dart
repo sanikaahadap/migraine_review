@@ -1,159 +1,196 @@
-import 'package:file_picker/file_picker.dart';
-import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
-import 'package:flutter/material.dart';
-import 'package:neurooooo/storage_service.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class EHRPage extends StatefulWidget {
-  const EHRPage({super.key});
+
+class PDFUploader extends StatefulWidget {
+  const PDFUploader({super.key});
 
   @override
-  State<EHRPage> createState() => _EHRPageState();
+  _PDFUploaderState createState() => _PDFUploaderState();
 }
 
-class _EHRPageState extends State<EHRPage> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final Storage storage = Storage();
+class _PDFUploaderState extends State<PDFUploader> {
+  List<File> _pdfFiles = [];
 
   @override
   void initState() {
     super.initState();
-    requestPermission();
+    _loadPDFFiles();
   }
 
-  Future<void> requestPermission() async {
-    final permission2 = Permission.photos;
-    final permission3 = Permission.camera;
-    if (await permission2.isDenied) {
-      print("---photos permission---");
-      await permission2.request();
-    }
-    if (await permission3.isDenied) {
-      await permission3.request();
+  Future<void> _loadPDFFiles() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String>? pdfPaths = prefs.getStringList('pdf_paths');
+    if (pdfPaths != null) {
+      setState(() {
+        _pdfFiles = pdfPaths.map((path) => File(path)).toList();
+      });
     }
   }
 
-  Future<void> _uploadAndSaveToFirestore(String path, String fileName) async {
-    // Upload image to Firebase Storage
-    final imageUrl = await storage.uploadFile(path, fileName);
+  Future<void> _savePDFFiles() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String> pdfPaths = _pdfFiles.map((file) => file.path).toList();
+    prefs.setStringList('pdf_paths', pdfPaths);
+  }
 
-    // Get current user
-    User? user = _auth.currentUser;
-    if (user != null) {
-      String uid = user.uid;
+  Future pickAndUploadPDF() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['pdf'],
+    );
 
-      // Add data to Firestore
-      await _firestore
-          .collection('ehr')
-          .doc(FirebaseAuth.instance.currentUser?.uid)
-          .set({
-        'uid': FirebaseAuth.instance.currentUser?.uid,
-        // 'imageUrl': imageUrl as String,
+    if (result != null) {
+      File pdf = File(result.files.single.path!);
+      await _uploadPDF(pdf);
+      await _savePDFFiles(); // Save the updated list of PDF files
+    } else {
+      print('No PDF selected.');
+    }
+  }
+
+  Future<void> _uploadPDF(File pdf) async {
+    try {
+      Reference storageReference = FirebaseStorage.instance
+          .ref()
+          .child('pdfs/${DateTime.now().millisecondsSinceEpoch}.pdf');
+
+      UploadTask uploadTask = storageReference.putFile(pdf);
+      TaskSnapshot snapshot = await uploadTask.whenComplete(() {
+        print('PDF uploaded');
       });
 
-      // return imageUrl; // Return imageUrl after uploading
-    } else {
-      // No user signed in
-      print('No user signed in');
-      // return ''; // Return empty string if no user signed in
+      // Get the download URL
+      String downloadURL = await snapshot.ref.getDownloadURL();
+
+      // Store the download URL in Firestore
+      await FirebaseFirestore.instance.collection('ehr').add({
+        'uid' : FirebaseAuth.instance.currentUser!.uid,
+        'pdf_name': storageReference.name,
+        'download_url': downloadURL,
+        'timestamp': FieldValue.serverTimestamp(),
+      });
+
+      setState(() {
+        _pdfFiles.add(pdf);
+      });
+    } catch (e) {
+      print(e);
     }
   }
+
+  Future<void> _renamePDF(int index, String newName) async {
+    setState(() {
+      _pdfFiles[index] = File(newName);
+    });
+  }
+
+  // void _viewPDF(File pdf) {
+  //   Navigator.push(
+  //     context,
+  //     MaterialPageRoute(
+  //       builder: (context) => PDFViewerPage(pdfPath: pdf.path),
+  //     ),
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
-    final Storage storage = Storage();
-
     return Scaffold(
       appBar: AppBar(
-        title: const Text('EHR'),
+        title: const Text('PDF Uploader'),
       ),
       body: Column(
-        children: [
-          Center(
-            child: ElevatedButton(
-              onPressed: () async {
-                final results = await FilePicker.platform.pickFiles(
-                  allowMultiple: false,
-                  type: FileType.custom,
-                  allowedExtensions: ['png', 'jpg'],
-                );
-
-                if (results == null) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('No file selected'),
+        children: <Widget>[
+          ElevatedButton(
+            onPressed: pickAndUploadPDF,
+            child: const Text('Select and Upload PDF'),
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: _pdfFiles.length,
+              itemBuilder: (context, index) {
+                File pdf = _pdfFiles[index];
+                return GestureDetector(
+                  onTap: () {
+                    // _viewPDF(pdf);
+                  },
+                  child: ListTile(
+                    title: Text(pdf.path.split('/').last),
+                    trailing: PopupMenuButton(
+                      itemBuilder: (context) => [
+                        PopupMenuItem(
+                          value: 'rename',
+                          child: Text('Rename PDF'),
+                        ),
+                      ],
+                      onSelected: (value) async {
+                        if (value == 'rename') {
+                          String? newName = await showDialog<String>(
+                            context: context,
+                            builder: (context) {
+                              String newName = '';
+                              return AlertDialog(
+                                title: const Text('Rename PDF'),
+                                content: TextField(
+                                  onChanged: (value) {
+                                    newName = value;
+                                  },
+                                  decoration: const InputDecoration(
+                                    labelText: 'New Name',
+                                  ),
+                                ),
+                                actions: <Widget>[
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop(newName);
+                                    },
+                                    child: const Text('OK'),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                          if (newName != null && newName.isNotEmpty) {
+                            _renamePDF(index, newName);
+                          }
+                        }
+                      },
                     ),
-                  );
-                  return;
-                }
-
-                final path = results.files.single.path!;
-                final fileName = results.files.single.name;
-
-                storage
-                    .uploadFile(path, fileName)
-                    .then((value) => print('done'));
+                  ),
+                );
               },
-              child: Text('Upload File'),
             ),
           ),
-          FutureBuilder(
-              future: storage.listFiles(),
-              builder: (BuildContext context,
-                  AsyncSnapshot<firebase_storage.ListResult> snapshot) {
-                if (snapshot.connectionState == ConnectionState.done &&
-                    snapshot.hasData) {
-                  return Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    height: 50,
-                    child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        shrinkWrap: true,
-                        itemCount: snapshot.data!.items.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: ElevatedButton(
-                              onPressed: () {},
-                              child: Text(snapshot.data!.items[index].name),
-                            ),
-                          );
-                        }),
-                  );
-                }
-
-                if (snapshot.connectionState == ConnectionState.waiting ||
-                    !snapshot.hasData) {
-                  return CircularProgressIndicator();
-                }
-
-                return Container();
-              }),
-          FutureBuilder(
-              future: storage.downloadURL(''),
-              builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-                if (snapshot.connectionState == ConnectionState.done &&
-                    snapshot.hasData) {
-                  return Container(
-                      width: 300,
-                      height: 250,
-                      child: Image.network(
-                        snapshot.data!,
-                        fit: BoxFit.cover,
-                      ));
-                }
-                if (snapshot.connectionState == ConnectionState.waiting ||
-                    !snapshot.hasData) {
-                  return CircularProgressIndicator();
-                }
-
-                return Container();
-              })
         ],
       ),
     );
   }
+}
+
+// class PDFViewerPage extends StatelessWidget {
+//   final String pdfPath;
+//
+//   const PDFViewerPage({Key? key, required this.pdfPath}) : super(key: key);
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Text('PDF Viewer'),
+//       ),
+//       body: SfPdfViewer.network(pdfPath),
+//     );
+//   }
+// }
+
+void main( ) {
+  runApp(MaterialApp(
+    home: PDFUploader( ),
+  ));
 }
