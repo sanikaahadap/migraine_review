@@ -163,58 +163,7 @@ class UserInfoPageState extends State<UserInfoPage> {
                   ),
                   maxLines: null,
                 ),
-                const SizedBox(height: 16.0),
-                TextFormField(
-                  controller: emergencyContactNameController,
-                  decoration: const InputDecoration(
-                    labelText: 'Emergency Contact Name',
-                    labelStyle: TextStyle(
-                      color: Color(0xFF16666B), // Text color when not focused
-                    ),
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey), // Default border color
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Color(0xFF16666B)), // Border color when focused
-                    ),
-                  ),
-                  maxLines: null,
-                ),
-                const SizedBox(height: 16.0),
-                TextFormField(
-                  controller: relationshipController,
-                  decoration: const InputDecoration(
-                    labelText: 'Relationship',
-                    labelStyle: TextStyle(
-                      color: Color(0xFF16666B), // Text color when not focused
-                    ),
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey), // Default border color
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Color(0xFF16666B)), // Border color when focused
-                    ),
-                  ),
-                  maxLines: null,
-                ),
-                const SizedBox(height: 16.0),
-                TextFormField(
-                  controller: contactNumberController,
-                  decoration: const InputDecoration(
-                    labelText: 'Contact No.',
-                    labelStyle: TextStyle(
-                      color: Color(0xFF16666B), // Text color when not focused
-                    ),
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey), // Default border color
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Color(0xFF16666B)), // Border color when focused
-                    ),
-                  ),
-                  keyboardType: TextInputType.phone,
-                  maxLines: null,
-                ),
+
                 const SizedBox(height: 16.0),
                 ElevatedButton(
                   onPressed: () {
@@ -237,9 +186,7 @@ class UserInfoPageState extends State<UserInfoPage> {
                           'medicalCondition': medicalConditionController.text,
                           'medications': medicationsController.text,
                           'surgeries': surgeriesController.text,
-                          'emergencyContactName': emergencyContactNameController.text,
-                          'relationship': relationshipController.text,
-                          'contactNumber': contactNumberController.text,
+
                         }).then((value) {
                           // Navigate to the next page after storing data
                           Navigator.push(
@@ -279,33 +226,43 @@ class DisclaimerPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text(
-              'Disclaimer',
-              style: TextStyle(
-                fontSize: 30.0,
-                fontWeight: FontWeight.bold,
-                color: Color(0xFF16666B),
-              ),
+            const Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.warning, // Choose the appropriate icon
+                  color: Color(0xFF16666B),
+                  size: 30.0,
+                ),
+                SizedBox(width: 8.0), // Add some space between the icon and text
+                Text(
+                  'Disclaimer',
+                  style: TextStyle(
+                    fontSize: 30.0,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF16666B),
+                  ),
+                ),
+              ],
             ),
             const SizedBox(height: 16.0),
             const Padding(
-              padding: EdgeInsets.fromLTRB(8.0, 0, 0, 0),
+              padding: EdgeInsets.symmetric(horizontal: 24.0),
               child: Text(
                 'The app is designed to help you keep track of your headache and coordinate with your physician. Your data will be kept confidential',
                 style: TextStyle(
                   color: Color(0xFF16666B),
                   fontSize: 15.0,
                 ),
+                textAlign: TextAlign.center, // Center the text
               ),
             ),
-
-
-            const SizedBox(height: 170.0),
+            const SizedBox(height: 70.0),
             ElevatedButton(
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => QuestionnairePage()),
+                  MaterialPageRoute(builder: (context) => const QuestionnairePage()),
                 );
               },
               style: ElevatedButton.styleFrom(
@@ -320,7 +277,7 @@ class DisclaimerPage extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => QuestionnairePage()),
+                  MaterialPageRoute(builder: (context) => const QuestionnairePage()),
                 );
               },
               style: ElevatedButton.styleFrom(
@@ -333,6 +290,7 @@ class DisclaimerPage extends StatelessWidget {
           ],
         ),
       ),
+
     );
   }
 }

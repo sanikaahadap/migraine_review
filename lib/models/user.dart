@@ -13,7 +13,7 @@ class ModelUser
 
   Map<String,dynamic> toJson()=>
       {
-        'email': email,
+        // 'email': email,
         'name': name,
         'uid':uid,
         'patient_id': patient_id,

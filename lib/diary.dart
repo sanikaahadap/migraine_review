@@ -79,8 +79,6 @@ class DiaryPageState extends State<DiaryPage> {
             ),
             const SizedBox(height: 20),
 
-
-
             Column(
               children: [
                 const SizedBox(height: 10),
@@ -425,7 +423,7 @@ class DiaryPageState extends State<DiaryPage> {
 
             const Spacer(),
             ElevatedButton(
-               onPressed: _submitDiary,
+              onPressed: _submitDiary,
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF16666B),
                 foregroundColor: Colors.white,
@@ -435,7 +433,9 @@ class DiaryPageState extends State<DiaryPage> {
             ),
           ],
         ),
+
       ),
+
     );
   }
 

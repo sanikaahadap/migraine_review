@@ -90,8 +90,4 @@ class LoginSignupPage extends StatelessWidget {
   }
 }
 
-void main() {
-  runApp(const MaterialApp(
-    home: LoginSignupPage(),
-  ));
-}
+

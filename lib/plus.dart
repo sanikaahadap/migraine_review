@@ -3,6 +3,8 @@ import 'package:neurooooo/home.dart';
 import 'package:neurooooo/midas.dart';
 
 class QuestionnairePage extends StatelessWidget {
+  const QuestionnairePage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -13,7 +15,7 @@ class QuestionnairePage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
+            const Text(
               'We don’t know each other yet',
               style: TextStyle(
                 fontSize: 16.0,
@@ -21,12 +23,12 @@ class QuestionnairePage extends StatelessWidget {
                 color: Color(0xFF16666B), // Text color matching the theme
               ),
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             GestureDetector(
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => MIDASAssessmentPage()),
+                  MaterialPageRoute(builder: (context) => const MIDASAssessmentPage()),
                 ); // Navigate to the homepage
               },
               child: Image.asset(
@@ -34,15 +36,15 @@ class QuestionnairePage extends StatelessWidget {
                 height: 50, // Adjust the height as needed
               ),
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             TextButton(
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => HomePage()),
+                  MaterialPageRoute(builder: (context) => const HomePage()),
                 ); // Navigate to the homepage
               },
-              child: Text(
+              child: const Text(
                 'Skip the questionnaire for now',
                 style: TextStyle(
                   color: Color(0xFF16666B), // Text color matching the theme
