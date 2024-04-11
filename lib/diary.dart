@@ -8,10 +8,10 @@ class DiaryPage extends StatefulWidget {
   const DiaryPage({super.key});
 
   @override
-  _DiaryPageState createState() => _DiaryPageState();
+  DiaryPageState createState() => DiaryPageState();
 }
 
-class _DiaryPageState extends State<DiaryPage> {
+class DiaryPageState extends State<DiaryPage> {
   bool? _didMissMeals;
   double _glassesOfWater = 0;
   bool? _didExerciseToday;
@@ -39,13 +39,16 @@ class _DiaryPageState extends State<DiaryPage> {
       );
     } catch (e) {
       // Handle errors here
-      print('Error adding diary entry: $e');
     }
   }
 
   @override
   Widget build(BuildContext context) {
     String currentDate = DateFormat('EEEE, d MMMM yyyy').format(DateTime.now());
+    bool? hadHeadache; // Initialize as null
+    bool? avoidRoutineActivities; // Initialize as null
+    String? sleepDuration; // Initialize as null
+    double screenTime = 0; // Initialize with a default value
 
     return Scaffold(
       appBar: AppBar(
@@ -78,14 +81,130 @@ class _DiaryPageState extends State<DiaryPage> {
 
 
 
-            Row(
+            Column(
               children: [
+                const SizedBox(height: 10),
                 const Text(
-                  'Did you miss meals? ',
+                  'Did you have a headache today?',
                   style: TextStyle(
                     color: Color(0xFF16666B),
                   ),
                 ),
+                Row(
+                  children: [
+                    Radio(
+                      value: true,
+                      groupValue: hadHeadache,
+                      activeColor: const Color(0xFF16666B),
+                      onChanged: (value) {
+                        setState(() {
+                          hadHeadache = value;
+                        });
+                      },
+                    ),
+                    const Text('Yes', style: TextStyle(color: Color(0xFF16666B))),
+                    Radio(
+                      value: false,
+                      groupValue: hadHeadache,
+                      activeColor: const Color(0xFF16666B),
+                      onChanged: (value) {
+                        setState(() {
+                          hadHeadache = value;
+                        });
+                      },
+                    ),
+                    const Text('No', style: TextStyle(color: Color(0xFF16666B))),
+                  ],
+                ),
+                if (hadHeadache ?? false)
+                  Column(
+                    children: [
+                      const SizedBox(height: 10),
+                      const Text(
+                        '1. Describe the headache experienced:',
+                        style: TextStyle(
+                          color: Color(0xFF16666B),
+                        ),
+                      ),
+                      // Radio buttons for headache description
+                      const SizedBox(height: 10),
+                      const Text(
+                        '2. What was the severity:',
+                        style: TextStyle(
+                          color: Color(0xFF16666B),
+                        ),
+                      ),
+                      // Radio buttons for headache severity
+                      const SizedBox(height: 10),
+                      const Text(
+                        '3. What was the headache accompanied by:',
+                        style: TextStyle(
+                          color: Color(0xFF16666B),
+                        ),
+                      ),
+                      // Checkboxes for headache accompaniments
+                      const SizedBox(height: 10),
+                      const Text(
+                        '4. Any symptoms before the headache:',
+                        style: TextStyle(
+                          color: Color(0xFF16666B),
+                        ),
+                      ),
+                      // Checkboxes for pre-headache symptoms
+                      const SizedBox(height: 10),
+                      const Text(
+                        '5. Did you identify any triggers today:',
+                        style: TextStyle(
+                          color: Color(0xFF16666B),
+                        ),
+                      ),
+                      // Checkboxes for headache triggers
+                      const SizedBox(height: 10),
+                      const Text(
+                        '6. Did the headache cause you to avoid routine activities?',
+                        style: TextStyle(
+                          color: Color(0xFF16666B),
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          Radio(
+                            value: true,
+                            groupValue: avoidRoutineActivities,
+                            activeColor: const Color(0xFF16666B),
+                            onChanged: (value) {
+                              setState(() {
+                                avoidRoutineActivities = value;
+                              });
+                            },
+                          ),
+                          const Text('Yes', style: TextStyle(color: Color(0xFF16666B))),
+                          Radio(
+                            value: false,
+                            groupValue: avoidRoutineActivities,
+                            activeColor: const Color(0xFF16666B),
+                            onChanged: (value) {
+                              setState(() {
+                                avoidRoutineActivities = value;
+                              });
+                            },
+                          ),
+                          const Text('No', style: TextStyle(color: Color(0xFF16666B))),
+                        ],
+                      ),
+                    ],
+                  ),
+              ],
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              'a) Did you miss meals?',
+              style: TextStyle(
+                color: Color(0xFF16666B),
+              ),
+            ),
+            Row(
+              children: [
                 Radio(
                   value: true,
                   groupValue: _didMissMeals,
@@ -112,7 +231,7 @@ class _DiaryPageState extends State<DiaryPage> {
             ),
             const SizedBox(height: 20),
             const Text(
-              'Glasses of Water:',
+              'b) Glasses of Water:',
               style: TextStyle(
                 color: Color(0xFF16666B),
               ),
@@ -148,14 +267,14 @@ class _DiaryPageState extends State<DiaryPage> {
               ),
             ),
             const SizedBox(height: 20),
+            const Text(
+              'c) Did you exercise today?',
+              style: TextStyle(
+                color: Color(0xFF16666B),
+              ),
+            ),
             Row(
               children: [
-                const Text(
-                  'Did you exercise today?',
-                  style: TextStyle(
-                    color: Color(0xFF16666B),
-                  ),
-                ),
                 Radio(
                   value: true,
                   groupValue: _didExerciseToday,
@@ -182,7 +301,7 @@ class _DiaryPageState extends State<DiaryPage> {
             ),
             const SizedBox(height: 20),
             const Text(
-              'Are you facing any obstacles being productive?',
+              'd) Are you facing any obstacles in being productive?',
               style: TextStyle(
                 color: Color(0xFF16666B),
               ),
@@ -213,6 +332,97 @@ class _DiaryPageState extends State<DiaryPage> {
                 const Text('No', style: TextStyle(color: Color(0xFF16666B))),
               ],
             ),
+            const SizedBox(height: 20),
+            const Text(
+              'e) How much sleep did you get?',
+              style: TextStyle(
+                color: Color(0xFF16666B),
+              ),
+            ),
+            Row(
+              children: [
+                Radio(
+                  value: sleepDuration == 'Less than 3 hours',
+                  groupValue: sleepDuration,
+                  activeColor: const Color(0xFF16666B),
+                  onChanged: (value) {
+                    setState(() {
+                      sleepDuration = 'Less than 3 hours';
+                    });
+                  },
+                ),
+                const Text('< 3 hours', style: TextStyle(color: Color(0xFF16666B))),
+                Radio(
+                  value: sleepDuration == '3-5 hours',
+                  groupValue: sleepDuration,
+                  activeColor: const Color(0xFF16666B),
+                  onChanged: (value) {
+                    setState(() {
+                      sleepDuration = '3-5 hours';
+                    });
+                  },
+                ),
+                const Text('3-5 hours', style: TextStyle(color: Color(0xFF16666B))),
+                Radio(
+                  value: sleepDuration == '5-8 hours',
+                  groupValue: sleepDuration,
+                  activeColor: const Color(0xFF16666B),
+                  onChanged: (value) {
+                    setState(() {
+                      sleepDuration = '5-8 hours';
+                    });
+                  },
+                ),
+                const Text('5-8 hours', style: TextStyle(color: Color(0xFF16666B))),
+                Radio(
+                  value: sleepDuration == '8-10 hours',
+                  groupValue: sleepDuration,
+                  activeColor: const Color(0xFF16666B),
+                  onChanged: (value) {
+                    setState(() {
+                      sleepDuration = '8-10 hours';
+                    });
+                  },
+                ),
+                const Text('8-10 hours', style: TextStyle(color: Color(0xFF16666B))),
+                Radio(
+                  value: sleepDuration == 'More than 10 hours',
+                  groupValue: sleepDuration,
+                  activeColor: const Color(0xFF16666B),
+                  onChanged: (value) {
+                    setState(() {
+                      sleepDuration = 'More than 10 hours';
+                    });
+                  },
+                ),
+                const Text('> 10 hours', style: TextStyle(color: Color(0xFF16666B))),
+              ],
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              'f) How many hours of screen time today?',
+              style: TextStyle(
+                color: Color(0xFF16666B),
+              ),
+            ),
+            Row(
+              children: [
+                Slider(
+                  value: screenTime,
+                  min: 0,
+                  max: 24,
+                  divisions: 24,
+                  label: screenTime.round().toString(),
+                  onChanged: (double value) {
+                    setState(() {
+                      screenTime = value;
+                    });
+                  },
+                ),
+                Text('${screenTime.round()} hours', style: const TextStyle(color: Color(0xFF16666B))),
+              ],
+            ),
+
             const Spacer(),
             ElevatedButton(
                onPressed: _submitDiary,

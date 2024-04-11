@@ -1,6 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:neurooooo/animated_page.dart';
+import 'package:neurooooo/onboarding/animated_page.dart';
 import 'package:neurooooo/firebase_options.dart';
 import 'package:neurooooo/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/login': (context) => validate(),
       },
-      title: 'Flutter Demo',
+      title: 'NeuroCare',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         // This is the theme of your application.
