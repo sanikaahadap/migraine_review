@@ -110,11 +110,13 @@
 import 'package:flutter/material.dart';
 
 class FAQsPage extends StatefulWidget {
+  const FAQsPage({super.key});
+
   @override
-  _FAQsPageState createState() => _FAQsPageState();
+  FAQsPageState createState() => FAQsPageState();
 }
 
-class _FAQsPageState extends State<FAQsPage> {
+class FAQsPageState extends State<FAQsPage> {
   String _searchText = "";
 
   @override
@@ -204,7 +206,7 @@ class FAQItem extends StatelessWidget {
   final String question;
   final String answer;
 
-  const FAQItem({required this.question, required this.answer});
+  const FAQItem({super.key, required this.question, required this.answer});
 
   @override
   Widget build(BuildContext context) {

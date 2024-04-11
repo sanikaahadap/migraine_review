@@ -6,15 +6,15 @@ class MigraineLogsPage extends StatefulWidget {
   const MigraineLogsPage({Key? key}) : super(key: key);
 
   @override
-  _MigraineLogsPageState createState() => _MigraineLogsPageState();
+  MigraineLogsPageState createState() => MigraineLogsPageState();
 }
 
-class _MigraineLogsPageState extends State<MigraineLogsPage> {
+class MigraineLogsPageState extends State<MigraineLogsPage> {
   bool showOtherCharacterTextField = false; // Track checkbox state
   int _durationIndex = 0; // Index for duration options
   int _painSeverity = 1; // Initial pain severity
   int? _selectedLocation; // Track selected location of headache
-  List<String> _selectedCharacter = []; // Track selected character of headache
+  final List<String> _selectedCharacter = []; // Track selected character of headache
   int? _selectedSeverity; // Track selected severity of headache
   bool _difficultyInWork = false; // Track difficulty in work
   bool _nausea = false; // Track nausea
@@ -25,7 +25,7 @@ class _MigraineLogsPageState extends State<MigraineLogsPage> {
   bool _blurringOfVision = false; // Track blurring of vision
   bool _ctMriScan = false; // Track CT/MRI scan
   int _painKillersPerMonth = 0; // Track pain killers per month
-  int _monthsOfPainkillerUse = 0; // Track months of painkiller use
+  final int _monthsOfPainkillerUse = 0; // Track months of painkiller use
 
   final List<String> _durationOptions = [
     '15 mins',
@@ -549,7 +549,7 @@ class _MigraineLogsPageState extends State<MigraineLogsPage> {
                 onChanged: (value) {
                   _painKillersPerMonth = int.tryParse(value) ?? 0;
                 },
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   hintText: 'Enter number of pain killers',
                   contentPadding:
                   EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
@@ -609,12 +609,12 @@ class LogResponsePage extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => const HomePage()),
                 );
               },
-              child: const Text('Back to Home',
-                  style: TextStyle(color: Colors.white)),
               style: ElevatedButton.styleFrom(
                 backgroundColor:
                 const Color(0xFF16666B), // Set button background color
               ),
+              child: const Text('Back to Home',
+                  style: TextStyle(color: Colors.white)),
             ),
           ],
         ),

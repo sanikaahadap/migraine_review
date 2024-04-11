@@ -3,6 +3,8 @@ import 'package:neurooooo/login.dart';
 import 'package:neurooooo/signup.dart';
 
 class LoginSignupPage extends StatelessWidget {
+  const LoginSignupPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,7 +51,7 @@ class LoginSignupPage extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => LoginPage()),
+                    MaterialPageRoute(builder: (context) => const LoginPage()),
                   );
                 },
                 style: ElevatedButton.styleFrom(
@@ -68,7 +70,7 @@ class LoginSignupPage extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => SignUpPage()),
+                      MaterialPageRoute(builder: (context) => const SignUpPage()),
                   );
                 },
                 style: ElevatedButton.styleFrom(
@@ -89,7 +91,7 @@ class LoginSignupPage extends StatelessWidget {
 }
 
 void main() {
-  runApp(MaterialApp(
+  runApp(const MaterialApp(
     home: LoginSignupPage(),
   ));
 }

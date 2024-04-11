@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class GetScore extends StatelessWidget {
   final String docID;
-  GetScore({required this.docID});
+  const GetScore({super.key, required this.docID});
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +14,7 @@ class GetScore extends StatelessWidget {
       future: users.doc(docID).get(),
       builder: ((context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Text('Loading...');
+          return const Text('Loading...');
         }
 
         if (snapshot.hasError) {
@@ -24,7 +24,7 @@ class GetScore extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.data == null || !snapshot.data!.exists) {
             // If document doesn't exist or is null, return an empty widget
-            return SizedBox.shrink();
+            return const SizedBox.shrink();
           }
 
           // Here we safely access the data
@@ -33,7 +33,7 @@ class GetScore extends StatelessWidget {
 
           if (data == null || !data.containsKey('score')) {
             // If data or score field doesn't exist, return an empty widget
-            return SizedBox.shrink();
+            return const SizedBox.shrink();
           }
 
           // Now we safely access the 'score' field
@@ -41,7 +41,7 @@ class GetScore extends StatelessWidget {
         }
 
         // Default to a loading state
-        return Text('Loading...');
+        return const Text('Loading...');
       }),
     );
   }

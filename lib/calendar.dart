@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class CalendarPage extends StatefulWidget {
+  const CalendarPage({super.key});
+
   @override
-  _CalendarPageState createState() => _CalendarPageState();
+  CalendarPageState createState() => CalendarPageState();
 }
 
-class _CalendarPageState extends State<CalendarPage> {
+class CalendarPageState extends State<CalendarPage> {
   CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
@@ -15,7 +17,7 @@ class _CalendarPageState extends State<CalendarPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Calendar',
           style: TextStyle(color: Color(0xFF16666B)),
         ),
@@ -31,22 +33,22 @@ class _CalendarPageState extends State<CalendarPage> {
               focusedDay: _focusedDay,
               calendarFormat: _calendarFormat,
               headerStyle: HeaderStyle(
-                titleTextStyle: TextStyle(color: Color(0xFF16666B)),
+                titleTextStyle: const TextStyle(color: Color(0xFF16666B)),
                 formatButtonDecoration: BoxDecoration(
-                  color: Color(0xFF16666B),
+                  color: const Color(0xFF16666B),
                   borderRadius: BorderRadius.circular(16.0),
                 ),
-                formatButtonTextStyle: TextStyle(color: Colors.white),
+                formatButtonTextStyle: const TextStyle(color: Colors.white),
               ),
               calendarStyle: CalendarStyle(
-                defaultTextStyle: TextStyle(color: Color(0xFF16666B)),
-                todayTextStyle: TextStyle(color: Colors.white),
-                selectedTextStyle: TextStyle(color: Colors.white),
-                weekendTextStyle: TextStyle(color: Color(0xFF16666B)),
-                outsideTextStyle: TextStyle(color: Color(0xFF16666B).withOpacity(0.5)),
+                defaultTextStyle: const TextStyle(color: Color(0xFF16666B)),
+                todayTextStyle: const TextStyle(color: Colors.white),
+                selectedTextStyle: const TextStyle(color: Colors.white),
+                weekendTextStyle: const TextStyle(color: Color(0xFF16666B)),
+                outsideTextStyle: TextStyle(color: const Color(0xFF16666B).withOpacity(0.5)),
                 outsideDaysVisible: false,
-                todayDecoration: BoxDecoration(shape: BoxShape.circle, color: Color(0xFF16666B)),
-                selectedDecoration: BoxDecoration(shape: BoxShape.circle, color: Color(0xFF16666B)),
+                todayDecoration: const BoxDecoration(shape: BoxShape.circle, color: Color(0xFF16666B)),
+                selectedDecoration: const BoxDecoration(shape: BoxShape.circle, color: Color(0xFF16666B)),
               ),
               onFormatChanged: (format) {
                 setState(() {
@@ -60,11 +62,11 @@ class _CalendarPageState extends State<CalendarPage> {
                 });
               },
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             _selectedDay != null
                 ? Text(
               'Selected Day: ${_selectedDay!.toString().substring(0, 10)}',
-              style: TextStyle(fontSize: 18, color: Color(0xFF16666B)),
+              style: const TextStyle(fontSize: 18, color: Color(0xFF16666B)),
             )
                 : Container(),
           ],

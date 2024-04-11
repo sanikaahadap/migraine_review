@@ -269,7 +269,7 @@ class UserInfoPageState extends State<UserInfoPage> {
 }
 
 class DisclaimerPage extends StatelessWidget {
-  const DisclaimerPage({Key? key});
+  const DisclaimerPage({super.key});
 
   @override
   Widget build(BuildContext context) {

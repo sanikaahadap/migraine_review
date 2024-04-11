@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:neurooooo/login_signup_page.dart';
 
 class IntroPage4 extends StatelessWidget {
+  const IntroPage4({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,7 +28,7 @@ class IntroPage4 extends StatelessWidget {
             ),
             const SizedBox(height: 5),
             const Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              padding: EdgeInsets.symmetric(horizontal: 16.0),
               child: Text(
                 'Your Diary',
                 textAlign: TextAlign.center,

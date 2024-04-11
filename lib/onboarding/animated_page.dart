@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:neurooooo/slide_button.dart';
 
 class AnimatedPage extends StatefulWidget {
+  const AnimatedPage({super.key});
+
   @override
   AnimatedPageState createState() => AnimatedPageState();
 }
@@ -59,7 +61,7 @@ class AnimatedPageState extends State<AnimatedPage>
                 ),
               ),
             ),
-            Container(
+            SizedBox(
               height: MediaQuery.of(context).size.height / 4,
               child: Center(
                 // Content for the bottom half of the page

@@ -2,14 +2,14 @@ import "package:flutter/material.dart";
 import "package:neurooooo/ehr.dart";
 import "package:neurooooo/ehr_record.dart";
 
-class ehrmainpg extends StatelessWidget {
-  const ehrmainpg({super.key});
+class Ehrmainpg extends StatelessWidget {
+  const Ehrmainpg({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Home Page'),
+        title: const Text('Home Page'),
       ),
       body: Center(
         child: Column(
@@ -19,10 +19,10 @@ class ehrmainpg extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => ehrrec()),
+                  MaterialPageRoute(builder: (context) => const Ehrrec()),
                 );
               },
-              child: Text('View MIDAS records'),
+              child: const Text('View MIDAS records'),
             ),
             ElevatedButton(
               onPressed: () {
@@ -31,7 +31,7 @@ class ehrmainpg extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => const PDFUploader()),
                 );
               },
-              child: Text('upload pdf'),
+              child: const Text('upload pdf'),
             ),
           ],
         ),

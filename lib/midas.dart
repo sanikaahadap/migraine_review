@@ -6,13 +6,15 @@ import 'package:neurooooo/home.dart';
 import 'dart:developer';
 
 class MIDASAssessmentPage extends StatefulWidget {
+  const MIDASAssessmentPage({super.key});
+
   @override
-  _MIDASAssessmentPageState createState() => _MIDASAssessmentPageState();
+  MIDASAssessmentPageState createState() => MIDASAssessmentPageState();
 }
 
-class _MIDASAssessmentPageState extends State<MIDASAssessmentPage> {
+class MIDASAssessmentPageState extends State<MIDASAssessmentPage> {
   int _currentPageIndex = 0;
-  List<String?> _selectedOptions = List.filled(5, null);
+  final List<String?> _selectedOptions = List.filled(5, null);
 
   final List<String> _questions = [
     'How many days in the last 3 months did you miss work or school because of your headaches?',
@@ -208,7 +210,7 @@ class _MIDASAssessmentPageState extends State<MIDASAssessmentPage> {
 class MIDASOutputPage extends StatelessWidget {
   final int score;
 
-  MIDASOutputPage(this.score);
+  const MIDASOutputPage(this.score, {super.key});
 
   String getSeverityLevel(int score) {
     if (score >= 0 && score <= 5) {
@@ -291,7 +293,7 @@ class MIDASOutputPage extends StatelessWidget {
 
                   ElevatedButton(
                     onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => const HomePage()));
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,

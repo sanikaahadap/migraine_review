@@ -60,7 +60,7 @@ class Features extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => IntroPage3()), // Navigate to intro_page_3.dart
+                      MaterialPageRoute(builder: (context) => const IntroPage3()), // Navigate to intro_page_3.dart
                     );
                   },
                 ),
@@ -70,7 +70,7 @@ class Features extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => IntroPage4()), // Navigate to intro_page_4.dart
+                      MaterialPageRoute(builder: (context) => const IntroPage4()), // Navigate to intro_page_4.dart
                     );
                   },
                 ),
@@ -80,7 +80,7 @@ class Features extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => IntroPage5()), // Navigate to intro_page_5.dart
+                      MaterialPageRoute(builder: (context) => const IntroPage5()), // Navigate to intro_page_5.dart
                     );
                   },
                 ),

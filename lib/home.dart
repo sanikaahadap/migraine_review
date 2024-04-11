@@ -3,9 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:neurooooo/ehr_entry.dart';
 import 'package:neurooooo/midas.dart';
-import 'package:neurooooo/notifications.dart';
 import 'package:neurooooo/settings.dart';
-import 'package:neurooooo/ehr.dart';
 import 'package:neurooooo/faqs.dart';
 import 'package:neurooooo/calendar.dart';
 import 'package:neurooooo/profile.dart';
@@ -18,10 +16,10 @@ class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   @override
-  _HomePageState createState() => _HomePageState();
+  HomePageState createState() => HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   ModelUser user = ModelUser(
       email: '', name: '', uid: '', phone: '', dob: '', patient_id: '');
@@ -129,7 +127,7 @@ class _HomePageState extends State<HomePage> {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => ehrmainpg()),
+                          MaterialPageRoute(builder: (context) => const Ehrmainpg()),
                         );
                       },
                     ),
@@ -140,7 +138,7 @@ class _HomePageState extends State<HomePage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => CalendarPage()),
+                              builder: (context) => const CalendarPage()),
                         );
                       },
                     ),
@@ -155,7 +153,7 @@ class _HomePageState extends State<HomePage> {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => FAQsPage()),
+                          MaterialPageRoute(builder: (context) => const FAQsPage()),
                         );
                       },
                     ),
@@ -190,7 +188,7 @@ class _HomePageState extends State<HomePage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => MigraineLogsPage()),
+                          builder: (context) => const MigraineLogsPage()),
                     );
                   },
                 ),
@@ -250,7 +248,7 @@ class _HomePageState extends State<HomePage> {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => DiaryPage()),
+                  MaterialPageRoute(builder: (context) => const DiaryPage()),
                 );
               },
             ),
@@ -259,7 +257,7 @@ class _HomePageState extends State<HomePage> {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => CalendarPage()),
+                  MaterialPageRoute(builder: (context) => const CalendarPage()),
                 );
               },
             ),
@@ -268,7 +266,7 @@ class _HomePageState extends State<HomePage> {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => ehrmainpg()),
+                  MaterialPageRoute(builder: (context) => const Ehrmainpg()),
                 );
               },
             ),
@@ -277,7 +275,7 @@ class _HomePageState extends State<HomePage> {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => FAQsPage()),
+                  MaterialPageRoute(builder: (context) => const FAQsPage()),
                 );
               },
             ),

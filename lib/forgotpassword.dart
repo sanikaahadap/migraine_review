@@ -1,17 +1,16 @@
 import 'dart:async';
 
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class forgotpasspg extends StatefulWidget {
-  const forgotpasspg({super.key});
+class Forgotpasspg extends StatefulWidget {
+  const Forgotpasspg({super.key});
 
   @override
-  State<forgotpasspg> createState() => _forgotpasspgState();
+  State<Forgotpasspg> createState() => _ForgotpasspgState();
 }
 
-class _forgotpasspgState extends State<forgotpasspg> {
+class _ForgotpasspgState extends State<Forgotpasspg> {
   final TextEditingController _emailController = TextEditingController();
   @override
   void dispose() {
@@ -26,7 +25,7 @@ class _forgotpasspgState extends State<forgotpasspg> {
       showDialog(
           context: context,
           builder: (context) {
-            return AlertDialog(
+            return const AlertDialog(
               content: Text("Password resent link sent successfully"),
             );
           });
@@ -42,6 +41,7 @@ class _forgotpasspgState extends State<forgotpasspg> {
     }
   }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
@@ -49,8 +49,8 @@ class _forgotpasspgState extends State<forgotpasspg> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('Enter your e-mail ID'),
-            SizedBox(
+            const Text('Enter your e-mail ID'),
+            const SizedBox(
               height: 10,
             ),
             TextFormField(
@@ -71,7 +71,7 @@ class _forgotpasspgState extends State<forgotpasspg> {
                 return null;
               },
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             SizedBox(
@@ -79,14 +79,14 @@ class _forgotpasspgState extends State<forgotpasspg> {
               height: 45.0,
               child: MaterialButton(
                 onPressed: passwordReset,
-                child: Text(
-                  'Reset Password',
-                  style: TextStyle(color: Colors.white),
-                ),
                 color: const Color(0xFF16666B),
                 shape: RoundedRectangleBorder(
                   borderRadius:
                       BorderRadius.circular(12.0), // Adjust the value as needed
+                ),
+                child: const Text(
+                  'Reset Password',
+                  style: TextStyle(color: Colors.white),
                 ),
               ),
             )

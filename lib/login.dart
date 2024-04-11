@@ -11,11 +11,13 @@ import 'package:neurooooo/signup.dart';
 import 'package:crypto/crypto.dart';
 
 class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
+
   @override
-  _LoginPageState createState() => _LoginPageState();
+  LoginPageState createState() => LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class LoginPageState extends State<LoginPage> {
   bool _isButtonPressed = false;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
@@ -189,7 +191,7 @@ class _LoginPageState extends State<LoginPage> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => forgotpasspg()));
+                              builder: (context) => const Forgotpasspg()));
                     },
                     child: const Text(
                       'Forgot Password?',
@@ -201,7 +203,7 @@ class _LoginPageState extends State<LoginPage> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => SignUpPage()),
+                        MaterialPageRoute(builder: (context) => const SignUpPage()),
                       );
                     },
                     child: const Text(
@@ -214,7 +216,7 @@ class _LoginPageState extends State<LoginPage> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Features()),
+                        MaterialPageRoute(builder: (context) => const Features()),
                       );
                     },
                     child: const Text(

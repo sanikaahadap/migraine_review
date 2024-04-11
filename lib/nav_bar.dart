@@ -4,6 +4,8 @@ import 'package:neurooooo/notifications.dart';
 import 'package:neurooooo/settings.dart';
 
 class CustomBottomNavigationBar extends StatefulWidget {
+  const CustomBottomNavigationBar({super.key});
+
   @override
   State<CustomBottomNavigationBar> createState() =>
       _CustomBottomNavigationBarState();
@@ -19,9 +21,9 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
   }
 
   final List<Widget> _pages = [
-    HomePage(),
-    NotificationsPage(),
-    SettingsPage(),
+    const HomePage(),
+    const NotificationsPage(),
+    const SettingsPage(),
   ];
 
   @override
@@ -31,9 +33,9 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: selectedIndex,
         type: BottomNavigationBarType.fixed,
-        selectedItemColor: Color(0xFF16666B), // Color for the selected item
+        selectedItemColor: const Color(0xFF16666B), // Color for the selected item
         onTap: _navigate,
-        items: [
+        items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Home',

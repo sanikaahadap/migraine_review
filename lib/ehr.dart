@@ -11,10 +11,10 @@ class PDFUploader extends StatefulWidget {
   const PDFUploader({super.key});
 
   @override
-  _PDFUploaderState createState() => _PDFUploaderState();
+  PDFUploaderState createState() => PDFUploaderState();
 }
 
-class _PDFUploaderState extends State<PDFUploader> {
+class PDFUploaderState extends State<PDFUploader> {
   List<File> _pdfFiles = [];
 
   @override
@@ -124,7 +124,7 @@ class _PDFUploaderState extends State<PDFUploader> {
                     title: Text(pdf.path.split('/').last),
                     trailing: PopupMenuButton(
                       itemBuilder: (context) => [
-                        PopupMenuItem(
+                        const PopupMenuItem(
                           value: 'rename',
                           child: Text('Rename PDF'),
                         ),
@@ -190,7 +190,7 @@ class _PDFUploaderState extends State<PDFUploader> {
 // }
 
 void main( ) {
-  runApp(MaterialApp(
+  runApp(const MaterialApp(
     home: PDFUploader( ),
   ));
 }

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:neurooooo/login_signup_page.dart';
 
 class IntroPage3 extends StatelessWidget {
+  const IntroPage3({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

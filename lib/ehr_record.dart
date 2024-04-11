@@ -1,17 +1,16 @@
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:flutter/material.dart";
-import "package:flutter/widgets.dart";
 import "package:neurooooo/ehr_getscores.dart";
 import "package:fl_chart/fl_chart.dart";
 
-class ehrrec extends StatefulWidget {
-  const ehrrec({super.key});
+class Ehrrec extends StatefulWidget {
+  const Ehrrec({super.key});
 
   @override
-  State<ehrrec> createState() => _ehrrecState();
+  State<Ehrrec> createState() => _EhrrecState();
 }
 
-class _ehrrecState extends State<ehrrec> {
+class _EhrrecState extends State<Ehrrec> {
   List<String> docIDs = [];
 
   Future getDocId() async {
@@ -34,15 +33,15 @@ class _ehrrecState extends State<ehrrec> {
       body: Center(
         child: Column(
           children: [
-            SizedBox(
+            const SizedBox(
               height: 100,
             ),
-            Container(
+            SizedBox(
               height: 30,
               child: LineChart(
                 LineChartData(
-                  gridData: FlGridData(show: true),
-                  titlesData: FlTitlesData(show: true),
+                  gridData: const FlGridData(show: true),
+                  titlesData: const FlTitlesData(show: true),
                   borderData: FlBorderData(show: true),
                   minX: 0,
                   maxX: 35,
@@ -51,24 +50,24 @@ class _ehrrecState extends State<ehrrec> {
                   lineBarsData: [
                     LineChartBarData(
                       spots: [
-                        FlSpot(0, 3),
-                        FlSpot(1, 1),
-                        FlSpot(2, 4),
-                        FlSpot(3, 2),
-                        FlSpot(4, 5),
-                        FlSpot(10, 3),
+                        const FlSpot(0, 3),
+                        const FlSpot(1, 1),
+                        const FlSpot(2, 4),
+                        const FlSpot(3, 2),
+                        const FlSpot(4, 5),
+                        const FlSpot(10, 3),
                       ],
                       isCurved: false,
                       barWidth: 4,
                       isStrokeCapRound: true,
-                      dotData: FlDotData(show: false),
+                      dotData: const FlDotData(show: false),
                       belowBarData: BarAreaData(show: false),
                     ),
                   ],
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 30,
             ),
             Expanded(
