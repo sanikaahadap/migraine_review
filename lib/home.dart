@@ -118,79 +118,178 @@ class HomePageState extends State<HomePage> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 45),
-                Row(
+                const SizedBox(height: 40),
+
+                Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    CustomButton(
-                      buttonText: 'EHR',
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => const Ehrmainpg()),
-                        );
-                      },
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Column(
+                          children: [
+                            IconButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => const Ehrmainpg()),
+                                );
+                              },
+                              icon: const Icon(Icons.assignment), // Icon for EHR
+                              color: const Color(0xFF16666B),
+                              iconSize: 52,
+                            ),
+
+                            Text(
+                              'EHR',
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold, // Bold text
+                                color: Color(0xFF16666B),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(width: 60),
+                        Column(
+                          children: [
+                            IconButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => const CalendarPage()),
+                                );
+                              },
+                              icon: const Icon(Icons.calendar_today), // Icon for Calendar
+                              color: const Color(0xFF16666B),
+                              iconSize: 52,
+                            ),
+
+                            Text(
+                              'Calendar',
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold, // Bold text
+                                color: Color(0xFF16666B),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
-                    const SizedBox(width: 20),
-                    CustomButton(
-                      buttonText: 'Calendar',
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const CalendarPage()),
-                        );
-                      },
+                    const SizedBox(height: 10), // Vertical spacing
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Column(
+                          children: [
+                            IconButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => const FAQsPage()),
+                                );
+                              },
+                              icon: const Icon(Icons.help_outline), // Icon for FAQs
+                              color: const Color(0xFF16666B),
+                              iconSize: 52,
+                            ),
+
+                            Text(
+                              'FAQs',
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold, // Bold text
+                                color: Color(0xFF16666B),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(width: 60),
+                        Column(
+                          children: [
+                            IconButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => const DiaryPage()),
+                                );
+                              },
+                              icon: const Icon(Icons.book), // Icon for Your Diary
+                              color: const Color(0xFF16666B),
+                              iconSize: 52,
+                            ),
+
+                            Text(
+                              'Your Diary',
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold, // Bold text
+                                color: Color(0xFF16666B),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                     // Vertical spacing
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Column(
+                          children: [
+                            const SizedBox(height: 25),
+                            IconButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => const MIDASAssessmentPage()),
+                                );
+                              },
+                              icon: const Icon(Icons.assessment), // Icon for Migraine Assessment
+                              color: const Color(0xFF16666B),
+                              iconSize: 52,
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              'Migraine\nAssessment',
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold, // Bold text
+                                color: Color(0xFF16666B),
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
+                        const SizedBox(width: 40),
+                        Column(
+                          children: [
+                            IconButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => const MigraineLogsPage()),
+                                );
+                              },
+                              icon: const Icon(Icons.assignment_turned_in), // Icon for Migraine Logs
+                              color: const Color(0xFF16666B),
+                              iconSize: 52,
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              'Migraine Logs',
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold, // Bold text
+                                color: Color(0xFF16666B),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   ],
-                ),
-                const SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    CustomButton(
-                      buttonText: 'FAQs',
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => const FAQsPage()),
-                        );
-                      },
-                    ),
-                    const SizedBox(width: 20),
-                    CustomButton(
-                      buttonText: 'Your Diary',
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const DiaryPage()),
-                        ); // Handle Your Diary button press
-                      },
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 20),
-                CustomButton(
-                  buttonText: 'Migraine Assessment',
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => MIDASAssessmentPage()),
-                    );
-                  },
-                ),
-                const SizedBox(height: 20),
-                CustomButton(
-                  buttonText: 'Migraine logs',
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const MigraineLogsPage()),
-                    );
-                  },
                 ),
               ],
             ),
@@ -216,15 +315,17 @@ class HomePageState extends State<HomePage> {
               ),
             ),
             ListTile(
+              leading: Icon(Icons.person), // Icon for Profile
               title: const Text('Profile'),
               onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => const ProfilePage()),
-                ); // Navigate to profile page
+                );
               },
             ),
             ListTile(
+              leading: Icon(Icons.settings), // Icon for Settings
               title: const Text('Settings'),
               onTap: () {
                 Navigator.push(
@@ -234,16 +335,17 @@ class HomePageState extends State<HomePage> {
               },
             ),
             ListTile(
+              leading: Icon(Icons.assignment), // Icon for Questionnaire
               title: const Text('Questionnaire'),
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) => MIDASAssessmentPage()),
+                  MaterialPageRoute(builder: (context) => const MIDASAssessmentPage()),
                 );
               },
             ),
             ListTile(
+              leading: Icon(Icons.book), // Icon for Your Diary
               title: const Text('Your Diary'),
               onTap: () {
                 Navigator.push(
@@ -253,6 +355,7 @@ class HomePageState extends State<HomePage> {
               },
             ),
             ListTile(
+              leading: Icon(Icons.calendar_today), // Icon for Calendar
               title: const Text('Calendar'),
               onTap: () {
                 Navigator.push(
@@ -262,6 +365,7 @@ class HomePageState extends State<HomePage> {
               },
             ),
             ListTile(
+              leading: Icon(Icons.assignment), // Icon for EHR
               title: const Text('EHR'),
               onTap: () {
                 Navigator.push(
@@ -271,6 +375,7 @@ class HomePageState extends State<HomePage> {
               },
             ),
             ListTile(
+              leading: Icon(Icons.help_outline), // Icon for FAQs
               title: const Text('FAQs'),
               onTap: () {
                 Navigator.push(
@@ -280,7 +385,11 @@ class HomePageState extends State<HomePage> {
               },
             ),
             const Divider(),
-            ListTile(title: const Text('Log Out'), onTap: signUserOut),
+            ListTile(
+              leading: Icon(Icons.logout), // Icon for Log Out
+              title: const Text('Log Out'),
+              onTap: signUserOut,
+            ),
           ],
         ),
       ),
@@ -323,3 +432,4 @@ class CustomButton extends StatelessWidget {
     );
   }
 }
+
