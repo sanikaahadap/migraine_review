@@ -140,9 +140,9 @@ class HomePageState extends State<HomePage> {
                               iconSize: 52,
                             ),
 
-                            Text(
+                            const Text(
                               'EHR',
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold, // Bold text
                                 color: Color(0xFF16666B),
@@ -165,9 +165,9 @@ class HomePageState extends State<HomePage> {
                               iconSize: 52,
                             ),
 
-                            Text(
+                            const Text(
                               'Calendar',
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold, // Bold text
                                 color: Color(0xFF16666B),
@@ -195,9 +195,9 @@ class HomePageState extends State<HomePage> {
                               iconSize: 52,
                             ),
 
-                            Text(
+                            const Text(
                               'FAQs',
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold, // Bold text
                                 color: Color(0xFF16666B),
@@ -220,9 +220,9 @@ class HomePageState extends State<HomePage> {
                               iconSize: 52,
                             ),
 
-                            Text(
+                            const Text(
                               'Your Diary',
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold, // Bold text
                                 color: Color(0xFF16666B),
@@ -251,9 +251,9 @@ class HomePageState extends State<HomePage> {
                               iconSize: 52,
                             ),
                             const SizedBox(height: 4),
-                            Text(
+                            const Text(
                               'Migraine\nAssessment',
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold, // Bold text
                                 color: Color(0xFF16666B),
@@ -277,9 +277,9 @@ class HomePageState extends State<HomePage> {
                               iconSize: 52,
                             ),
                             const SizedBox(height: 4),
-                            Text(
+                            const Text(
                               'Migraine Logs',
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold, // Bold text
                                 color: Color(0xFF16666B),
@@ -315,7 +315,7 @@ class HomePageState extends State<HomePage> {
               ),
             ),
             ListTile(
-              leading: Icon(Icons.person), // Icon for Profile
+              leading: const Icon(Icons.person), // Icon for Profile
               title: const Text('Profile'),
               onTap: () {
                 Navigator.push(
@@ -325,7 +325,7 @@ class HomePageState extends State<HomePage> {
               },
             ),
             ListTile(
-              leading: Icon(Icons.settings), // Icon for Settings
+              leading: const Icon(Icons.settings), // Icon for Settings
               title: const Text('Settings'),
               onTap: () {
                 Navigator.push(
@@ -335,7 +335,7 @@ class HomePageState extends State<HomePage> {
               },
             ),
             ListTile(
-              leading: Icon(Icons.assignment), // Icon for Questionnaire
+              leading: const Icon(Icons.assignment), // Icon for Questionnaire
               title: const Text('Questionnaire'),
               onTap: () {
                 Navigator.push(
@@ -345,7 +345,7 @@ class HomePageState extends State<HomePage> {
               },
             ),
             ListTile(
-              leading: Icon(Icons.book), // Icon for Your Diary
+              leading: const Icon(Icons.book), // Icon for Your Diary
               title: const Text('Your Diary'),
               onTap: () {
                 Navigator.push(
@@ -355,7 +355,7 @@ class HomePageState extends State<HomePage> {
               },
             ),
             ListTile(
-              leading: Icon(Icons.calendar_today), // Icon for Calendar
+              leading: const Icon(Icons.calendar_today), // Icon for Calendar
               title: const Text('Calendar'),
               onTap: () {
                 Navigator.push(
@@ -365,7 +365,7 @@ class HomePageState extends State<HomePage> {
               },
             ),
             ListTile(
-              leading: Icon(Icons.assignment), // Icon for EHR
+              leading: const Icon(Icons.assignment), // Icon for EHR
               title: const Text('EHR'),
               onTap: () {
                 Navigator.push(
@@ -375,7 +375,7 @@ class HomePageState extends State<HomePage> {
               },
             ),
             ListTile(
-              leading: Icon(Icons.help_outline), // Icon for FAQs
+              leading: const Icon(Icons.help_outline), // Icon for FAQs
               title: const Text('FAQs'),
               onTap: () {
                 Navigator.push(
@@ -386,7 +386,7 @@ class HomePageState extends State<HomePage> {
             ),
             const Divider(),
             ListTile(
-              leading: Icon(Icons.logout), // Icon for Log Out
+              leading: const Icon(Icons.logout), // Icon for Log Out
               title: const Text('Log Out'),
               onTap: signUserOut,
             ),
