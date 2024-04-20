@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:neurooooo/admin_login.dart';
 import 'package:neurooooo/login.dart';
 import 'package:neurooooo/signup.dart';
 
@@ -80,6 +81,26 @@ class LoginSignupPage extends StatelessWidget {
                 child: const Text(
                   'Signup',
                   style: TextStyle(fontSize: 17.0, color: Colors.white),
+                ),
+              ),
+
+              const SizedBox(height: 16.0),
+
+              // Signup button
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const AdminLoginPage()),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF16666B),
+                  fixedSize: const Size(170.0, 45.0),
+                ),
+                child: const Text(
+                  'Login as Admin',
+                  style: TextStyle(fontSize: 15.0, color: Colors.white),
                 ),
               ),
             ],

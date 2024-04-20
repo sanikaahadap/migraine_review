@@ -1,9 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:neurooooo/onboarding/animated_page.dart';
 import 'package:neurooooo/firebase_options.dart';
-import 'package:neurooooo/login.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:neurooooo/validation.dart';
 
 void main() async {

@@ -5,7 +5,7 @@ import 'package:table_calendar/table_calendar.dart';
 
 void main() {
   testWidgets('Calendar Page Widget Test', (WidgetTester tester) async {
-    await tester.pumpWidget(MaterialApp(
+    await tester.pumpWidget(const MaterialApp(
       home: CalendarPage(),
     ));
 
