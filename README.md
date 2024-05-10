@@ -1,12 +1,10 @@
- \
-'[# Comprehensive Migraine Care Flutter Project
+**Comprehensive Migraine Care Flutter App**
 
 This Flutter project aims to provide comprehensive care for individuals suffering from migraines. It includes various functionalities such as MIDAS assessment, personal diary, migraine logs, electronic health records (EHR), and personalized notifications.
 
 ## Tech Stack
-
 - Flutter (Dart)
-- Docker
+- Python
 
 ## Functionalities
 
