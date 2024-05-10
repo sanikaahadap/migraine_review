@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:neurooooo/login_signup_page.dart'; // Import the login/signup page
+import 'package:neurooooo/login/login_signup_page.dart'; // Import the login/signup page
 
 class IntroPage1 extends StatelessWidget {
   const IntroPage1({super.key});
