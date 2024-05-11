@@ -1,6 +1,6 @@
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:flutter/material.dart";
-import "package:neurooooo/ehr_getscores.dart";
+import "package:neurooooo/main_features/ehr/ehr_getscores.dart";
 import "package:fl_chart/fl_chart.dart";
 
 class Ehrrec extends StatefulWidget {

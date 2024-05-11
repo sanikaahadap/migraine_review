@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
-import "package:neurooooo/ehr.dart";
-import "package:neurooooo/ehr_record.dart";
+import "package:neurooooo/main_features/ehr/ehr.dart";
+import "package:neurooooo/main_features/ehr/ehr_record.dart";
+import "package:neurooooo/main_features/ehr/pdf_upload.dart";
 
 class Ehrmainpg extends StatelessWidget {
   const Ehrmainpg({super.key});
@@ -24,14 +25,15 @@ class Ehrmainpg extends StatelessWidget {
               },
               child: const Text('View MIDAS records'),
             ),
+            SizedBox(height: 25,),
             ElevatedButton(
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const PDFUploader()),
+                  MaterialPageRoute(builder: (context) => const DocUpload()),
                 );
               },
-              child: const Text('upload pdf'),
+              child: const Text('Upload PDFs'),
             ),
           ],
         ),

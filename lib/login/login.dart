@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 import 'dart:developer';
 import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:neurooooo/features.dart';
-import 'package:neurooooo/forgotpassword.dart';
-import 'package:neurooooo/home.dart';
-import 'package:neurooooo/nav_bar.dart';
-import 'package:neurooooo/signup.dart';
+import 'package:neurooooo/login/phone_number_signin.dart';
+import 'package:neurooooo/onboarding/features.dart';
+import 'package:neurooooo/login/forgotpassword.dart';
+import 'package:neurooooo/user_home/home.dart';
+import 'package:neurooooo/user_home/nav_bar.dart';
+import 'package:neurooooo/login/signup.dart';
 import 'package:crypto/crypto.dart';
 
 class LoginPage extends StatefulWidget {
@@ -195,6 +196,18 @@ class LoginPageState extends State<LoginPage> {
                     },
                     child: const Text(
                       'Forgot Password?',
+                      style: TextStyle(color: Color(0xFF16666B)),
+                    ),
+                  ),const SizedBox(height: 10),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const SignInWithPhone()));
+                    },
+                    child: const Text(
+                      'Login with Phone Number',
                       style: TextStyle(color: Color(0xFF16666B)),
                     ),
                   ),

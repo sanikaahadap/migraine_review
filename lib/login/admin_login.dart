@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:neurooooo/admin_home.dart'; // Import the AdminHomePage
+import 'package:neurooooo/admin_home/admin_home.dart'; // Import the AdminHomePage
 
 class AdminLoginPage extends StatefulWidget {
   const AdminLoginPage({Key? key}) : super(key: key);

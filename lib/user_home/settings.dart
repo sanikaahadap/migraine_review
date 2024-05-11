@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:neurooooo/theme_settings.dart'; // Import the ThemeSettingsPage
+import 'package:neurooooo/other_services/theme_settings.dart'; // Import the ThemeSettingsPage
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});

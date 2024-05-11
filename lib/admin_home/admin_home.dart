@@ -1,7 +1,7 @@
 // In admin_home.dart
 import 'package:flutter/material.dart';
-import 'user_service.dart';
-import 'models/user.dart';// Import the user service
+import 'package:neurooooo/other_services/user_service.dart';
+import 'package:neurooooo/models/user.dart';// Import the user service
 
 class AdminHomePage extends StatelessWidget {
   final UserService userService = UserService(); // Initialize the user service

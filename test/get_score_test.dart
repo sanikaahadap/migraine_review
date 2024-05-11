@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:neurooooo/calendar.dart';
+import 'package:neurooooo/main_features/calendar/calendar.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 void main() {

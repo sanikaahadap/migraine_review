@@ -46,6 +46,7 @@ dependencies:
   flutter_signin_button: any
   uuid: ^4.3.3
   google_nav_bar: ^5.0.6
+  easy_pdf_viewer:
 
   firebase_storage: ^11.6.6
   gallery_picker: ^0.4.7
@@ -91,6 +92,7 @@ flutter:
     - assets/images/home.png
     - assets/images/plus.png
     - assets/images/midas_bg.png
+    - assets/images/pdf.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:

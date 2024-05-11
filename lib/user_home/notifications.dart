@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:neurooooo/home.dart';
-import 'package:neurooooo/settings.dart';
+import 'package:neurooooo/user_home/home.dart';
+import 'package:neurooooo/user_home/settings.dart';
 
 class NotificationsPage extends StatefulWidget {
   const NotificationsPage({super.key});

@@ -1,7 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:neurooooo/firebase_options.dart';
-import 'package:neurooooo/validation.dart';
+import 'package:neurooooo/other_services/firebase_options.dart';
+import 'package:neurooooo/other_services/validation.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

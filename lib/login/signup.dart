@@ -5,7 +5,7 @@ import 'dart:math' as math;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:neurooooo/login.dart';
+import 'package:neurooooo/login/login.dart';
 import 'package:neurooooo/models/user.dart';
 import 'package:neurooooo/onboarding/userinfopage.dart';
 import 'package:intl/intl.dart';

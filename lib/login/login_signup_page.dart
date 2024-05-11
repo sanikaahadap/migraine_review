@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:neurooooo/admin_login.dart';
-import 'package:neurooooo/login.dart';
-import 'package:neurooooo/signup.dart';
+import 'package:neurooooo/login/admin_login.dart';
+import 'package:neurooooo/login/login.dart';
+import 'package:neurooooo/login/signup.dart';
 
 class LoginSignupPage extends StatelessWidget {
   const LoginSignupPage({super.key});

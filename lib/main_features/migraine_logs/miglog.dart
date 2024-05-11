@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'home.dart';
+import 'package:neurooooo/user_home/home.dart';
 
 class MigraineLogsPage extends StatefulWidget {
   const MigraineLogsPage({Key? key}) : super(key: key);

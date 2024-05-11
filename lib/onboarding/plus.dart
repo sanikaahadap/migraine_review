@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:neurooooo/home.dart';
-import 'package:neurooooo/midas.dart';
+import 'package:neurooooo/user_home/home.dart';
+import 'package:neurooooo/main_features/midas_assessment/midas.dart';
 
 class QuestionnairePage extends StatelessWidget {
   const QuestionnairePage({super.key});

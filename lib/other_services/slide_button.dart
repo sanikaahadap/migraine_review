@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:neurooooo/features.dart';
+import 'package:neurooooo/onboarding/features.dart';
 
 class SlideButton extends StatefulWidget {
   @override

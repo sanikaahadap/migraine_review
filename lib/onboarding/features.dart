@@ -4,7 +4,7 @@ import 'package:neurooooo/intro_screens/intro_page_2.dart';
 import 'package:neurooooo/intro_screens/intro_page_3.dart';
 import 'package:neurooooo/intro_screens/intro_page_4.dart';
 import 'package:neurooooo/intro_screens/intro_page_5.dart';
-import 'package:neurooooo/login_signup_page.dart'; // Import the login/signup page
+import 'package:neurooooo/login/login_signup_page.dart'; // Import the login/signup page
 
 class Features extends StatelessWidget {
   const Features({super.key});

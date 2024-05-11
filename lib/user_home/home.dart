@@ -1,15 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:neurooooo/ehr_entry.dart';
-import 'package:neurooooo/midas.dart';
-import 'package:neurooooo/settings.dart';
-import 'package:neurooooo/faqs.dart';
-import 'package:neurooooo/calendar.dart';
-import 'package:neurooooo/profile.dart';
-import 'package:neurooooo/diary.dart';
-import 'package:neurooooo/miglog.dart';
-import 'models/user.dart';
+import 'package:neurooooo/main_features/ehr/ehr_entry.dart';
+import 'package:neurooooo/main_features/midas_assessment/midas.dart';
+import 'package:neurooooo/user_home/settings.dart';
+import 'package:neurooooo/main_features/faqs/faqs.dart';
+import 'package:neurooooo/main_features/calendar/calendar.dart';
+import 'package:neurooooo/user_home/profile.dart';
+import 'package:neurooooo/main_features/personal_diary/diary.dart';
+import 'package:neurooooo/main_features/migraine_logs/miglog.dart';
+import 'package:neurooooo/models/user.dart';
 import 'dart:developer';
 
 class HomePage extends StatefulWidget {

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:neurooooo/slide_button.dart';
+import 'package:neurooooo/other_services/slide_button.dart';
 
 class AnimatedPage extends StatefulWidget {
   const AnimatedPage({super.key});
