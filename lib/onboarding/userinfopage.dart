@@ -43,9 +43,6 @@ class UserInfoPageState extends State<UserInfoPage> {
   final TextEditingController medicalConditionController = TextEditingController();
   final TextEditingController medicationsController = TextEditingController();
   final TextEditingController surgeriesController = TextEditingController();
-  final TextEditingController emergencyContactNameController = TextEditingController();
-  final TextEditingController relationshipController = TextEditingController();
-  final TextEditingController contactNumberController = TextEditingController();
 
   // late String patientId = ''; // Variable to store patient_id
   //
@@ -96,13 +93,16 @@ class UserInfoPageState extends State<UserInfoPage> {
                 ),
 
                 const SizedBox(height: 16.0),
+                const Text(
+                  'What is your gender?',
+                  style: TextStyle(
+                    color: Color(0xFF16666B), // Text color
+                  ),
+                ),
+                const SizedBox(height: 8), // Adding some space between text and text field
                 TextFormField(
                   controller: genderController,
                   decoration: const InputDecoration(
-                    labelText: 'Gender',
-                    labelStyle: TextStyle(
-                      color: Color(0xFF16666B), // Text color when not focused
-                    ),
                     border: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.grey), // Default border color
                     ),
@@ -112,14 +112,17 @@ class UserInfoPageState extends State<UserInfoPage> {
                   ),
                   maxLines: null,
                 ),
-                const SizedBox(height: 16.0),
+                const SizedBox(height: 8.0),
+                const Text(
+                  'Do you have any existing medical conditions? If yes, please specify.',
+                  style: TextStyle(
+                    color: Color(0xFF16666B), // Text color
+                  ),
+                ),
+                const SizedBox(height: 8), // Adding some space between text and text field
                 TextFormField(
                   controller: medicalConditionController,
                   decoration: const InputDecoration(
-                    labelText: 'Do you have any existing medical conditions? If yes, please specify',
-                    labelStyle: TextStyle(
-                      color: Color(0xFF16666B), // Text color when not focused
-                    ),
                     border: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.grey), // Default border color
                     ),
@@ -129,14 +132,17 @@ class UserInfoPageState extends State<UserInfoPage> {
                   ),
                   maxLines: null,
                 ),
-                const SizedBox(height: 16.0),
+                const SizedBox(height: 8.0),
+                const Text(
+                  'List any current medications you are taking (prescription or over-the-counter).',
+                  style: TextStyle(
+                    color: Color(0xFF16666B), // Text color
+                  ),
+                ),
+                const SizedBox(height: 8), // Adding some space between text and text field
                 TextFormField(
                   controller: medicationsController,
                   decoration: const InputDecoration(
-                    labelText: 'List any current medications you are taking (prescription or over-the-counter)',
-                    labelStyle: TextStyle(
-                      color: Color(0xFF16666B), // Text color when not focused
-                    ),
                     border: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.grey), // Default border color
                     ),
@@ -146,14 +152,17 @@ class UserInfoPageState extends State<UserInfoPage> {
                   ),
                   maxLines: null,
                 ),
-                const SizedBox(height: 16.0),
+                const SizedBox(height: 8.0),
+                const Text(
+                  'Have you had any surgeries or hospitalizations in the past? If yes, please provide details.',
+                  style: TextStyle(
+                    color: Color(0xFF16666B), // Text color
+                  ),
+                ),
+                const SizedBox(height: 8), // Adding some space between text and text field
                 TextFormField(
                   controller: surgeriesController,
                   decoration: const InputDecoration(
-                    labelText: 'Have you had any surgeries or hospitalizations in the past? If yes, please provide details',
-                    labelStyle: TextStyle(
-                      color: Color(0xFF16666B), // Text color when not focused
-                    ),
                     border: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.grey), // Default border color
                     ),
@@ -163,49 +172,49 @@ class UserInfoPageState extends State<UserInfoPage> {
                   ),
                   maxLines: null,
                 ),
-
-                const SizedBox(height: 16.0),
+                const SizedBox(height: 30.0),
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const DisclaimerPage()),
-                    );
+                    String? uid = FirebaseAuth.instance.currentUser?.uid;
+
+                    if (uid != null) {
+                      // Store data in Firestore
+                      FirebaseFirestore.instance.collection('user_info').doc(FirebaseAuth.instance.currentUser?.uid).set({
+                        'uid': FirebaseAuth.instance.currentUser?.uid,
+                        'gender': genderController.text,
+                        'medicalCondition': medicalConditionController.text,
+                        'medications': medicationsController.text,
+                        'surgeries': surgeriesController.text,
+                      }).then((value) {
+                        // Navigate to the next page after storing data
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const DisclaimerPage()),
+                        );
+                      }).catchError((error) {
+                        // Handle errors if any
+                        log("Failed to add user information: $error");
+                        // You might want to show a snackbar or dialog to inform the user about the failure
+                      });
+                    } else {
+                      // Handle the case when the user is not authenticated
+                      log("User is not authenticated.");
+                    }
                   },
-                  // child: const Text('Proceed'),
-                  // ElevatedButton for submitting the form
-                  child : ElevatedButton(
-                    onPressed: () {
-                      String? uid = FirebaseAuth.instance.currentUser?.uid;
-
-                      if (uid != null) {
-                        // Store data in Firestore
-                        FirebaseFirestore.instance.collection('user_info').doc(FirebaseAuth.instance.currentUser?.uid).set({
-                          'uid': FirebaseAuth.instance.currentUser?.uid,
-                          'gender': genderController.text,
-                          'medicalCondition': medicalConditionController.text,
-                          'medications': medicationsController.text,
-                          'surgeries': surgeriesController.text,
-
-                        }).then((value) {
-                          // Navigate to the next page after storing data
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => const DisclaimerPage()),
-                          );
-                        }).catchError((error) {
-                          // Handle errors if any
-                          log("Failed to add user information: $error");
-                          // You might want to show a snackbar or dialog to inform the user about the failure
-                        });
-                      } else {
-                        // Handle the case when the user is not authenticated
-                        log("User is not authenticated.");
-                      }
-                    },
-                    child: const Text('Proceed'),
+                  // Styling for the button
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all<Color>(Color(0xFF16666B)), // Button background color
+                    elevation: MaterialStateProperty.all<double>(2), // Elevation of the button
+                    shape: MaterialStateProperty.all<OutlinedBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8), // Button border radius
+                      ),
+                    ),
                   ),
+                  child: const Text('Proceed', style: TextStyle(color: Colors.white)),
                 ),
+
+
               ],
             ),
           ),

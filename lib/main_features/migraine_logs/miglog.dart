@@ -291,9 +291,9 @@ class MigraineLogsPageState extends State<MigraineLogsPage> {
             ),
             Slider(
               value: _painSeverity.toDouble(),
-              min: 1,
+              min: 0,
               max: 10,
-              divisions: 9,
+              divisions: 10,
               onChanged: (double value) {
                 setState(() {
                   _painSeverity = value.toInt();
@@ -301,17 +301,12 @@ class MigraineLogsPageState extends State<MigraineLogsPage> {
               },
               activeColor: const Color(0xFF16666B), // Set active color
             ),
-            const Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('😊',
-                    style: TextStyle(fontSize: 24.0)), // Happy face emoji
-                Text('😐',
-                    style: TextStyle(fontSize: 24.0)), // Neutral face emoji
-                Text('😢',
-                    style: TextStyle(fontSize: 24.0)), // Crying face emoji
-              ],
+            Image.asset(
+              'assets/images/VAS.jpeg', // Replace 'your_image.png' with your image asset path
+              width: 386,
+              height: 130,
             ),
+
             const SizedBox(height: 20.0),
             const Text(
               'Are most of your headaches',

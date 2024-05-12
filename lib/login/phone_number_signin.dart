@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'signup.dart';
+// import 'signup.dart';
 import 'verify_otp.dart';
 
 class SignInWithPhone extends StatefulWidget {
@@ -32,14 +32,14 @@ class _SignInWithPhoneState extends State<SignInWithPhone> {
           print(ex.code.toString());
         },
         codeAutoRetrievalTimeout: (verificationId) {},
-        timeout: Duration(seconds: 30));
+        timeout: const Duration(seconds: 30));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(""),
+        title: const Text(""),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -59,7 +59,7 @@ class _SignInWithPhoneState extends State<SignInWithPhone> {
 
               TextFormField(
                 controller: phoneController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: "Phone Number",
                   border: OutlineInputBorder(),
                   filled: true,
@@ -68,7 +68,7 @@ class _SignInWithPhoneState extends State<SignInWithPhone> {
                 ),
                 keyboardType: TextInputType.phone,
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               GestureDetector(
                 onTap: sendOTP,
                 child: AnimatedContainer(
@@ -76,12 +76,12 @@ class _SignInWithPhoneState extends State<SignInWithPhone> {
                   width: 170.0,
                   height: 45.0,
                   decoration: BoxDecoration(
-                    color: Color(0xFF16666B),
+                    color: const Color(0xFF16666B),
                     borderRadius: BorderRadius.circular(12.0),
                   ),
-                  child: Center(
+                  child: const Center(
                     child: Text(
-                      "Login In",
+                      "Login",
                       style: TextStyle(
                         fontSize: 17.0,
                         color: Colors.white,

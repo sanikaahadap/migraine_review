@@ -92,7 +92,9 @@ flutter:
     - assets/images/home.png
     - assets/images/plus.png
     - assets/images/midas_bg.png
+    - assets/images/ehr_bg.png
     - assets/images/pdf.png
+    - assets/images/VAS.jpeg
 
   # To add assets to your application, add an assets section, like this:
   # assets:

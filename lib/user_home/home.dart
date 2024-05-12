@@ -137,7 +137,7 @@ class HomePageState extends State<HomePage> {
                               },
                               icon: const Icon(Icons.assignment), // Icon for EHR
                               color: const Color(0xFF16666B),
-                              iconSize: 52,
+                              iconSize: 54,
                             ),
 
                             const Text(
@@ -177,7 +177,7 @@ class HomePageState extends State<HomePage> {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 10), // Vertical spacing
+                    const SizedBox(height: 20), // Vertical spacing
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -238,7 +238,7 @@ class HomePageState extends State<HomePage> {
                       children: [
                         Column(
                           children: [
-                            const SizedBox(height: 25),
+                            const SizedBox(height: 20),
                             IconButton(
                               onPressed: () {
                                 Navigator.push(
@@ -250,7 +250,7 @@ class HomePageState extends State<HomePage> {
                               color: const Color(0xFF16666B),
                               iconSize: 52,
                             ),
-                            const SizedBox(height: 4),
+                            const SizedBox(height: 0),
                             const Text(
                               'Migraine\nAssessment',
                               style: TextStyle(
@@ -262,7 +262,7 @@ class HomePageState extends State<HomePage> {
                             ),
                           ],
                         ),
-                        const SizedBox(width: 40),
+                        const SizedBox(width: 35),
                         Column(
                           children: [
                             IconButton(

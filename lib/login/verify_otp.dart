@@ -1,9 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:neurooooo/user_home/home.dart';
-import 'signup.dart';
-import 'phone_number_signin.dart';
+import 'package:neurooooo/onboarding/userinfopage.dart';
+// import 'signup.dart';
+// import 'phone_number_signin.dart';
 
 class VerifyOtpScreen extends StatefulWidget {
   final String verificationId;
@@ -33,7 +33,7 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
       if (userCredential.user != null) {
         Navigator.popUntil(context, (route) => route.isFirst);
         Navigator.pushReplacement(
-            context, CupertinoPageRoute(builder: (context) => HomePage()));
+            context, CupertinoPageRoute(builder: (context) => const UserInfoPage()));
       }
     } on FirebaseAuthException catch (ex) {
       print(ex.code.toString());
@@ -45,13 +45,13 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text("Enter the OTP"),
+        title: const Text("Enter the OTP"),
       ),
       body: SafeArea(
         child: ListView(
           children: [
             Padding(
-              padding: EdgeInsets.all(15),
+              padding: const EdgeInsets.all(15),
               child: Column(
                 children: [
                   const SizedBox(height: 20.0),
@@ -74,7 +74,7 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
                           textAlign: TextAlign.center,
                           maxLength: 1,
                           keyboardType: TextInputType.number,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             counterText: "",
                             filled: true,
                             fillColor: Color(0x80B2EBF2),
@@ -90,15 +90,15 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 50,
                   ),
                   CupertinoButton(
                     onPressed: () {
                       verifyOTP();
                     },
-                    color: Color(0xFF16666B),
-                    child: Text("Verify OTP"),
+                    color: const Color(0xFF16666B),
+                    child: const Text("Verify OTP"),
                   ),
                 ],
               ),
