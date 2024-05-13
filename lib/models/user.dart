@@ -29,7 +29,7 @@ class ModelUser
         email: snapshot['email'],
         name: snapshot['name'],
         uid: snapshot['patient_id'],
-        phone : snapshot['email'],
+        phone : snapshot['phone'],
         dob: snapshot['dob'],
         patient_id: snapshot['patient_id']
 

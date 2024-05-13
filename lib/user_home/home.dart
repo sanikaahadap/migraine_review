@@ -11,6 +11,7 @@ import 'package:neurooooo/main_features/personal_diary/diary.dart';
 import 'package:neurooooo/main_features/migraine_logs/miglog.dart';
 import 'package:neurooooo/models/user.dart';
 import 'dart:developer';
+import 'dart:async';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -24,15 +25,38 @@ class HomePageState extends State<HomePage> {
   ModelUser user = ModelUser(
       email: '', name: '', uid: '', phone: '', dob: '', patient_id: '');
   // String _userName = '';
+  Timer? _timer;
+  int _currentIndex = 0;
+  final List<String> _texts = [
+    'Fasting increases the risk of migraines',
+    'Avoid stress and prevent migraine',
+    'Limit screen time to prevent eye strain',
+    'Good sleep -> Reduced migraine risk',
+  ];
 
   @override
   void initState() {
     super.initState();
-    // Fetch user data hereF
-    // _userName = 'Test User';
     getDetails();
-    // Placeholder user name
+    _startTimer();
   }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  void _startTimer() {
+    _timer = Timer.periodic(const Duration(seconds: 2), (timer) {
+      setState(() {
+        _currentIndex = (_currentIndex + 1) % _texts.length;
+      });
+    });
+  }
+
+
+
 
   void getDetails() async {
     user = await getUserDetails();
@@ -107,17 +131,40 @@ class HomePageState extends State<HomePage> {
                     border: Border.all(color: const Color(0xFF16666B)),
                     borderRadius: BorderRadius.circular(20.0),
                   ),
-                  child: const Center(
-                    child: Text(
-                      'Fasting increases the risk of migraines',
-                      style: TextStyle(
-                        fontSize: 18.0,
-                        color: Color(0xFFFFFFFF),
+                  child: Center(
+                    child: AnimatedSwitcher(
+                      duration: Duration(milliseconds: 1500),
+                      child: FutureBuilder<void>(
+                        future: Future.delayed(Duration(seconds: 3), () {}),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState == ConnectionState.waiting) {
+                            return Text(
+                              _texts[_currentIndex],
+                              key: ValueKey<int>(_currentIndex),
+                              style: TextStyle(
+                                fontSize: 18.0,
+                                color: Color(0xFFFFFFFF),
+                              ),
+                              textAlign: TextAlign.center,
+                            );
+                          } else {
+                            _currentIndex = (_currentIndex + 1) % _texts.length;
+                            return Text(
+                              _texts[_currentIndex],
+                              key: ValueKey<int>(_currentIndex),
+                              style: TextStyle(
+                                fontSize: 18.0,
+                                color: Color(0xFFFFFFFF),
+                              ),
+                              textAlign: TextAlign.center,
+                            );
+                          }
+                        },
                       ),
-                      textAlign: TextAlign.center,
                     ),
                   ),
                 ),
+
                 const SizedBox(height: 40),
 
                 Column(
