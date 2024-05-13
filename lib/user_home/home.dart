@@ -76,10 +76,96 @@ class HomePageState extends State<HomePage> {
     log('sssssssss ${snap["email"]}');
     return ModelUser.fromSnap(snap);
   }
+  Widget _buildCard({
+    required BuildContext context,
+    required VoidCallback onPressed,
+    required Icon icon,
+    required String label,
+  }) {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width * 0.35, // Adjust the width as needed
+      height: MediaQuery.of(context).size.height * 0.15, // Adjust the height as needed
+      child: Card(
+        color: Color(0xFF16666B),
+        child: InkWell(
+          onTap: onPressed,
+          child: Padding(
+            padding: EdgeInsets.all(10),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  width: 36, // Adjust the icon size as needed
+                  height: 36, // Adjust the icon size as needed
+                  child: icon,
+                ),
+                SizedBox(height: 5),
+                Flexible(
+                  child: Text(
+                    label,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 14, // Adjust the font size as needed
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 2,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Color(0xBFDAD8).withOpacity(0.49), // Set the background color with opacity
+        title: Text(
+          'Hello ${user.name}',
+          style: const TextStyle(
+            fontSize: 22.0,
+            fontWeight: FontWeight.bold,
+            color: Color(0xFF16666B),
+          ),
+        ),
+        centerTitle: true, // Center the title
+        leading: GestureDetector(
+          onTap: () {
+            _scaffoldKey.currentState!.openDrawer();
+          },
+          child: Icon(
+            Icons.menu,
+            size: 40,
+            color: Color(0xFF16666B),
+          ),
+        ),
+        actions: [
+          GestureDetector(
+            onTap: () {
+              // Handle profile icon tap
+            },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Icon(
+                Icons.person,
+                size: 40,
+                color: Color(0xFF16666B),
+              ),
+            ),
+          ),
+        ],
+      ),
+
       key: _scaffoldKey,
       body: Stack(
         children: [
@@ -91,35 +177,15 @@ class HomePageState extends State<HomePage> {
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(
-                left: 0, top: 35), // Adjust left padding as needed
-            child: Align(
-              alignment: Alignment.topLeft,
-              child: GestureDetector(
-                onTap: () {
-                  _scaffoldKey.currentState!.openDrawer();
-                },
-                child: const Icon(
-                  Icons.menu,
-                  size: 40,
-                  color: Color(0xFF16666B),
-                ),
-              ),
-            ),
-          ),
+
+
+
+
           Center(
+
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Text(
-                  'Hello ${user.name}',
-                  style: const TextStyle(
-                    fontSize: 22.0,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF16666B),
-                  ),
-                ),
                 const SizedBox(height: 20),
                 Container(
                   width: double.infinity,
@@ -133,15 +199,15 @@ class HomePageState extends State<HomePage> {
                   ),
                   child: Center(
                     child: AnimatedSwitcher(
-                      duration: Duration(milliseconds: 1500),
+                      duration: const Duration(milliseconds: 1500),
                       child: FutureBuilder<void>(
-                        future: Future.delayed(Duration(seconds: 3), () {}),
+                        future: Future.delayed(const Duration(seconds: 3), () {}),
                         builder: (context, snapshot) {
                           if (snapshot.connectionState == ConnectionState.waiting) {
                             return Text(
                               _texts[_currentIndex],
                               key: ValueKey<int>(_currentIndex),
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 18.0,
                                 color: Color(0xFFFFFFFF),
                               ),
@@ -152,7 +218,7 @@ class HomePageState extends State<HomePage> {
                             return Text(
                               _texts[_currentIndex],
                               key: ValueKey<int>(_currentIndex),
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 18.0,
                                 color: Color(0xFFFFFFFF),
                               ),
@@ -167,174 +233,93 @@ class HomePageState extends State<HomePage> {
 
                 const SizedBox(height: 40),
 
-                Column(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Column(
-                          children: [
-                            IconButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => const Ehrmainpg()),
-                                );
-                              },
-                              icon: const Icon(Icons.assignment), // Icon for EHR
-                              color: const Color(0xFF16666B),
-                              iconSize: 54,
-                            ),
-
-                            const Text(
-                              'EHR',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold, // Bold text
-                                color: Color(0xFF16666B),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(width: 60),
-                        Column(
-                          children: [
-                            IconButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => const CalendarPage()),
-                                );
-                              },
-                              icon: const Icon(Icons.calendar_today), // Icon for Calendar
-                              color: const Color(0xFF16666B),
-                              iconSize: 52,
-                            ),
-
-                            const Text(
-                              'Calendar',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold, // Bold text
-                                color: Color(0xFF16666B),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
+                    _buildCard(
+                      context: context,
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => Ehrmainpg()),
+                        );
+                      },
+                      icon: Icon(Icons.assignment, color: Colors.white),
+                      label: 'EHR',
                     ),
-                    const SizedBox(height: 20), // Vertical spacing
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Column(
-                          children: [
-                            IconButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => const FAQsPage()),
-                                );
-                              },
-                              icon: const Icon(Icons.help_outline), // Icon for FAQs
-                              color: const Color(0xFF16666B),
-                              iconSize: 52,
-                            ),
-
-                            const Text(
-                              'FAQs',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold, // Bold text
-                                color: Color(0xFF16666B),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(width: 60),
-                        Column(
-                          children: [
-                            IconButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => const DiaryPage()),
-                                );
-                              },
-                              icon: const Icon(Icons.book), // Icon for Your Diary
-                              color: const Color(0xFF16666B),
-                              iconSize: 52,
-                            ),
-
-                            const Text(
-                              'Your Diary',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold, // Bold text
-                                color: Color(0xFF16666B),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
+                    SizedBox(width: 20),
+                    _buildCard(
+                      context: context,
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => CalendarPage()),
+                        );
+                      },
+                      icon: Icon(Icons.calendar_today, color: Colors.white),
+                      label: 'Calendar',
                     ),
-                     // Vertical spacing
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Column(
-                          children: [
-                            const SizedBox(height: 20),
-                            IconButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => const MIDASAssessmentPage()),
-                                );
-                              },
-                              icon: const Icon(Icons.assessment), // Icon for Migraine Assessment
-                              color: const Color(0xFF16666B),
-                              iconSize: 52,
-                            ),
-                            const SizedBox(height: 0),
-                            const Text(
-                              'Migraine\nAssessment',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold, // Bold text
-                                color: Color(0xFF16666B),
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
-                        ),
-                        const SizedBox(width: 35),
-                        Column(
-                          children: [
-                            IconButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => const MigraineLogsPage()),
-                                );
-                              },
-                              icon: const Icon(Icons.assignment_turned_in), // Icon for Migraine Logs
-                              color: const Color(0xFF16666B),
-                              iconSize: 52,
-                            ),
-                            const SizedBox(height: 4),
-                            const Text(
-                              'Migraine Logs',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold, // Bold text
-                                color: Color(0xFF16666B),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
+                  ],
+                ),
+                SizedBox(height: 20),
+
+                // Row 2
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    _buildCard(
+                      context: context,
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => FAQsPage()),
+                        );
+                      },
+                      icon: Icon(Icons.help_outline, color: Colors.white),
+                      label: 'FAQs',
+                    ),
+                    SizedBox(width: 20),
+                    _buildCard(
+                      context: context,
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => DiaryPage()),
+                        );
+                      },
+                      icon: Icon(Icons.book, color: Colors.white),
+                      label: 'Your Diary',
+                    ),
+                  ],
+                ),
+                SizedBox(height: 20),
+
+                // Row 3
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    _buildCard(
+                      context: context,
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => MIDASAssessmentPage()),
+                        );
+                      },
+                      icon: Icon(Icons.assessment, color: Colors.white),
+                      label: 'Migraine Assessment',
+                    ),
+                    SizedBox(width: 20),
+                    _buildCard(
+                      context: context,
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => MigraineLogsPage()),
+                        );
+                      },
+                      icon: Icon(Icons.assignment_turned_in, color: Colors.white),
+                      label: 'Migraine Logs',
                     ),
                   ],
                 ),
@@ -347,17 +332,20 @@ class HomePageState extends State<HomePage> {
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
-            DrawerHeader(
-              decoration: const BoxDecoration(
-                color: Color(0xFF16666B),
-              ),
-              child: Text(
-                user.name.isNotEmpty
-                    ? user.name
-                    : 'Hello User', // Display user's name if not empty
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
+            SizedBox(
+              height: 130, // Adjust the height as needed
+              child: DrawerHeader(
+                decoration: const BoxDecoration(
+                  color: Color(0xFF16666B),
+                ),
+                child: Text(
+                  user.name.isNotEmpty
+                      ? user.name
+                      : 'Hello User', // Display user's name if not empty
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                  ),
                 ),
               ),
             ),
