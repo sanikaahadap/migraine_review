@@ -1,5 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:neurooooo/other_services/theme_settings.dart'; // Import the ThemeSettingsPage
+import 'package:flutter/material.dart';// Import the ThemeSettingsPage
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -33,16 +32,6 @@ class SettingsPage extends StatelessWidget {
             leading: const Icon(Icons.privacy_tip, color: Color(0xFF16666B)), // Use theme color for the icon
             onTap: () {
               // Handle tapping on privacy policy
-            },
-          ),
-          ListTile(
-            title: const Text('Change Theme'),
-            leading: const Icon(Icons.color_lens, color: Color(0xFF16666B)), // Use theme color for the icon
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const ThemeSettingsPage()),
-              );
             },
           ),
         ],
