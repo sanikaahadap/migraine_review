@@ -95,7 +95,7 @@ class Features extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => LoginSignupPage()), // Navigate to login_signup_page.dart
+                      MaterialPageRoute(builder: (context) => const LoginSignupPage()), // Navigate to login_signup_page.dart
                     );
                   },
                   child: const Text(

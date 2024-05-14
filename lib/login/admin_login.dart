@@ -5,12 +5,12 @@ class AdminLoginPage extends StatefulWidget {
   const AdminLoginPage({Key? key}) : super(key: key);
 
   @override
-  _AdminLoginPageState createState() => _AdminLoginPageState();
+  AdminLoginPageState createState() => AdminLoginPageState();
 }
 
-class _AdminLoginPageState extends State<AdminLoginPage> {
-  TextEditingController _usernameController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
+class AdminLoginPageState extends State<AdminLoginPage> {
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +45,7 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
               // Username field
               TextField(
                 controller: _usernameController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Username',
                   hintText: 'Enter your username',
                 ),
@@ -55,7 +55,7 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
               TextField(
                 controller: _passwordController,
                 obscureText: true,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Password',
                   hintText: 'Enter your password',
                 ),
@@ -76,14 +76,14 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialog(
-                          title: Text('Error'),
-                          content: Text('Invalid username or password.'),
+                          title: const Text('Error'),
+                          content: const Text('Invalid username or password.'),
                           actions: <Widget>[
                             TextButton(
                               onPressed: () {
                                 Navigator.of(context).pop();
                               },
-                              child: Text('OK'),
+                              child: const Text('OK'),
                             ),
                           ],
                         );

@@ -5,16 +5,19 @@ import 'package:neurooooo/user_home/home.dart';
 import 'package:neurooooo/login/login.dart';
 import 'package:neurooooo/user_home/nav_bar.dart';
 
-class validate extends StatelessWidget {
+class Validate extends StatelessWidget {
+  const Validate({super.key});
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: StreamBuilder<User?>(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return CustomBottomNavigationBar();
+            return const CustomBottomNavigationBar();
           } else {
-            return AnimatedPage();
+            return const AnimatedPage();
           }
         },
       ),

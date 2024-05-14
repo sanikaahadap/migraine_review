@@ -4,13 +4,15 @@ import 'package:neurooooo/other_services/user_service.dart';
 import 'package:neurooooo/models/user.dart';// Import the user service
 
 class AdminHomePage extends StatelessWidget {
-  final UserService userService = UserService(); // Initialize the user service
+  final UserService userService = UserService();
+
+  AdminHomePage({super.key}); // Initialize the user service
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Admin Home'),
+        title: const Text('Admin Home'),
       ),
       body: Center(
         child: ElevatedButton(
@@ -20,7 +22,7 @@ class AdminHomePage extends StatelessWidget {
               MaterialPageRoute(builder: (context) => PatientDetailsPage()),
             );
           },
-          child: Text('Patient Details'),
+          child: const Text('Patient Details'),
         ),
       ),
     );
@@ -28,19 +30,21 @@ class AdminHomePage extends StatelessWidget {
 }
 
 class PatientDetailsPage extends StatelessWidget {
-  final UserService userService = UserService(); // Initialize the user service
+  final UserService userService = UserService();
+
+  PatientDetailsPage({super.key}); // Initialize the user service
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Patient Details'),
+        title: const Text('Patient Details'),
       ),
       body: FutureBuilder(
         future: userService.getUsers(),
         builder: (BuildContext context, AsyncSnapshot<List<ModelUser>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else {

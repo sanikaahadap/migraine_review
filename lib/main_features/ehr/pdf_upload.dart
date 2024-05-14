@@ -67,14 +67,15 @@ class _DocUploadState extends State<DocUpload> {
     getAllPdf();
   }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Documents"),
+        title: const Text("Documents"),
       ),
       body: GridView.builder(
           itemCount: pdfData.length,
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
           itemBuilder: (context, index){
             return Padding(
               padding: const EdgeInsets.all(8.0),
@@ -99,7 +100,7 @@ class _DocUploadState extends State<DocUpload> {
                       ),
                       Text(
                         pdfData[index]['pdf_name'],
-                      style: TextStyle(fontSize: 10),),
+                      style: const TextStyle(fontSize: 10),),
                     ],
                   ),
                 ),
@@ -108,7 +109,7 @@ class _DocUploadState extends State<DocUpload> {
           }),
       floatingActionButton: FloatingActionButton(
         onPressed: pickFile,
-        child: Icon(Icons.upload_file),
+        child: const Icon(Icons.upload_file),
       ),
     );
   }
@@ -135,10 +136,11 @@ class _PDFViewerScreenState extends State<PDFViewerScreen> {
     super.initState();
     initialisePdf();
   }
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body:document != null? PDFViewer(document: document!,)
-          : Center(child: CircularProgressIndicator(),)
+          : const Center(child: CircularProgressIndicator(),)
     );
   }
 }

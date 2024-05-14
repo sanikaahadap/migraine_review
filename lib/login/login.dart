@@ -45,7 +45,7 @@ class LoginPageState extends State<LoginPage> {
           Navigator.pushReplacement(
             context,
             CupertinoPageRoute(
-                builder: (context) => CustomBottomNavigationBar()),
+                builder: (context) => const CustomBottomNavigationBar()),
           );
         }
       } on FirebaseAuthException catch (ex) {

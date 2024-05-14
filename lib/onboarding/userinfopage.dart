@@ -203,7 +203,7 @@ class UserInfoPageState extends State<UserInfoPage> {
                   },
                   // Styling for the button
                   style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all<Color>(Color(0xFF16666B)), // Button background color
+                    backgroundColor: MaterialStateProperty.all<Color>(const Color(0xFF16666B)), // Button background color
                     elevation: MaterialStateProperty.all<double>(2), // Elevation of the button
                     shape: MaterialStateProperty.all<OutlinedBorder>(
                       RoundedRectangleBorder(

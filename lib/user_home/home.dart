@@ -8,7 +8,7 @@ import 'package:neurooooo/main_features/faqs/faqs.dart';
 import 'package:neurooooo/main_features/calendar/calendar.dart';
 import 'package:neurooooo/user_home/profile.dart';
 import 'package:neurooooo/main_features/personal_diary/diary.dart';
-import 'package:neurooooo/main_features/migraine_logs/miglog.dart';
+import 'package:neurooooo/main_features/migraine_logs/migraine_logs.dart';
 import 'package:neurooooo/models/user.dart';
 import 'dart:developer';
 import 'dart:async';

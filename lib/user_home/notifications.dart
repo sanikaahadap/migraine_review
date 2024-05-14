@@ -6,10 +6,10 @@ class NotificationsPage extends StatefulWidget {
   const NotificationsPage({super.key});
 
   @override
-  _NotificationsPageState createState() => _NotificationsPageState();
+  NotificationsPageState createState() => NotificationsPageState();
 }
 
-class _NotificationsPageState extends State<NotificationsPage> {
+class NotificationsPageState extends State<NotificationsPage> {
   int _selectedIndex = 1; // Index of the selected item for notifications
 
   void _onItemTapped(int index) {
@@ -25,7 +25,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
     } else if (_selectedIndex == 2) {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => SettingsPage()),
+        MaterialPageRoute(builder: (context) => const SettingsPage()),
       ); // Navigate to settings page
     }
   }

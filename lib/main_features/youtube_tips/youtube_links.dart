@@ -34,7 +34,7 @@ class Feed extends StatelessWidget {
                   builder: (context) => PlayerScreen(videoId: videoID),
                 ));
               } else {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                   content: Text('Invalid video URL'),
                 ));
               }
@@ -46,7 +46,7 @@ class Feed extends StatelessWidget {
                   width: 300,
                   height: 200,
                   color: Colors.grey, // Placeholder image
-                  child: Center(
+                  child: const Center(
                     child: Icon(Icons.error),
                   ),
                 );
@@ -65,10 +65,10 @@ class PlayerScreen extends StatefulWidget {
   final String videoId;
 
   @override
-  _PlayerScreenState createState() => _PlayerScreenState();
+  PlayerScreenState createState() => PlayerScreenState();
 }
 
-class _PlayerScreenState extends State<PlayerScreen> {
+class PlayerScreenState extends State<PlayerScreen> {
   late final YoutubePlayerController _controller;
 
   @override

@@ -10,21 +10,23 @@ import 'package:neurooooo/intro_screens/intro_page_5.dart';
 class OnBoardingScreen extends StatefulWidget{
   const OnBoardingScreen({Key? key}) : super(key: key);
 
+  @override
   OnBoardingScreenState createState() => OnBoardingScreenState();
 }
 
 class OnBoardingScreenState extends State<OnBoardingScreen> {
 
   //controller to keep track of which page we're on
-  PageController _controller = PageController();
+  final PageController _controller = PageController();
 
+  @override
   Widget build(BuildContext context){
     return Scaffold(
       body: Stack(
         children: [
           PageView(
             controller: _controller,
-            children: [
+            children: const [
               IntroPage1(),
               IntroPage2(),
               IntroPage3(),

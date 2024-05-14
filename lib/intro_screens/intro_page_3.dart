@@ -59,7 +59,7 @@ class IntroPage3 extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => LoginSignupPage()),
+                  MaterialPageRoute(builder: (context) => const LoginSignupPage()),
                 );
               },
               child: const Text(

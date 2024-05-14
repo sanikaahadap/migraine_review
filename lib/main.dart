@@ -16,11 +16,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       routes: {
-        '/login': (context) => validate(),
+        '/login': (context) => const Validate(),
       },
       title: 'NeuroCare',
       debugShowCheckedModeBanner: false,
-      home: validate(),
+      home: const Validate(),
     );
   }
 }

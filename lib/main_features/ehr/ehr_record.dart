@@ -31,7 +31,7 @@ class _EhrrecState extends State<Ehrrec> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("MIDAS Scores"),
+        title: const Text("MIDAS Scores"),
       ),
       body: Center(
         child: Column(
@@ -73,7 +73,7 @@ class _EhrrecState extends State<Ehrrec> {
             const SizedBox(
               height: 30,
             ),
-            Expanded(child: GetScore(),)
+            const Expanded(child: GetScore(),)
           ],
         ),
       ),

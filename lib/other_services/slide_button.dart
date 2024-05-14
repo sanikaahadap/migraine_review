@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:neurooooo/onboarding/features.dart';
 
 class SlideButton extends StatefulWidget {
+  const SlideButton({super.key});
+
   @override
-  _SlideButtonState createState() => _SlideButtonState();
+  SlideButtonState createState() => SlideButtonState();
 }
 
-class _SlideButtonState extends State<SlideButton>
+class SlideButtonState extends State<SlideButton>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<Offset> _offsetAnimation;
@@ -41,7 +43,7 @@ class _SlideButtonState extends State<SlideButton>
           // Navigate to the new page when the button is pressed
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => Features()),
+            MaterialPageRoute(builder: (context) => const Features()),
           );
         },
         style: ElevatedButton.styleFrom(
