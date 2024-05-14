@@ -1,19 +1,20 @@
 
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:intl/intl.dart';
 
 class GetScore extends StatelessWidget {
-  final String docID;
-  const GetScore({super.key, required this.docID});
-
   @override
   Widget build(BuildContext context) {
-    CollectionReference users =
-        FirebaseFirestore.instance.collection('midas_scores');
+    String currentUserUID = FirebaseAuth.instance.currentUser!.uid;
 
-    return FutureBuilder<DocumentSnapshot>(
-      future: users.doc(docID).get(),
-      builder: ((context, snapshot) {
+    CollectionReference scores =
+    FirebaseFirestore.instance.collection('midas_scores');
+
+    return StreamBuilder<QuerySnapshot>(
+      stream: scores.where('uid', isEqualTo: currentUserUID).snapshots(),
+      builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Text('Loading...');
         }
@@ -22,29 +23,33 @@ class GetScore extends StatelessWidget {
           return Text('Error: ${snapshot.error}');
         }
 
-        if (snapshot.connectionState == ConnectionState.done) {
-          if (snapshot.data == null || !snapshot.data!.exists) {
-            // If document doesn't exist or is null, return an empty widget
-            return const SizedBox.shrink();
-          }
-
-          // Here we safely access the data
-          Map<String, dynamic>? data =
-              snapshot.data!.data() as Map<String, dynamic>?;
-
-          if (data == null || !data.containsKey('score')) {
-            // If data or score field doesn't exist, return an empty widget
-            return const SizedBox.shrink();
-          }
-
-          // Now we safely access the 'score' field
-          return Text('Score: ${data['score']}');
+        if (snapshot.data == null || snapshot.data!.docs.isEmpty) {
+          // If no scores found for the current user, return an empty widget
+          return const SizedBox.shrink();
         }
 
-        // Default to a loading state
-        return const Text('Loading...');
-      }),
+        return ListView.builder(
+          itemCount: snapshot.data!.docs.length,
+            itemBuilder: (context, index) {
+          // Access each score document
+          Map<String, dynamic> data =
+          (snapshot.data!.docs[index].data() as Map<String, dynamic>);
+          String score = data['score'].toString();
+
+          // Access the timestamp and format it to display the date
+          Timestamp timestamp = data['timestamp'];
+          DateTime dateTime = timestamp.toDate();
+          String formattedDate = DateFormat.yMMMd().add_jm().format(dateTime);
+
+          // Return a widget to display the score, day, and date
+          return ListTile(
+            title: Text('MIDAS Score: $score'),
+            subtitle: Text('Recorded on: $formattedDate'),
+            // Add more details if needed
+          );
+        },
+        );
+      },
     );
   }
 }
-

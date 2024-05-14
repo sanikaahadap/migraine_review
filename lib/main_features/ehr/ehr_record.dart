@@ -30,6 +30,9 @@ class _EhrrecState extends State<Ehrrec> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text("MIDAS Scores"),
+      ),
       body: Center(
         child: Column(
           children: [
@@ -40,8 +43,8 @@ class _EhrrecState extends State<Ehrrec> {
               height: 30,
               child: LineChart(
                 LineChartData(
-                  gridData: const FlGridData(show: true),
-                  titlesData: const FlTitlesData(show: true),
+                  gridData: FlGridData(show: true),
+                  titlesData: FlTitlesData(show: true),
                   borderData: FlBorderData(show: true),
                   minX: 0,
                   maxX: 35,
@@ -50,17 +53,17 @@ class _EhrrecState extends State<Ehrrec> {
                   lineBarsData: [
                     LineChartBarData(
                       spots: [
-                        const FlSpot(0, 3),
-                        const FlSpot(1, 1),
-                        const FlSpot(2, 4),
-                        const FlSpot(3, 2),
-                        const FlSpot(4, 5),
-                        const FlSpot(10, 3),
+                        FlSpot(0, 3),
+                        FlSpot(1, 1),
+                        FlSpot(2, 4),
+                        FlSpot(3, 2),
+                        FlSpot(4, 5),
+                        FlSpot(10, 3),
                       ],
                       isCurved: false,
                       barWidth: 4,
                       isStrokeCapRound: true,
-                      dotData: const FlDotData(show: false),
+                      dotData: FlDotData(show: false),
                       belowBarData: BarAreaData(show: false),
                     ),
                   ],
@@ -70,20 +73,7 @@ class _EhrrecState extends State<Ehrrec> {
             const SizedBox(
               height: 30,
             ),
-            Expanded(
-                child: FutureBuilder(
-                    future: getDocId(),
-                    builder: (context, snapshot) {
-                      return ListView.builder(
-                          itemCount: docIDs.length,
-                          itemBuilder: (context, index) {
-                            return ListTile(
-                              title: GetScore(
-                                docID: docIDs[index],
-                              ),
-                            );
-                          });
-                    }))
+            Expanded(child: GetScore(),)
           ],
         ),
       ),
