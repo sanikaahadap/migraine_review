@@ -45,11 +45,17 @@ class _DocUploadState extends State<DocUpload> {
         });
         print("PDF Uploaded successfully");
 
+        getAllPdf();
+
       }
   }
 
   void getAllPdf() async {
-    final results = await _firebaseFirestore.collection("docs").get();
+    String currentUserUID = FirebaseAuth.instance.currentUser!.uid;
+    final results = await _firebaseFirestore
+        .collection("docs")
+        .where('uid', isEqualTo: currentUserUID)
+        .get();
     pdfData = results.docs.map((e) => e.data()).toList();
     setState(() {});
   }

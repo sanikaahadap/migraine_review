@@ -1,3 +1,5 @@
+//Not in use. Refer pdf_upload for doc uploading
+
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';

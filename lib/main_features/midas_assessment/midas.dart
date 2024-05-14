@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:neurooooo/user_home/home.dart';
 import 'dart:developer';
 
+import 'package:neurooooo/user_home/nav_bar.dart';
+
 class MIDASAssessmentPage extends StatefulWidget {
   const MIDASAssessmentPage({super.key});
 
@@ -293,7 +295,7 @@ class MIDASOutputPage extends StatelessWidget {
 
                   ElevatedButton(
                     onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => const HomePage()));
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => const CustomBottomNavigationBar()));
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,
