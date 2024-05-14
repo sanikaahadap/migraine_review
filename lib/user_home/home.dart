@@ -12,6 +12,7 @@ import 'package:neurooooo/main_features/migraine_logs/miglog.dart';
 import 'package:neurooooo/models/user.dart';
 import 'dart:developer';
 import 'dart:async';
+import '../main_features/youtube_tips/youtube_links.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -86,11 +87,11 @@ class HomePageState extends State<HomePage> {
       width: MediaQuery.of(context).size.width * 0.35, // Adjust the width as needed
       height: MediaQuery.of(context).size.height * 0.15, // Adjust the height as needed
       child: Card(
-        color: Color(0xFF16666B),
+        color: const Color(0xFF16666B),
         child: InkWell(
           onTap: onPressed,
           child: Padding(
-            padding: EdgeInsets.all(10),
+            padding: const EdgeInsets.all(5),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
@@ -100,14 +101,14 @@ class HomePageState extends State<HomePage> {
                   height: 36, // Adjust the icon size as needed
                   child: icon,
                 ),
-                SizedBox(height: 5),
+                const SizedBox(height: 5),
                 Flexible(
                   child: Text(
                     label,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.white,
                       fontSize: 14, // Adjust the font size as needed
-                      fontWeight: FontWeight.bold,
+
                     ),
                     textAlign: TextAlign.center,
                     overflow: TextOverflow.ellipsis,
@@ -129,7 +130,7 @@ class HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xBFDAD8).withOpacity(0.49), // Set the background color with opacity
+        backgroundColor: const Color(0x00bfdad8).withOpacity(0.49), // Set the background color with opacity
         title: Text(
           'Hello ${user.name}',
           style: const TextStyle(
@@ -143,7 +144,7 @@ class HomePageState extends State<HomePage> {
           onTap: () {
             _scaffoldKey.currentState!.openDrawer();
           },
-          child: Icon(
+          child: const Icon(
             Icons.menu,
             size: 40,
             color: Color(0xFF16666B),
@@ -154,8 +155,8 @@ class HomePageState extends State<HomePage> {
             onTap: () {
               // Handle profile icon tap
             },
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10),
               child: Icon(
                 Icons.person,
                 size: 40,
@@ -186,10 +187,9 @@ class HomePageState extends State<HomePage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                const SizedBox(height: 20),
                 Container(
                   width: double.infinity,
-                  height: MediaQuery.of(context).size.height / 5.5,
+                  height: MediaQuery.of(context).size.height / 6,
                   margin: const EdgeInsets.symmetric(horizontal: 20.0),
                   padding: const EdgeInsets.all(20.0),
                   decoration: BoxDecoration(
@@ -241,27 +241,27 @@ class HomePageState extends State<HomePage> {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => Ehrmainpg()),
+                          MaterialPageRoute(builder: (context) => const Ehrmainpg()),
                         );
                       },
-                      icon: Icon(Icons.assignment, color: Colors.white),
+                      icon: const Icon(Icons.assignment, color: Colors.white),
                       label: 'EHR',
                     ),
-                    SizedBox(width: 20),
+                    const SizedBox(width: 20),
                     _buildCard(
                       context: context,
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => CalendarPage()),
+                          MaterialPageRoute(builder: (context) => const CalendarPage()),
                         );
                       },
-                      icon: Icon(Icons.calendar_today, color: Colors.white),
+                      icon: const Icon(Icons.calendar_today, color: Colors.white),
                       label: 'Calendar',
                     ),
                   ],
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
 
                 // Row 2
                 Row(
@@ -272,27 +272,27 @@ class HomePageState extends State<HomePage> {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => FAQsPage()),
+                          MaterialPageRoute(builder: (context) => const FAQsPage()),
                         );
                       },
-                      icon: Icon(Icons.help_outline, color: Colors.white),
+                      icon: const Icon(Icons.help_outline, color: Colors.white),
                       label: 'FAQs',
                     ),
-                    SizedBox(width: 20),
+                    const SizedBox(width: 20),
                     _buildCard(
                       context: context,
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => DiaryPage()),
+                          MaterialPageRoute(builder: (context) => const DiaryPage()),
                         );
                       },
-                      icon: Icon(Icons.book, color: Colors.white),
+                      icon: const Icon(Icons.book, color: Colors.white),
                       label: 'Your Diary',
                     ),
                   ],
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
 
                 // Row 3
                 Row(
@@ -303,22 +303,22 @@ class HomePageState extends State<HomePage> {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => MIDASAssessmentPage()),
+                          MaterialPageRoute(builder: (context) => const MIDASAssessmentPage()),
                         );
                       },
-                      icon: Icon(Icons.assessment, color: Colors.white),
+                      icon: const Icon(Icons.assessment, color: Colors.white),
                       label: 'Migraine Assessment',
                     ),
-                    SizedBox(width: 20),
+                    const SizedBox(width: 20),
                     _buildCard(
                       context: context,
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => MigraineLogsPage()),
+                          MaterialPageRoute(builder: (context) => const MigraineLogsPage()),
                         );
                       },
-                      icon: Icon(Icons.assignment_turned_in, color: Colors.white),
+                      icon: const Icon(Icons.assignment_turned_in, color: Colors.white),
                       label: 'Migraine Logs',
                     ),
                   ],
@@ -406,6 +406,16 @@ class HomePageState extends State<HomePage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => const Ehrmainpg()),
+                );
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.videocam), // Icon for Settings
+              title: const Text('Youtube videos'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Feed()),
                 );
               },
             ),
