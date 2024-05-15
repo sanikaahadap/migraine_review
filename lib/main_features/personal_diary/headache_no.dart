@@ -13,8 +13,6 @@ class NoPageState extends State<NoPage> {
   bool? _didExerciseToday;
   bool? _productiveObstacles;
   String? _sleepDuration;
-  String? _exerciseDuration;
-  String? _screenTime;
 
   @override
   Widget build(BuildContext context) {
@@ -159,7 +157,6 @@ class NoPageState extends State<NoPage> {
             TextField(
               onChanged: (value) {
                 setState(() {
-                  _exerciseDuration = value;
                 });
               },
               decoration: const InputDecoration(
@@ -172,7 +169,6 @@ class NoPageState extends State<NoPage> {
             TextField(
               onChanged: (value) {
                 setState(() {
-                  _screenTime = value;
                 });
               },
               decoration: const InputDecoration(
@@ -183,10 +179,10 @@ class NoPageState extends State<NoPage> {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                // Submit form
-                // Code for form submission goes here
+
               },
-              child: const Text('Submit'),
+              style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF16666B)),
+              child: const Text('Submit', style: TextStyle(color: Colors.white)),
             ),
           ],
         ),
