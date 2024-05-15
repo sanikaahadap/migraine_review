@@ -171,7 +171,7 @@ class NoPageState extends State<NoPage> {
                 'Did not exercise',
                 '15-20 minutes',
                 '20-60 minutes',
-                '1-2 hours hours',
+                'Between 1 to 2 hours',
                 'More than 2 hours',
               ].map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
@@ -219,7 +219,7 @@ class NoPageState extends State<NoPage> {
                 };
 
                 // Add data to Firestore
-                FirebaseFirestore.instance.collection('headache_occurence_entries').add(formData)
+                FirebaseFirestore.instance.collection('no_headache_entries').add(formData)
                     .then((value) {
                   log("Data added successfully");
                   // Show success message
