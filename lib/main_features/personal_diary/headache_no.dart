@@ -1,3 +1,7 @@
+import 'dart:developer';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class NoPage extends StatefulWidget {
@@ -201,7 +205,48 @@ class NoPageState extends State<NoPage> {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
+                // Gather all the data collected
+                Map<String, dynamic> formData = {
+                  'missedMeals': _missedMeals,
+                  'glassesOfWater': _glassesOfWater,
+                  'didExerciseToday': _didExerciseToday,
+                  'productiveObstacles': _productiveObstacles,
+                  'sleepDuration': _sleepDuration,
+                  'exerciseDuration': _exerciseDuration,
+                  'screenTime': _screenTime,
+                  'timestamp': Timestamp.now(),
+                  'uid' : FirebaseAuth.instance.currentUser!.uid,
+                };
 
+                // Add data to Firestore
+                FirebaseFirestore.instance.collection('headache_occurence_entries').add(formData)
+                    .then((value) {
+                  log("Data added successfully");
+                  // Show success message
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: const Text("Success"),
+                        content: const Text("Details stored successfully"),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () {
+                              // Close the dialog
+                              Navigator.of(context).pop();
+                              // Navigate back to the home page
+                              Navigator.of(context).pop();
+                            },
+                            child: const Text("OK"),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                }).catchError((error) {
+                  log("Failed to add data: $error");
+                  // Handle errors appropriately, such as showing an error message to the user.
+                });
               },
               style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF16666B)),
               child: const Text('Submit', style: TextStyle(color: Colors.white)),
