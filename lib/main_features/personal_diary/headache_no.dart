@@ -13,6 +13,8 @@ class NoPageState extends State<NoPage> {
   bool? _didExerciseToday;
   bool? _productiveObstacles;
   String? _sleepDuration;
+  String? _exerciseDuration;
+  String? _screenTime;
 
   @override
   Widget build(BuildContext context) {
@@ -154,27 +156,47 @@ class NoPageState extends State<NoPage> {
             ),
             const SizedBox(height: 20),
             const Text('For how long did you exercise? (in hours/minutes)', style: TextStyle(color: Color(0xFF16666B), fontSize: 18, fontWeight: FontWeight.bold)),
-            TextField(
-              onChanged: (value) {
+            DropdownButton<String>(
+              value: _exerciseDuration,
+              onChanged: (String? value) {
                 setState(() {
+                  _exerciseDuration = value;
                 });
               },
-              decoration: const InputDecoration(
-                hintText: 'Enter exercise duration',
-                hintStyle: TextStyle(color: Color(0xFF16666B)),
-              ),
+              items: <String>[
+                'Did not exercise',
+                '15-20 minutes',
+                '20-60 minutes',
+                '1-2 hours hours',
+                'More than 2 hours',
+              ].map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value, style: const TextStyle(color: Colors.black)),
+                );
+              }).toList(),
             ),
             const SizedBox(height: 20),
             const Text('How long do you work on mobile phones or computers? (in hours)', style: TextStyle(color: Color(0xFF16666B), fontSize: 18, fontWeight: FontWeight.bold)),
-            TextField(
-              onChanged: (value) {
+            DropdownButton<String>(
+              value: _screenTime,
+              onChanged: (String? value) {
                 setState(() {
+                  _screenTime = value;
                 });
               },
-              decoration: const InputDecoration(
-                hintText: 'Enter screen time',
-                hintStyle: TextStyle(color: Color(0xFF16666B)),
-              ),
+              items: <String>[
+                'Less than an hour',
+                '1-2 hours',
+                '2-4 hours',
+                '4-6 hours',
+                'More than 6 hours',
+              ].map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value, style: const TextStyle(color: Colors.black)),
+                );
+              }).toList(),
             ),
             const SizedBox(height: 20),
             ElevatedButton(
