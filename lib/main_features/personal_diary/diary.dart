@@ -57,9 +57,11 @@ class DiaryPageState extends State<DiaryPage> {
       appBar: AppBar(
         title: const Text(
           'Your Diary',
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(color: Color(0xFF16666B),
+          ),
+
         ),
-        backgroundColor: const Color(0xFF16666B),
+        // backgroundColor: const Color(0xFF16666B),
       ),
       body: Center(
         child: Column(

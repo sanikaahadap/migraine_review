@@ -81,8 +81,12 @@ class MigraineLogsPageState extends State<MigraineLogsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Migraine Logs'),
-        backgroundColor: const Color(0xFF16666B), // Set app bar color
+        title: const Text('Migraine Logs',
+          style: TextStyle(color: Color(0xFF16666B),
+          ),
+        ),
+
+        // backgroundColor: const Color(0xFF16666B), // Set app bar color
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
