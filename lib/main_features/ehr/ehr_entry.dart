@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:neurooooo/main_features/ehr/ehr_graph.dart';
 // import 'package:neurooooo/main_features/ehr/ehr.dart';
 import 'package:neurooooo/main_features/ehr/ehr_record.dart';
 import 'package:neurooooo/main_features/ehr/pdf_upload.dart';
@@ -39,7 +40,7 @@ class Ehrmainpg extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const Ehrrec()),
+                    MaterialPageRoute(builder: (context) => Ehrrec()),
                   );
                 },
                 style: ElevatedButton.styleFrom(
