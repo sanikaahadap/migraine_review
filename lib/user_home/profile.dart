@@ -3,14 +3,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({super.key});
+  const ProfilePage({Key? key}) : super(key: key);
 
   @override
-  ProfilePageState createState() => ProfilePageState();
+  _ProfilePageState createState() => _ProfilePageState();
 }
 
-class ProfilePageState extends State<ProfilePage> {
-  late Future<DocumentSnapshot> _userData;
+class _ProfilePageState extends State<ProfilePage> {
+  late Future<Map<String, dynamic>> _userData;
 
   @override
   void initState() {
@@ -18,10 +18,37 @@ class ProfilePageState extends State<ProfilePage> {
     _userData = _getUserData();
   }
 
-  Future<DocumentSnapshot> _getUserData() async {
+  Future<Map<String, dynamic>> _getUserData() async {
     final String? uid = FirebaseAuth.instance.currentUser?.uid;
     if (uid != null) {
-      return await FirebaseFirestore.instance.collection('users').doc(uid).get();
+      final userDocSnapshot = await FirebaseFirestore.instance.collection('users').doc(uid).get();
+      final userInfoDocSnapshot = await FirebaseFirestore.instance.collection('user_info').doc(uid).get();
+
+      if (userDocSnapshot.exists && userInfoDocSnapshot.exists) {
+        final userData = userDocSnapshot.data() as Map<String, dynamic>;
+        final userInfo = userInfoDocSnapshot.data() as Map<String, dynamic>;
+
+        // Extract Date of Birth from user data and calculate age
+        String dobString = userData['dob']; // Assuming 'dob' is a String
+        DateTime dob = DateTime.parse(dobString); // Parsing string to DateTime
+        DateTime now = DateTime.now();
+        int age = now.year - dob.year;
+        if (now.month < dob.month || (now.month == dob.month && now.day < dob.day)) {
+          age--;
+        }
+
+        // Combine data from both collections
+        Map<String, dynamic> combinedData = {
+          'name': userData['name'],
+          'dob': userData['dob'],
+          'age': age,
+          'gender': userInfo['gender'],
+        };
+
+        return combinedData;
+      } else {
+        throw Exception('User data not found');
+      }
     } else {
       throw Exception('User ID not found');
     }
@@ -35,12 +62,12 @@ class ProfilePageState extends State<ProfilePage> {
       ),
       body: FutureBuilder(
         future: _userData,
-        builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+        builder: (context, AsyncSnapshot<Map<String, dynamic>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
-          } else if (!snapshot.hasData || !snapshot.data!.exists) {
+          } else if (!snapshot.hasData) {
             return const Center(child: Text('User data not found'));
           } else {
             var userData = snapshot.data!;
@@ -49,35 +76,47 @@ class ProfilePageState extends State<ProfilePage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'Name: ${userData['name']}',
-                    style: const TextStyle(fontSize: 18.0),
+                  const Text(
+                    'Name:',
+                    style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold, color: Color(0xFF16666B)),
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 5),
                   Text(
-                    'Age: ${userData['age']}',
-                    style: const TextStyle(fontSize: 18.0),
+                    '${userData['name']}',
+                    style: const TextStyle(fontSize: 16.0, color: Colors.black54),
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 20),
+                  const Text(
+                    'Date of Birth:',
+                    style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold, color: Color(0xFF16666B)),
+                  ),
+                  const SizedBox(height: 5),
                   Text(
-                    'Gender: ${userData['gender']}',
-                    style: const TextStyle(fontSize: 18.0),
+                    '${userData['dob']}',
+                    style: const TextStyle(fontSize: 16.0, color: Colors.black54),
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 20),
+                  const Text(
+                    'Age:',
+                    style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold, color: Color(0xFF16666B)),
+                  ),
+                  const SizedBox(height: 5),
                   Text(
-                    'Date of Birth: ${userData['dateOfBirth']}',
-                    style: const TextStyle(fontSize: 18.0),
+                    '${userData['age']} years',
+                    style: const TextStyle(fontSize: 16.0, color: Colors.black54),
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 20),
+                  const Text(
+                    'Gender:',
+                    style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold, color: Color(0xFF16666B)),
+                  ),
+                  const SizedBox(height: 5),
                   Text(
-                    'Emergency Contact: ${userData['emergencyContact']}',
-                    style: const TextStyle(fontSize: 18.0),
+                    '${userData['gender']}',
+                    style: const TextStyle(fontSize: 16.0, color: Colors.black54),
                   ),
-                  const SizedBox(height: 10),
-                  Text(
-                    'Previous Medical Conditions: ${userData['previousMedicalConditions']}',
-                    style: const TextStyle(fontSize: 18.0),
-                  ),
+                  const SizedBox(height: 20),
+                  // Add more fields here as needed
                 ],
               ),
             );
