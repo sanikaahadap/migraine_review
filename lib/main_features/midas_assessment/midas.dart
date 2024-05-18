@@ -55,6 +55,23 @@ class MIDASAssessmentPageState extends State<MIDASAssessmentPage> {
       }
     });
   }
+  IconData _getIconForOption(String option) {
+    switch (option) {
+      case 'One':
+        return Icons.looks_one;
+      case 'Two':
+        return Icons.looks_two;
+      case 'Three':
+        return Icons.looks_3;
+      case 'Four':
+        return Icons.looks_4;
+      case 'Five or more':
+        return Icons.looks_5;
+      default:
+        return Icons.error; // Default icon for unrecognized options
+    }
+  }
+
 
   int calculateScore() {
     int score = 0;
@@ -130,16 +147,14 @@ class MIDASAssessmentPageState extends State<MIDASAssessmentPage> {
                       children: List.generate(_options.length, (index) {
                         return Container(
                           height: 55,
-                          width: MediaQuery.of(context).size.width / 2.2, // Adjust width to cover almost entire width
+                          width: MediaQuery.of(context).size.width / 2.2,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8.0),
-                            color: _selectedOptions[_currentPageIndex] == _options[index]
-                                ? const Color(0xFF16666B) // Selected option background color
-                                : Colors.white, // Default color
+                            color: Colors.white,
                             border: Border.all(
                               color: _selectedOptions[_currentPageIndex] == _options[index]
-                                  ? const Color(0xFF16666B) // Selected option border color
-                                  : Colors.black, // Default color
+                                  ? const Color(0xFF16666B)
+                                  : Colors.black,
                             ),
                           ),
                           child: TextButton(
@@ -147,18 +162,34 @@ class MIDASAssessmentPageState extends State<MIDASAssessmentPage> {
                               _selectOption(_currentPageIndex, _options[index]);
                             },
                             style: TextButton.styleFrom(
-                              foregroundColor: _selectedOptions[_currentPageIndex] == _options[index]
-                                  ? Colors.white // Selected option text color
-                                  : const Color(0xFF16666B), // Default text color
+                              backgroundColor: _selectedOptions[_currentPageIndex] == _options[index]
+                                  ? Colors.white
+                                  : const Color(0xFFFFFFFF),
                             ),
-                            child: Text(
-                              _options[index],
-                              style: const TextStyle(fontSize: 16), // Increased text size
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  _options[index],
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: const Color(0xFF16666B),
+                                  ),
+                                ),
+                                const SizedBox(width: 5),
+                                Icon(
+                                  _getIconForOption(_options[index]),
+                                  size: 30,
+                                  color: const Color(0xFF16666B),
+                                ),
+                              ],
                             ),
                           ),
                         );
                       }),
                     ),
+
+
                   ],
                 ),
               ),
