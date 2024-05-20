@@ -55,12 +55,8 @@ class DiaryPageState extends State<DiaryPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Your Diary',
-          style: TextStyle(color: Color(0xFF16666B),
-          ),
-
-        ),
+        title: const Text('Your Diary', style: TextStyle(color: Colors.white)),
+        backgroundColor: const Color(0xFF16666B),
         // backgroundColor: const Color(0xFF16666B),
       ),
       body: Center(
@@ -77,10 +73,6 @@ class DiaryPageState extends State<DiaryPage> {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                // setState(() {
-                //   _hadHeadache = true;
-                //
-                // });
                 Navigator.push(
                   context,
                   MaterialPageRoute(

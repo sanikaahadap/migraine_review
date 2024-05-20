@@ -24,6 +24,7 @@ class YesPageState extends State<YesPage> {
   String? _sleepDuration;
   String? _exerciseDuration;
   String? _screenTime;
+  String? _migraineDescription;
 
 
 
@@ -393,6 +394,28 @@ class YesPageState extends State<YesPage> {
               ],
             ),
             const SizedBox(height: 20),
+            const Text('7. Describe the migraine you experienced today:', style: TextStyle(color: Color(0xFF16666B), fontSize: 18, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 10),
+            TextField(
+              onChanged: (value) {
+                setState(() {
+                  _migraineDescription = value;
+                });
+              },
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(
+                  borderSide: BorderSide(color: Color(0xFF16666B)),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Color(0xFF16666B)),
+                ),
+                hintText: 'Enter your description here',
+              ),
+              cursorColor: const Color(0xFF16666B),
+              maxLines: 5,
+              style: const TextStyle(color: Color(0xFF16666B)),
+            ),
+            const SizedBox(height: 20),
             const Text('Did you miss meals?', style: TextStyle(color: Color(0xFF16666B), fontSize: 18, fontWeight: FontWeight.bold)),
             Row(
               children: <Widget>[
@@ -581,6 +604,7 @@ class YesPageState extends State<YesPage> {
                   'sleepDuration': _sleepDuration,
                   'exerciseDuration': _exerciseDuration,
                   'screenTime': _screenTime,
+                  'migraineDescription': _migraineDescription,
                   'timestamp': Timestamp.now(),
                   'uid' : FirebaseAuth.instance.currentUser!.uid,
                 };

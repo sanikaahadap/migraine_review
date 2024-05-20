@@ -123,13 +123,8 @@ class FAQsPageState extends State<FAQsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'FAQs',
-          style: TextStyle(
-            color: Color(0xFF16666B),
-          ),
-        ),
-        backgroundColor: Colors.white,
+        title: const Text('FAQs', style: TextStyle(color: Colors.white)),
+        backgroundColor: const Color(0xFF16666B),
       ),
       body: Column(
         children: [
@@ -137,13 +132,15 @@ class FAQsPageState extends State<FAQsPage> {
             padding: const EdgeInsets.all(10.0),
             child: TextField(
               cursorColor: const Color(0xFF16666B),
-
               onChanged: (value) {
                 setState(() {
                   _searchText = value.toLowerCase();
                 });
               },
               decoration: InputDecoration(
+                focusedBorder: const OutlineInputBorder(
+                  borderSide: BorderSide(color: Color(0xFF16666B)),
+                ),
                 hintText: 'Search FAQs',
                 prefixIcon: const Icon(Icons.search),
                 border: OutlineInputBorder(
@@ -259,10 +256,6 @@ List<FAQ> faqsList = [
     question: 'Are any tablets responsible for headache such as birth control pills?',
     answer:
     'Headaches can become more frequent in patients taking oral contraceptives. However the dose and type of hormone in the pill affects the headache. Hence patients should inform their gynecologist about migraine.',
-  ),
-  FAQ(
-    question: 'Can hypnosis help in treating migraine?',
-    answer: 'You need to consult and talk to your doctor about it.',
   ),
   FAQ(
     question: 'Can migraine be prevented?',
