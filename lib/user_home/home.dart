@@ -10,9 +10,9 @@ import 'package:neurooooo/user_home/profile.dart';
 import 'package:neurooooo/main_features/personal_diary/diary.dart';
 import 'package:neurooooo/main_features/migraine_logs/migraine_logs.dart';
 import 'package:neurooooo/models/user.dart';
+import '../main_features/youtube_tips/youtube_links.dart';
 import 'dart:developer';
 import 'dart:async';
-import '../main_features/youtube_tips/youtube_links.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -153,6 +153,10 @@ class HomePageState extends State<HomePage> {
         actions: [
           GestureDetector(
             onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const ProfilePage()),
+              );
               // Handle profile icon tap
             },
             child: const Padding(
