@@ -288,7 +288,7 @@ class HomePageState extends State<HomePage> {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => DiaryPage()),
+                          MaterialPageRoute(builder: (context) => const DiaryPage()),
                         );
                       },
                       icon: const Icon(Icons.book, color: Colors.white),
@@ -389,7 +389,7 @@ class HomePageState extends State<HomePage> {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => DiaryPage()),
+                  MaterialPageRoute(builder: (context) => const DiaryPage()),
                 );
               },
             ),

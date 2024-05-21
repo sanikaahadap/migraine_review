@@ -6,10 +6,10 @@ class AnalysisPage extends StatefulWidget {
   const AnalysisPage({super.key});
 
   @override
-  _AnalysisPageState createState() => _AnalysisPageState();
+  AnalysisPageState createState() => AnalysisPageState();
 }
 
-class _AnalysisPageState extends State<AnalysisPage> {
+class AnalysisPageState extends State<AnalysisPage> {
   Map<String, int> _triggersFrequency = {};
   Map<String, int> _symptomsFrequency = {};
   Map<String, int> _preSymptomsFrequency = {};
@@ -61,7 +61,7 @@ class _AnalysisPageState extends State<AnalysisPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xFF16666B),
-        title: const Text('Headache Analysis'),
+        title: const Text('Notifications', style: TextStyle(color: Colors.white)),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),

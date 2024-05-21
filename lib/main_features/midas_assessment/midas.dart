@@ -171,9 +171,9 @@ class MIDASAssessmentPageState extends State<MIDASAssessmentPage> {
                               children: [
                                 Text(
                                   _options[index],
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 16,
-                                    color: const Color(0xFF16666B),
+                                    color: Color(0xFF16666B),
                                   ),
                                 ),
                                 const SizedBox(width: 5),

@@ -4,6 +4,8 @@ import 'headache_yes.dart';
 // import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DiaryPage extends StatefulWidget {
+  const DiaryPage({super.key});
+
 
   @override
   DiaryPageState createState() => DiaryPageState();
