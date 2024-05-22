@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:neurooooo/login/login_signup_page.dart';
 import 'package:neurooooo/main_features/ehr/ehr_entry.dart';
 import 'package:neurooooo/main_features/midas_assessment/midas.dart';
+import 'package:neurooooo/onboarding/animated_page.dart';
 import 'package:neurooooo/user_home/settings.dart';
 import 'package:neurooooo/main_features/faqs/faqs.dart';
 import 'package:neurooooo/main_features/calendar/calendar.dart';
@@ -64,8 +66,12 @@ class HomePageState extends State<HomePage> {
     setState(() {});
   }
 
-  void signUserOut() {
-    FirebaseAuth.instance.signOut();
+  void signUserOut(BuildContext context) {
+    FirebaseAuth.instance.signOut().then((_) {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => LoginSignupPage()),
+      );
+    });
   }
 
   Future<ModelUser> getUserDetails() async {
@@ -437,7 +443,7 @@ class HomePageState extends State<HomePage> {
             ListTile(
               leading: const Icon(Icons.logout), // Icon for Log Out
               title: const Text('Log Out'),
-              onTap: signUserOut,
+              onTap:()=> signUserOut(context),
             ),
           ],
         ),
