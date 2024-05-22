@@ -1,5 +1,5 @@
 import 'dart:developer';
-
+import 'package:neurooooo/user_home/nav_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -227,17 +227,27 @@ class NoPageState extends State<NoPage> {
                     context: context,
                     builder: (BuildContext context) {
                       return AlertDialog(
-                        title: const Text("Success"),
-                        content: const Text("Details stored successfully"),
+                        title: const Text("Confirmation"),
+                        content: const Text("Are you sure you want to submit this response?"),
                         actions: <Widget>[
                           TextButton(
                             onPressed: () {
                               // Close the dialog
                               Navigator.of(context).pop();
-                              // Navigate back to the home page
+                              // Navigate to the new page
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => const CustomBottomNavigationBar()),
+                              );
+                            },
+                            child: const Text("Yes"),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              // Close the dialog without navigating
                               Navigator.of(context).pop();
                             },
-                            child: const Text("OK"),
+                            child: const Text("No"),
                           ),
                         ],
                       );

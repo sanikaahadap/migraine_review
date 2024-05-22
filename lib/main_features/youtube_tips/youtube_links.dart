@@ -4,9 +4,7 @@ import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 final videoUrls = [
   'https://www.youtube.com/watch?v=hYApsBuf7ec',
   'https://youtu.be/jryy3mlZtXk?si=lZ7FtWs6MzmdGWMp',
-  'https://youtu.be/5SYUkCqfmc8?si=9WPKXgkn2dVvZQ_X',
-  'https://www.youtube.com/watch?v=qEZf2q4W20g',
-  'https://www.youtube.com/watch?v=jCbclWBV32o'
+  'https://youtu.be/5SYUkCqfmc8?si=9WPKXgkn2dVvZQ_X'
 ];
 
 class Feed extends StatelessWidget {
