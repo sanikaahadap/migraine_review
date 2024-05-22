@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:neurooooo/login/login.dart';
+import 'package:neurooooo/login/login_signup_page.dart';
 import 'package:neurooooo/models/user.dart';
 import 'package:neurooooo/onboarding/userinfopage.dart';
 import 'package:intl/intl.dart';
@@ -93,7 +94,7 @@ class SignUpPageState extends State<SignUpPage> {
           log("User created successfully");
           saveUser(); // Add this log
           Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const UserInfoPage()));
+              MaterialPageRoute(builder: (context) => const DisclaimerPage()));
         }
       } on FirebaseAuthException catch (ex) {
         log("FirebaseAuthException: ${ex.code}"); // Add this log
@@ -185,6 +186,15 @@ class SignUpPageState extends State<SignUpPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const LoginSignupPage()),
+            );
+          },
+        ),
           // Your app bar content goes here
           ),
       body: SingleChildScrollView(

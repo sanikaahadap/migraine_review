@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'dart:developer';
 import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:neurooooo/login/login_signup_page.dart';
 import 'package:neurooooo/login/phone_number_signin.dart';
 import 'package:neurooooo/onboarding/features.dart';
 import 'package:neurooooo/login/forgotpassword.dart';
-import 'package:neurooooo/user_home/home.dart';
 import 'package:neurooooo/user_home/nav_bar.dart';
 import 'package:neurooooo/login/signup.dart';
 import 'package:crypto/crypto.dart';
@@ -61,6 +61,15 @@ class LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const LoginSignupPage()),
+            );
+          },
+        ),
           // Your app bar content goes here
           ),
       body: SingleChildScrollView(

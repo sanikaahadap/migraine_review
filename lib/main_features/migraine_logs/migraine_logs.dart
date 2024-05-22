@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:neurooooo/user_home/home.dart';
+import 'package:neurooooo/user_home/nav_bar.dart';
 
 class MigraineLogsPage extends StatefulWidget {
   const MigraineLogsPage({Key? key}) : super(key: key);
@@ -602,7 +603,7 @@ class LogResponsePage extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const HomePage()),
+                  MaterialPageRoute(builder: (context) => const CustomBottomNavigationBar()),
                 );
               },
               style: ElevatedButton.styleFrom(

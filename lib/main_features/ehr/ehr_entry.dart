@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:neurooooo/main_features/ehr/ehr_graph.dart';
-// import 'package:neurooooo/main_features/ehr/ehr.dart';
+// import 'package:neurooooo/main_features/ehr/ehr_graph.dart';
+// // import 'package:neurooooo/main_features/ehr/ehr.dart';
 import 'package:neurooooo/main_features/ehr/ehr_record.dart';
 import 'package:neurooooo/main_features/ehr/pdf_upload.dart';
 
@@ -67,7 +67,7 @@ class Ehrmainpg extends StatelessWidget {
                     borderRadius: BorderRadius.circular(15),
                   ),
                 ),
-                child: const Text('Upload PDFs', style: TextStyle(fontSize: 18, color: Colors.white)),
+                child: const Text('Upload Medical Records', style: TextStyle(fontSize: 18, color: Colors.white)),
               ),
             ],
           ),

@@ -63,7 +63,7 @@ class AnimatedPageState extends State<AnimatedPage>
             ),
             SizedBox(
               height: MediaQuery.of(context).size.height / 4,
-              child: Center(
+              child: const Center(
                 // Content for the bottom half of the page
                 // For example, you can place the animated special shape and the button here
                 child: Column(
