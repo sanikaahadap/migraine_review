@@ -1,6 +1,6 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
-import 'plus.dart';
+import 'package:neurooooo/user_home/nav_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -271,7 +271,7 @@ class DisclaimerPage extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const QuestionnairePage()),
+                  MaterialPageRoute(builder: (context) => const CustomBottomNavigationBar()),
                 );
               },
               style: ElevatedButton.styleFrom(
@@ -286,7 +286,7 @@ class DisclaimerPage extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const QuestionnairePage()),
+                  MaterialPageRoute(builder: (context) => const CustomBottomNavigationBar()),
                 );
               },
               style: ElevatedButton.styleFrom(
