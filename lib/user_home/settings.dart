@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:neurooooo/user_home/doctor_info_page.dart';
 import 'package:neurooooo/user_home/profile.dart';// Import the ThemeSettingsPage
 
 class SettingsPage extends StatelessWidget {
@@ -33,6 +34,17 @@ class SettingsPage extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                     builder: (context) => const PrivacyPolicyDescription()),
+              );
+            },
+          ),
+          ListTile(
+            title: const Text('Know Your Doctor'),
+            leading: const Icon(Icons.healing, color: Color(0xFF16666B)), // Use theme color for the icon
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const DoctorInfoPage()),
               );
             },
           ),
