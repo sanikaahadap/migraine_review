@@ -9,7 +9,7 @@ import 'package:neurooooo/admin_home/users_info.dart';
 class AdminHomePage extends StatelessWidget {
   final UserService userService = UserService();
 
-  AdminHomePage({super.key}); // Initialize the user service
+  AdminHomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +35,7 @@ class AdminHomePage extends StatelessWidget {
 class PatientDetailsPage extends StatelessWidget {
   final UserService userService = UserService();
 
-  PatientDetailsPage({Key? key});
+  PatientDetailsPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -57,20 +57,34 @@ class PatientDetailsPage extends StatelessWidget {
             final uniqueUsers = users.toSet().toList();
 
             return ListView.builder(
+              padding: const EdgeInsets.all(8.0),
               itemCount: uniqueUsers.length,
               itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(uniqueUsers[index].name),
-                  subtitle: Text(uniqueUsers[index].email),
-                  onTap: () {
-                    // Navigate to another page
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => UserDetailsPage(user: uniqueUsers[index]),
+                return Card(
+                  margin: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: ListTile(
+                    contentPadding: const EdgeInsets.all(16.0),
+                    leading: CircleAvatar(
+                      backgroundColor: Color(0xFF16666B),
+                      child: Text(
+                        uniqueUsers[index].name[0].toUpperCase(),
+                        style: const TextStyle(color: Colors.white),
                       ),
-                    );
-                  },
+                    ),
+                    title: Text(
+                      uniqueUsers[index].name,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    subtitle: Text(uniqueUsers[index].email),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => UserDetailsPage(user: uniqueUsers[index]),
+                        ),
+                      );
+                    },
+                  ),
                 );
               },
             );
@@ -80,26 +94,25 @@ class PatientDetailsPage extends StatelessWidget {
     );
   }
 }
-
-
-
-
 class ModelUser {
   final String name;
-  final String email;
   final String uid;
+  final String email;
+  final String dob;
 
-  ModelUser({required this.name, required this.email, required this.uid});
+  ModelUser({required this.name, required this.uid, required this.dob, required this.email});
 
   factory ModelUser.fromDocument(DocumentSnapshot doc) {
     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
     return ModelUser(
       name: data['name'] ?? 'No Name',
-      email: data['email'] ?? 'No Email',
       uid: data['uid'] ?? 'No UID',
+      dob: data['dob'] ?? 'No dob',
+      email: data['email']?? 'No email', // Ensure there's a default value
     );
   }
 }
+
 
 class UserService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
