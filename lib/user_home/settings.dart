@@ -1,4 +1,6 @@
-import 'package:flutter/material.dart';// Import the ThemeSettingsPage
+import 'package:flutter/material.dart';
+import 'package:neurooooo/user_home/doctor_info_page.dart';
+import 'package:neurooooo/user_home/profile.dart';// Import the ThemeSettingsPage
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -14,17 +16,14 @@ class SettingsPage extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         children: [
           ListTile(
-            title: const Text('Profile Settings'),
+            title: const Text('Profile Info'),
             leading: const Icon(Icons.person, color: Color(0xFF16666B)), // Use theme color for the icon
             onTap: () {
-              // Handle tapping on profile settings
-            },
-          ),
-          ListTile(
-            title: const Text('Notification Preferences'),
-            leading: const Icon(Icons.notifications_active, color: Color(0xFF16666B)), // Use theme color for the icon
-            onTap: () {
-              // Handle tapping on notification preferences
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const ProfilePage()),
+              );
             },
           ),
           ListTile(
@@ -35,6 +34,17 @@ class SettingsPage extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                     builder: (context) => const PrivacyPolicyDescription()),
+              );
+            },
+          ),
+          ListTile(
+            title: const Text('Know Your Doctor'),
+            leading: const Icon(Icons.healing, color: Color(0xFF16666B)), // Use theme color for the icon
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const DoctorInfoPage()),
               );
             },
           ),

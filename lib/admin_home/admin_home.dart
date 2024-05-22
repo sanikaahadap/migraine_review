@@ -1,10 +1,9 @@
-// In admin_home.dart
 import 'package:flutter/material.dart';
-import 'package:neurooooo/other_services/user_service.dart';
-import 'package:neurooooo/models/user.dart';// Import the user service
+// import 'package:neurooooo/other_services/user_service.dart';
+// import 'package:neurooooo/models/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:neurooooo/admin_home/users_info.dart';
-
+import 'package:neurooooo/login/login_signup_page.dart';
 
 class AdminHomePage extends StatelessWidget {
   final UserService userService = UserService();
@@ -15,18 +14,72 @@ class AdminHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Admin Home'),
+        backgroundColor: const Color(0xFF16666B),
       ),
-      body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => PatientDetailsPage()),
-            );
-          },
-          child: const Text('Patient Details'),
-        ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Expanded(
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    'Admin Dashboard',
+                    style: TextStyle(
+                      color: Color(0xFF16666B),
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => PatientDetailsPage()),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF16666B),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 16, horizontal: 32),
+                    ),
+                    child: const Text(
+                      'Patient Details',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(
+                bottom: 20), // Add some space from the bottom
+            child: ElevatedButton.icon(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const LoginSignupPage()),
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF16666B),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 25),
+              ),
+              icon: const Icon(Icons.logout,
+                  color: Colors.white), // Set the icon color to white
+              label: const Text(
+                'Logout',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -35,7 +88,7 @@ class AdminHomePage extends StatelessWidget {
 class PatientDetailsPage extends StatelessWidget {
   final UserService userService = UserService();
 
-  PatientDetailsPage({Key? key}) : super(key: key);
+  PatientDetailsPage({Key? key});
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +98,8 @@ class PatientDetailsPage extends StatelessWidget {
       ),
       body: FutureBuilder<List<ModelUser>>(
         future: userService.getUsers(),
-        builder: (BuildContext context, AsyncSnapshot<List<ModelUser>> snapshot) {
+        builder:
+            (BuildContext context, AsyncSnapshot<List<ModelUser>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
@@ -80,7 +134,8 @@ class PatientDetailsPage extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => UserDetailsPage(user: uniqueUsers[index]),
+                          builder: (context) =>
+                              UserDetailsPage(user: uniqueUsers[index]),
                         ),
                       );
                     },
@@ -94,13 +149,18 @@ class PatientDetailsPage extends StatelessWidget {
     );
   }
 }
+
 class ModelUser {
   final String name;
   final String uid;
   final String email;
   final String dob;
 
-  ModelUser({required this.name, required this.uid, required this.dob, required this.email});
+  ModelUser(
+      {required this.name,
+      required this.uid,
+      required this.dob,
+      required this.email});
 
   factory ModelUser.fromDocument(DocumentSnapshot doc) {
     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
@@ -108,11 +168,10 @@ class ModelUser {
       name: data['name'] ?? 'No Name',
       uid: data['uid'] ?? 'No UID',
       dob: data['dob'] ?? 'No dob',
-      email: data['email']?? 'No email', // Ensure there's a default value
+      email: data['email'] ?? 'No email', // Ensure there's a default value
     );
   }
 }
-
 
 class UserService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;

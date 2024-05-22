@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
-import 'plus.dart';
+import 'package:neurooooo/login/login.dart';
+import 'package:neurooooo/user_home/nav_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -189,7 +190,7 @@ class UserInfoPageState extends State<UserInfoPage> {
                         // Navigate to the next page after storing data
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const DisclaimerPage()),
+                          MaterialPageRoute(builder: (context) => const BackToLogin()),
                         );
                       }).catchError((error) {
                         // Handle errors if any
@@ -230,7 +231,7 @@ class DisclaimerPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -267,11 +268,12 @@ class DisclaimerPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 70.0),
+
             ElevatedButton(
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const QuestionnairePage()),
+                  MaterialPageRoute(builder: (context) => const UserInfoPage()),
                 );
               },
               style: ElevatedButton.styleFrom(
@@ -279,27 +281,61 @@ class DisclaimerPage extends StatelessWidget {
                 foregroundColor: Colors.white,
                 padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
               ),
-              child: const Text('Accept'),
-            ),
-            const SizedBox(height: 16.0),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const QuestionnairePage()),
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF16666B),
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
-              ),
-              child: const Text('Decline'),
+              child: const Text('Proceed'),
             ),
           ],
         ),
       ),
 
+    );
+  }
+}
+
+class BackToLogin extends StatelessWidget {
+  const BackToLogin({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: const Color(0xFF16666B),
+      ),
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text(
+                'Account created successfully, please log in again',
+                style: TextStyle(
+                  color: Color(0xFF16666B),
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const LoginPage()),
+                  ); // Implement navigation to login page
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF16666B),
+                  padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
+                ),
+                child: const Text(
+                  'Back to Login',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

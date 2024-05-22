@@ -1,57 +1,48 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'headache_no.dart';
 import 'headache_yes.dart';
-// import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:async';
 
 class DiaryPage extends StatefulWidget {
   const DiaryPage({super.key});
-
 
   @override
   DiaryPageState createState() => DiaryPageState();
 }
 
 class DiaryPageState extends State<DiaryPage> {
-  // bool? _hadHeadache;
-  // Future<void> _submitDiary() async {
-  //   // Create a map with the values to be stored
-  //   Map<String, dynamic> diaryData = {
-  //     'durationIndex': _durationIndex,
-  //     'painSeverity': _painSeverity,
-  //     'selectedLocation': _selectedLocation,
-  //     'selectedCharacter': _selectedCharacter,
-  //     'selectedSeverity': _selectedSeverity,
-  //     'difficultyInWork': _difficultyInWork,
-  //     'nausea': _nausea,
-  //     'vomiting': _vomiting,
-  //     'photophobia': _photophobia,
-  //     'phonophobia': _phonophobia,
-  //     'osmophobia': _osmophobia,
-  //     'blurringOfVision': _blurringOfVision,
-  //     'ctMriScan': _ctMriScan,
-  //     'painKillersPerMonth': _painKillersPerMonth,
-  //     'monthsOfPainkillerUse': _monthsOfPainkillerUse,
-  //     'timestamp': DateTime.now(),
-  //   };
-  //
-  //   try {
-  //     // Add the data to the Firestore collection 'diary_logs'
-  //     await FirebaseFirestore.instance
-  //         .collection('personal_diary')
-  //         .add(diaryData);
-  //
-  //     // Navigate to the log response page or any other action
-  //     // Navigator.push(
-  //     //   context,
-  //     //   MaterialPageRoute(
-  //     //     builder: (context) => LogResponsePage(date: DateTime.now()),
-  //     //   ),
-  //     // );
-  //   } catch (error) {
-  //     // Handle any errors that occur during submission
-  //     print('Error submitting diary: $error');
-  //   }
-  // }
+  bool _canFillDiary = true;
+  final String _uid = FirebaseAuth.instance.currentUser!.uid;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkDiaryStatus();
+  }
+
+  Future<void> _checkDiaryStatus() async {
+    DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('users').doc(_uid).get();
+    if (userDoc.exists) {
+      Map<String, dynamic>? data = userDoc.data() as Map<String, dynamic>?;
+      String? lastFilledDate = data?['lastFilledDate'] as String?;
+      String today = DateTime.now().toIso8601String().split('T')[0];
+
+      if (lastFilledDate == today) {
+        setState(() {
+          _canFillDiary = false;
+        });
+      }
+    }
+  }
+
+  Future<void> _setDiaryFilled() async {
+    String today = DateTime.now().toIso8601String().split('T')[0];
+    await FirebaseFirestore.instance.collection('users').doc(_uid).set({
+      'lastFilledDate': today,
+    }, SetOptions(merge: true));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +50,6 @@ class DiaryPageState extends State<DiaryPage> {
       appBar: AppBar(
         title: const Text('Your Diary', style: TextStyle(color: Colors.white)),
         backgroundColor: const Color(0xFF16666B),
-        // backgroundColor: const Color(0xFF16666B),
       ),
       body: Center(
         child: Column(
@@ -74,13 +64,17 @@ class DiaryPageState extends State<DiaryPage> {
             ),
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const YesPage()),
-                );
-              },
+              onPressed: _canFillDiary
+                  ? () {
+                _setDiaryFilled().then((_) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const YesPage()),
+                  );
+                });
+              }
+                  : null,
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF16666B),
               ),
@@ -88,25 +82,35 @@ class DiaryPageState extends State<DiaryPage> {
             ),
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () {
-                // setState(() {
-                //   _hadHeadache = false;
-                // });
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const NoPage()),
-                );
-              },
+              onPressed: _canFillDiary
+                  ? () {
+                _setDiaryFilled().then((_) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const NoPage()),
+                  );
+                });
+              }
+                  : null,
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF16666B),
               ),
               child: const Text('No', style: TextStyle(color: Colors.white)),
             ),
+            const SizedBox(height: 20),
+            if (!_canFillDiary)
+              const Text(
+                'You have already filled the diary today, come again to fill it tomorrow',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.red,
+                ),
+                textAlign: TextAlign.center,
+              ),
           ],
         ),
       ),
     );
   }
 }
-

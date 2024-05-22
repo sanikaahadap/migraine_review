@@ -2,19 +2,109 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-// import 'package:neurooooo/user_home/home.dart';
 import 'dart:developer';
-
 import 'package:neurooooo/user_home/nav_bar.dart';
+import 'dart:async';
 
 class MIDASAssessmentPage extends StatefulWidget {
-  const MIDASAssessmentPage({super.key});
+  const MIDASAssessmentPage({Key? key}) : super(key: key);
 
   @override
   MIDASAssessmentPageState createState() => MIDASAssessmentPageState();
 }
 
 class MIDASAssessmentPageState extends State<MIDASAssessmentPage> {
+  bool _canFillQuestionnaire = true; // Indicates whether the user can fill the questionnaire
+  final String _uid = FirebaseAuth.instance.currentUser!.uid;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkQuestionnaireStatus();
+  }
+
+  Future<void> _checkQuestionnaireStatus() async {
+    DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('users').doc(_uid).get();
+    if (userDoc.exists) {
+      Map<String, dynamic>? data = userDoc.data() as Map<String, dynamic>?;
+      Timestamp? lastFilledTimestamp = data?['lastMIDASFilledTimestamp'] as Timestamp?;
+      if (lastFilledTimestamp != null) {
+        // Check if two weeks have passed since the last filled timestamp
+        DateTime twoWeeksAgo = DateTime.now().subtract(const Duration(days: 14));
+        DateTime lastFilledDateTime = lastFilledTimestamp.toDate();
+        if (lastFilledDateTime.isAfter(twoWeeksAgo)) {
+          setState(() {
+            _canFillQuestionnaire = false;
+          });
+        }
+      }
+    }
+  }
+
+  Future<void> _setQuestionnaireFilled() async {
+    Timestamp now = Timestamp.now();
+    await FirebaseFirestore.instance.collection('users').doc(_uid).set({
+      'lastMIDASFilledTimestamp': now,
+    }, SetOptions(merge: true));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          'MIDAS Assessment',
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: const Color(0xFF16666B),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text(
+              'MIDAS Assessment',
+              style: TextStyle(
+                color: Color(0xFF16666B),
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: _canFillQuestionnaire
+                  ? () {
+                _setQuestionnaireFilled().then((_) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const MIDASQuestions()),
+                  );
+                });
+              }
+                  : null,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF16666B), // Background color
+                foregroundColor: Colors.white, // Text color
+              ),
+              child: Text(
+                _canFillQuestionnaire ? 'Proceed to the Questionnaire' : 'Questionnaire already filled',
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class MIDASQuestions extends StatefulWidget {
+  const MIDASQuestions({Key? key}) : super(key: key);
+
+  @override
+  MIDASQuestionsState createState() => MIDASQuestionsState();
+}
+
+class MIDASQuestionsState extends State<MIDASQuestions> {
   int _currentPageIndex = 0;
   final List<String?> _selectedOptions = List.filled(5, null);
 
@@ -55,6 +145,7 @@ class MIDASAssessmentPageState extends State<MIDASAssessmentPage> {
       }
     });
   }
+
   IconData _getIconForOption(String option) {
     switch (option) {
       case 'One':
@@ -71,7 +162,6 @@ class MIDASAssessmentPageState extends State<MIDASAssessmentPage> {
         return Icons.error; // Default icon for unrecognized options
     }
   }
-
 
   int calculateScore() {
     int score = 0;
@@ -99,8 +189,6 @@ class MIDASAssessmentPageState extends State<MIDASAssessmentPage> {
 
   @override
   Widget build(BuildContext context) {
-
-
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
@@ -114,7 +202,7 @@ class MIDASAssessmentPageState extends State<MIDASAssessmentPage> {
           children: [
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal :15.0),
+                padding: const EdgeInsets.symmetric(horizontal: 15.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
@@ -126,10 +214,10 @@ class MIDASAssessmentPageState extends State<MIDASAssessmentPage> {
                         color: Color(0xFFFFFFFF),
                       ),
                     ),
-                    const Divider( // Add a Divider widget
-                      color: Colors.white, // Set the color to white
-                      thickness: 1, // Set the thickness of the line
-                      height: 20, // Set the height of the line
+                    const Divider(
+                      color: Colors.white,
+                      thickness: 1,
+                      height: 20,
                     ),
                     const SizedBox(height: 5),
                     Text(
@@ -150,7 +238,9 @@ class MIDASAssessmentPageState extends State<MIDASAssessmentPage> {
                           width: MediaQuery.of(context).size.width / 2.2,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8.0),
-                            color: Colors.white,
+                            color: _selectedOptions[_currentPageIndex] == _options[index]
+                                ? const Color(0xFF16666B)
+                                : Colors.white,
                             border: Border.all(
                               color: _selectedOptions[_currentPageIndex] == _options[index]
                                   ? const Color(0xFF16666B)
@@ -163,24 +253,28 @@ class MIDASAssessmentPageState extends State<MIDASAssessmentPage> {
                             },
                             style: TextButton.styleFrom(
                               backgroundColor: _selectedOptions[_currentPageIndex] == _options[index]
-                                  ? Colors.white
-                                  : const Color(0xFFFFFFFF),
+                                  ? const Color(0xFF16666B)
+                                  : Colors.white,
                             ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
                                   _options[index],
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontSize: 16,
-                                    color: Color(0xFF16666B),
+                                    color: _selectedOptions[_currentPageIndex] == _options[index]
+                                        ? Colors.white
+                                        : const Color(0xFF16666B),
                                   ),
                                 ),
                                 const SizedBox(width: 5),
                                 Icon(
                                   _getIconForOption(_options[index]),
                                   size: 30,
-                                  color: const Color(0xFF16666B),
+                                  color: _selectedOptions[_currentPageIndex] == _options[index]
+                                      ? Colors.white
+                                      : const Color(0xFF16666B),
                                 ),
                               ],
                             ),
@@ -188,8 +282,6 @@ class MIDASAssessmentPageState extends State<MIDASAssessmentPage> {
                         );
                       }),
                     ),
-
-
                   ],
                 ),
               ),
@@ -239,6 +331,7 @@ class MIDASAssessmentPageState extends State<MIDASAssessmentPage> {
     );
   }
 }
+
 
 class MIDASOutputPage extends StatelessWidget {
   final int score;
