@@ -5,6 +5,8 @@ import 'package:neurooooo/login/login_signup_page.dart';
 import 'package:neurooooo/main_features/ehr/ehr_entry.dart';
 import 'package:neurooooo/main_features/midas_assessment/midas.dart';
 import 'package:neurooooo/onboarding/animated_page.dart';
+import 'package:neurooooo/salient_features.dart';
+import 'package:neurooooo/user_home/doctor_info_page.dart';
 import 'package:neurooooo/user_home/settings.dart';
 import 'package:neurooooo/main_features/faqs/faqs.dart';
 import 'package:neurooooo/main_features/calendar/calendar.dart';
@@ -360,67 +362,7 @@ class HomePageState extends State<HomePage> {
               ),
             ),
             ListTile(
-              leading: const Icon(Icons.person), // Icon for Profile
-              title: const Text('Profile'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const ProfilePage()),
-                );
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.settings), // Icon for Settings
-              title: const Text('Settings'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const SettingsPage()),
-                );
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.assignment), // Icon for Questionnaire
-              title: const Text('Questionnaire'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const MIDASAssessmentPage()),
-                );
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.book), // Icon for Your Diary
-              title: const Text('Your Diary'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const DiaryPage()),
-                );
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.calendar_today), // Icon for Calendar
-              title: const Text('Calendar'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const CalendarPage()),
-                );
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.assignment), // Icon for EHR
-              title: const Text('EHR'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const Ehrmainpg()),
-                );
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.videocam), // Icon for Settings
+              leading: const Icon(Icons.videocam), // Icon for YT videos
               title: const Text('Youtube videos'),
               onTap: () {
                 Navigator.push(
@@ -430,12 +372,22 @@ class HomePageState extends State<HomePage> {
               },
             ),
             ListTile(
-              leading: const Icon(Icons.help_outline), // Icon for FAQs
-              title: const Text('FAQs'),
+              leading: const Icon(Icons.healing), // Icon for Know Your Doctor
+              title: const Text('Know Your Doctor'),
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const FAQsPage()),
+                  MaterialPageRoute(builder: (context) => const DoctorInfoPage()),
+                );
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.app_shortcut_sharp), // Icon for FAQs
+              title: const Text('Salient Features'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SalientFeaturesPage()),
                 );
               },
             ),

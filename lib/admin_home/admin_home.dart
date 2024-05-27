@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-// import 'package:neurooooo/other_services/user_service.dart';
-// import 'package:neurooooo/models/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:neurooooo/admin_home/users_info.dart';
 import 'package:neurooooo/login/login_signup_page.dart';
@@ -13,9 +11,6 @@ class AdminHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF16666B),
-      ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -38,7 +33,7 @@ class AdminHomePage extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => PatientDetailsPage()),
+                            builder: (context) => const PatientDetailsPage()),
                       );
                     },
                     style: ElevatedButton.styleFrom(
@@ -69,7 +64,7 @@ class AdminHomePage extends StatelessWidget {
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF16666B),
                 padding:
-                    const EdgeInsets.symmetric(vertical: 10, horizontal: 25),
+                const EdgeInsets.symmetric(vertical: 10, horizontal: 25),
               ),
               icon: const Icon(Icons.logout,
                   color: Colors.white), // Set the icon color to white
@@ -85,67 +80,116 @@ class AdminHomePage extends StatelessWidget {
   }
 }
 
-class PatientDetailsPage extends StatelessWidget {
-  final UserService userService = UserService();
+class PatientDetailsPage extends StatefulWidget {
+  const PatientDetailsPage({super.key});
 
-  PatientDetailsPage({Key? key});
+  @override
+  _PatientDetailsPageState createState() => _PatientDetailsPageState();
+}
+
+class _PatientDetailsPageState extends State<PatientDetailsPage> {
+  final UserService userService = UserService();
+  List<ModelUser> _users = [];
+  List<ModelUser> _filteredUsers = [];
+  final TextEditingController _searchController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchUsers();
+    _searchController.addListener(_filterUsers);
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  void _fetchUsers() async {
+    List<ModelUser> users = await userService.getUsers();
+    setState(() {
+      _users = users;
+      _filteredUsers = users;
+    });
+  }
+
+  void _filterUsers() {
+    String query = _searchController.text.toLowerCase();
+    setState(() {
+      _filteredUsers = _users
+          .where((user) => user.name.toLowerCase().contains(query))
+          .toList();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Patient Details'),
+        backgroundColor: const Color(0xFF16666B),
+        foregroundColor: Colors.white,
       ),
-      body: FutureBuilder<List<ModelUser>>(
-        future: userService.getUsers(),
-        builder:
-            (BuildContext context, AsyncSnapshot<List<ModelUser>> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          } else {
-            List<ModelUser> users = snapshot.data ?? [];
-
-            // Remove duplicate entries
-            final uniqueUsers = users.toSet().toList();
-
-            return ListView.builder(
-              padding: const EdgeInsets.all(8.0),
-              itemCount: uniqueUsers.length,
-              itemBuilder: (context, index) {
-                return Card(
-                  margin: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: ListTile(
-                    contentPadding: const EdgeInsets.all(16.0),
-                    leading: CircleAvatar(
-                      backgroundColor: Color(0xFF16666B),
-                      child: Text(
-                        uniqueUsers[index].name[0].toUpperCase(),
-                        style: const TextStyle(color: Colors.white),
-                      ),
-                    ),
-                    title: Text(
-                      uniqueUsers[index].name,
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    subtitle: Text(uniqueUsers[index].email),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              UserDetailsPage(user: uniqueUsers[index]),
-                        ),
-                      );
-                    },
-                  ),
-                );
-              },
-            );
-          }
-        },
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              controller: _searchController,
+              decoration: InputDecoration(
+                labelText: 'Search by name',
+                prefixIcon: const Icon(Icons.search),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+              ),
+            ),
+          ),
+          Expanded(
+            child: _buildUserList(),
+          ),
+        ],
       ),
+    );
+  }
+
+  Widget _buildUserList() {
+    if (_filteredUsers.isEmpty) {
+      return const Center(child: Text('No users found'));
+    }
+    return ListView.builder(
+      padding: const EdgeInsets.all(8.0),
+      itemCount: _filteredUsers.length,
+      itemBuilder: (context, index) {
+        return Card(
+          margin: const EdgeInsets.symmetric(vertical: 8.0),
+          child: ListTile(
+            contentPadding: const EdgeInsets.all(8.0),
+            leading: CircleAvatar(
+              backgroundColor: const Color(0xFF16666B),
+              child: Text(
+                _filteredUsers[index].name[0].toUpperCase(),
+                style: const TextStyle(color: Colors.white),
+              ),
+            ),
+            title: Text(
+              _filteredUsers[index].name,
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+            subtitle: Text(_filteredUsers[index].email),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      UserDetailsPage(user: _filteredUsers[index]),
+                ),
+              );
+            },
+          ),
+        );
+      },
     );
   }
 }
@@ -158,9 +202,9 @@ class ModelUser {
 
   ModelUser(
       {required this.name,
-      required this.uid,
-      required this.dob,
-      required this.email});
+        required this.uid,
+        required this.dob,
+        required this.email});
 
   factory ModelUser.fromDocument(DocumentSnapshot doc) {
     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;

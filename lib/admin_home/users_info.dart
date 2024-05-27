@@ -10,33 +10,52 @@ import 'package:easy_pdf_viewer/easy_pdf_viewer.dart';
 class UserDetailsPage extends StatelessWidget {
   final ModelUser user;
 
-  UserDetailsPage({required this.user});
+  const UserDetailsPage({super.key, required this.user});
 
   @override
   Widget build(BuildContext context)  {
     return Scaffold(
       appBar: AppBar(
-        title: Text('User Details: ${user.name}'),
+        backgroundColor: Color(0xFF16666B),
+        title: RichText(
+          text: TextSpan(
+            children: [
+              TextSpan(
+                text: 'Patient Details: ',
+                style: TextStyle(
+                  fontSize: 20.0, // Adjust the font size to fit the screen
+                  color: Colors.white70, // Make sure the text color is visible
+                ),
+              ),
+              TextSpan(
+                text: user.name,
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.w900,
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
       body: ListView(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         children: [
           _buildSectionTitle('Patient Details'),
           _buildDetailItem('Name', user.name, Icons.person),
           _buildDetailItem('Age', _calculateAge(user.dob), Icons.cake),
-          _buildDetailItem('Gender', 'Male', Icons.wc), // Add gender
+          _buildGenderDetailItem(user.uid), // Use FutureBuilder for gender
 
-
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
 
           _buildSectionTitle('EHR Scores'),
           _buildEhrScores(user.uid), // Display EHR scores
 
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
 
           GraphChart(uid: user.uid),
 
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
 
           _buildSectionTitle('Patient Documents'),
           _buildPatientDocuments(user.uid), // Display patient documents
@@ -67,13 +86,29 @@ class UserDetailsPage extends StatelessWidget {
     }
   }
 
+  Widget _buildGenderDetailItem(String uid) {
+    return FutureBuilder<String>(
+      future: _fetchGender(uid),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        if (snapshot.hasError) {
+          return _buildDetailItem('Gender', 'Error: ${snapshot.error}', Icons.wc);
+        }
+
+        return _buildDetailItem('Gender', snapshot.data ?? 'N/A', Icons.wc);
+      },
+    );
+  }
 
   Widget _buildSectionTitle(String title) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Text(
         title,
-        style: TextStyle(
+        style: const TextStyle(
           fontSize: 18,
           fontWeight: FontWeight.bold,
         ),
@@ -81,16 +116,14 @@ class UserDetailsPage extends StatelessWidget {
     );
   }
 
-
-
   Widget _buildDetailItem(String label, String value, IconData icon) {
     return Card(
-      margin: EdgeInsets.symmetric(vertical: 8.0),
+      margin: const EdgeInsets.symmetric(vertical: 8.0),
       child: ListTile(
         leading: Icon(icon, color: Colors.blueAccent),
         title: Text(
           label,
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         subtitle: Text(value.isNotEmpty ? value : 'N/A'),
       ),
@@ -102,7 +135,7 @@ class UserDetailsPage extends StatelessWidget {
       future: FirebaseFirestore.instance.collection('midas_scores').where('uid', isEqualTo: uid).get(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         }
 
         if (snapshot.hasError) {
@@ -110,14 +143,14 @@ class UserDetailsPage extends StatelessWidget {
         }
 
         if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-          return Center(child: Text('No scores available'));
+          return const Center(child: Text('No scores available'));
         }
 
         List<QueryDocumentSnapshot> documents = snapshot.data!.docs;
 
         return ListView.builder(
           shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
           itemCount: documents.length,
           itemBuilder: (context, index) {
             Map<String, dynamic> data = documents[index].data() as Map<String, dynamic>;
@@ -128,9 +161,9 @@ class UserDetailsPage extends StatelessWidget {
             String formattedDate = DateFormat.yMMMd().add_jm().format(dateTime);
 
             return Card(
-              margin: EdgeInsets.symmetric(vertical: 8.0),
+              margin: const EdgeInsets.symmetric(vertical: 8.0),
               child: ListTile(
-                leading: Icon(Icons.assessment, color: Colors.green),
+                leading: const Icon(Icons.assessment, color: Colors.green),
                 title: Text('MIDAS Score: $score'),
                 subtitle: Text('Recorded on: $formattedDate'),
               ),
@@ -146,7 +179,7 @@ class UserDetailsPage extends StatelessWidget {
       future: FirebaseFirestore.instance.collection('docs').where('uid', isEqualTo: uid).get(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         }
 
         if (snapshot.hasError) {
@@ -154,14 +187,14 @@ class UserDetailsPage extends StatelessWidget {
         }
 
         if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-          return Center(child: Text('No documents available'));
+          return const Center(child: Text('No documents available'));
         }
 
         List<QueryDocumentSnapshot> documents = snapshot.data!.docs;
 
         return ListView.builder(
           shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
           itemCount: documents.length,
           itemBuilder: (context, index) {
             Map<String, dynamic> data = documents[index].data() as Map<String, dynamic>;
@@ -169,9 +202,9 @@ class UserDetailsPage extends StatelessWidget {
             String pdfUrl = data['download_url'] ?? '';
 
             return Card(
-              margin: EdgeInsets.symmetric(vertical: 8.0),
+              margin: const EdgeInsets.symmetric(vertical: 8.0),
               child: ListTile(
-                leading: Icon(Icons.picture_as_pdf, color: Colors.redAccent),
+                leading: const Icon(Icons.picture_as_pdf, color: Colors.redAccent),
                 title: Text(pdfName),
                 onTap: () {
                   Navigator.of(context).push(
@@ -215,7 +248,7 @@ class _PDFViewerScreenState extends State<PDFViewerScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('PDF Viewer'),
+        title: const Text('PDF Viewer'),
       ),
       body: document != null
           ? PDFViewer(document: document!)
