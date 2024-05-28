@@ -43,6 +43,7 @@ class ProfilePageState extends State<ProfilePage> {
           'dob': userData['dob'],
           'age': age,
           'gender': userInfo['gender'],
+          'profilePicture': userInfo['profilePicture'], // Assuming there's a profile picture URL
         };
 
         return combinedData;
@@ -72,58 +73,83 @@ class ProfilePageState extends State<ProfilePage> {
             return const Center(child: Text('User data not found'));
           } else {
             var userData = snapshot.data!;
-            return Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Name:',
-                    style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold, color: Color(0xFF16666B)),
-                  ),
-                  const SizedBox(height: 5),
-                  Text(
-                    '${userData['name']}',
-                    style: const TextStyle(fontSize: 16.0, color: Colors.black54),
-                  ),
-                  const SizedBox(height: 20),
-                  const Text(
-                    'Date of Birth:',
-                    style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold, color: Color(0xFF16666B)),
-                  ),
-                  const SizedBox(height: 5),
-                  Text(
-                    '${userData['dob']}',
-                    style: const TextStyle(fontSize: 16.0, color: Colors.black54),
-                  ),
-                  const SizedBox(height: 20),
-                  const Text(
-                    'Age:',
-                    style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold, color: Color(0xFF16666B)),
-                  ),
-                  const SizedBox(height: 5),
-                  Text(
-                    '${userData['age']} years',
-                    style: const TextStyle(fontSize: 16.0, color: Colors.black54),
-                  ),
-                  const SizedBox(height: 20),
-                  const Text(
-                    'Gender:',
-                    style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold, color: Color(0xFF16666B)),
-                  ),
-                  const SizedBox(height: 5),
-                  Text(
-                    '${userData['gender']}',
-                    style: const TextStyle(fontSize: 16.0, color: Colors.black54),
-                  ),
-                  const SizedBox(height: 20),
-                  // Add more fields here as needed
-                ],
+            return Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [Color(0xFF16666B), Color(0xFF2C8C92)],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    userData['profilePicture'] != null
+                        ? CircleAvatar(
+                      radius: 50,
+                      backgroundImage: NetworkImage(userData['profilePicture']),
+                    )
+                        : CircleAvatar(
+                      radius: 50,
+                      backgroundColor: Colors.grey,
+                      child: Text(
+                        _getInitials(userData['name']),
+                        style: const TextStyle(fontSize: 40, color: Colors.white),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    _buildInfoCard('Name', userData['name'], Icons.person),
+                    _buildInfoCard('Date of Birth', userData['dob'], Icons.cake),
+                    _buildInfoCard('Age', '${userData['age']} years', Icons.calendar_today),
+                    _buildInfoCard('Gender', userData['gender'], Icons.person_outline),
+                    // Add more fields here as needed
+                  ],
+                ),
               ),
             );
           }
         },
       ),
     );
+  }
+
+  Widget _buildInfoCard(String label, String value, IconData icon) {
+    return Card(
+      margin: const EdgeInsets.symmetric(vertical: 10.0),
+      child: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Row(
+          children: [
+            Icon(icon, color: const Color(0xFF16666B)),
+            const SizedBox(width: 10),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  label,
+                  style: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold, color: Color(0xFF16666B)),
+                ),
+                const SizedBox(height: 5),
+                Text(
+                  value,
+                  style: const TextStyle(fontSize: 16.0, color: Colors.black54),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  String _getInitials(String name) {
+    List<String> nameParts = name.split(' ');
+    String initials = '';
+    if (nameParts.isNotEmpty) {
+      initials = nameParts.map((part) => part[0]).take(2).join();
+    }
+    return initials.toUpperCase();
   }
 }
