@@ -30,9 +30,9 @@ class MIDASAssessmentPageState extends State<MIDASAssessmentPage> {
       Timestamp? lastFilledTimestamp = data?['lastMIDASFilledTimestamp'] as Timestamp?;
       if (lastFilledTimestamp != null) {
         // Check if two weeks have passed since the last filled timestamp
-        DateTime twoWeeksAgo = DateTime.now().subtract(const Duration(days: 179));
+        DateTime threeMonthsAgo = DateTime.now().subtract(const Duration(days: 179));
         DateTime lastFilledDateTime = lastFilledTimestamp.toDate();
-        if (lastFilledDateTime.isAfter(twoWeeksAgo)) {
+        if (lastFilledDateTime.isAfter(threeMonthsAgo)) {
           setState(() {
             _canFillQuestionnaire = false;
           });
