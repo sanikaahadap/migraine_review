@@ -2,9 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 final videoUrls = [
-  'https://www.youtube.com/watch?v=hYApsBuf7ec',
-  'https://youtu.be/jryy3mlZtXk?si=lZ7FtWs6MzmdGWMp',
-  'https://youtu.be/5SYUkCqfmc8?si=9WPKXgkn2dVvZQ_X'
+  'https://www.youtube.com/watch?v=INTm9FCDXug',
+  'https://www.youtube.com/watch?v=nqLa3XoNCAc',
+  'https://www.youtube.com/watch?v=Wrb1_O3R3F4',
+  'https://www.youtube.com/watch?v=rRehOUhRvj4'
+];
+
+final videoTitles = [
+  'Health Awareness on Headache (Telugu)',
+  'Health Awareness on Cluster Headache (English)',
+  'Health Awareness on Tension Type Headache (English)',
+  'Health Awareness on Analgesic Abuse (English)',
 ];
 
 class Feed extends StatelessWidget {
@@ -37,18 +45,33 @@ class Feed extends StatelessWidget {
                 ));
               }
             },
-            child: Image.network(
-              YoutubePlayer.getThumbnail(videoId: videoID ?? ''),
-              errorBuilder: (context, error, stackTrace) {
-                return Container(
-                  width: 300,
-                  height: 200,
-                  color: Colors.grey, // Placeholder image
-                  child: const Center(
-                    child: Icon(Icons.error),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Image.network(
+                  YoutubePlayer.getThumbnail(videoId: videoID ?? ''),
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      width: 280,
+                      height: 200,
+                      color: Colors.grey, // Placeholder image
+                      child: const Center(
+                        child: Icon(Icons.error),
+                      ),
+                    );
+                  },
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(6.0),
+                  child: Center(
+                    child: Text(
+                      textAlign: TextAlign.center,
+                      videoTitles[index],
+                      style: const TextStyle(fontSize: 16),
+                    ),
                   ),
-                );
-              },
+                ),
+              ],
             ),
           );
         },
@@ -76,7 +99,7 @@ class PlayerScreenState extends State<PlayerScreen> {
       initialVideoId: widget.videoId,
       flags: const YoutubePlayerFlags(
         autoPlay: true,
-        mute: true,
+        mute: false,
       ),
     );
   }
@@ -90,11 +113,13 @@ class PlayerScreenState extends State<PlayerScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text(
-        'Videos for reference',
-        style: TextStyle(color: Colors.white),
+      appBar: AppBar(
+        title: const Text(
+          'Videos for reference',
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: const Color(0xFF16666B),
       ),
-        backgroundColor: const Color(0xFF16666B),),
       body: YoutubePlayerBuilder(
         player: YoutubePlayer(
           controller: _controller,
@@ -114,7 +139,7 @@ class PlayerScreenState extends State<PlayerScreen> {
           return Column(
             children: [
               Expanded(child: player), // Player widget
-               // Loading indicator
+              // Loading indicator
               // Widgets below the player
             ],
           );
@@ -122,5 +147,4 @@ class PlayerScreenState extends State<PlayerScreen> {
       ),
     );
   }
-
 }
