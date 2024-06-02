@@ -49,11 +49,35 @@ class AnalysisPageState extends State<AnalysisPage> {
       }
 
       for (String preSymptom in preSymptoms) {
-        _preSymptomsFrequency[preSymptom] = (_preSymptomsFrequency[preSymptom] ?? 0) + 1;
+        _preSymptomsFrequency[preSymptom] =
+            (_preSymptomsFrequency[preSymptom] ?? 0) + 1;
       }
     }
 
     setState(() {});
+  }
+
+  IconData _getTriggerIcon(String trigger) {
+    switch (trigger) {
+      case 'Cold drinks':
+        return Icons.local_drink;
+      case 'Tea':
+        return Icons.local_cafe;
+      case 'Strong smells':
+        return Icons.waves;
+      case 'Traveling':
+        return Icons.directions_car;
+      case 'Mobile phone usage':
+        return Icons.phone_iphone;
+      case 'Allergy':
+        return Icons.healing;
+      case 'Excess/lack of sleep':
+        return Icons.bed;
+      case 'Coffee':
+        return Icons.coffee;
+      default:
+        return Icons.help; // default icon
+    }
   }
 
   @override
@@ -61,21 +85,98 @@ class AnalysisPageState extends State<AnalysisPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xFF16666B),
-        title: const Text('Notifications', style: TextStyle(color: Colors.white)),
+        title:
+            const Text('Notifications', style: TextStyle(color: Colors.white)),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            const Text('Potential Headache Triggers:', style: TextStyle(color: Color(0xFF16666B), fontSize: 18, fontWeight: FontWeight.bold)),
-            ..._triggersFrequency.entries.map((entry) => Text('${entry.key}: ${entry.value} times', style: const TextStyle(color: Color(0xFF16666B)))).toList(),
+            const Text(
+              'Potential Headache Triggers:',
+              style: TextStyle(
+                color: Color(0xFF16666B),
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 10),
+            GridView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: _triggersFrequency.length,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
+                childAspectRatio: 1,
+              ),
+              itemBuilder: (context, index) {
+                String trigger = _triggersFrequency.keys.elementAt(index);
+                return Card(
+                  elevation: 4,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          _getTriggerIcon(trigger),
+                          color: Color(0xFF16666B),
+                          size: 40,
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          trigger,
+                          style: const TextStyle(
+                            fontSize: 8,
+                            color: Color(0xFF16666B),
+                            fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
             const SizedBox(height: 20),
-            const Text('Common Accompanying Symptoms:', style: TextStyle(color: Color(0xFF16666B), fontSize: 18, fontWeight: FontWeight.bold)),
-            ..._symptomsFrequency.entries.map((entry) => Text('${entry.key}: ${entry.value} times', style: const TextStyle(color: Color(0xFF16666B)))).toList(),
+            const Text(
+              'Common Accompanying Symptoms:',
+              style: TextStyle(
+                color: Color(0xFF16666B),
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 10),
+            ..._symptomsFrequency.entries
+                .map((entry) => Text(
+                      entry.key,
+                      style: const TextStyle(color: Color(0xFF16666B)),
+                    ))
+                .toList(),
             const SizedBox(height: 20),
-            const Text('Common Pre-headache Symptoms:', style: TextStyle(color: Color(0xFF16666B), fontSize: 18, fontWeight: FontWeight.bold)),
-            ..._preSymptomsFrequency.entries.map((entry) => Text('${entry.key}: ${entry.value} times', style: const TextStyle(color: Color(0xFF16666B)))).toList(),
+            const Text(
+              'Common Pre-headache Symptoms:',
+              style: TextStyle(
+                color: Color(0xFF16666B),
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 10),
+            ..._preSymptomsFrequency.entries
+                .map((entry) => Text(
+                      entry.key,
+                      style: const TextStyle(color: Color(0xFF16666B)),
+                    ))
+                .toList(),
           ],
         ),
       ),

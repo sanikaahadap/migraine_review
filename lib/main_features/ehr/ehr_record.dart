@@ -38,17 +38,18 @@ class _EhrrecState extends State<Ehrrec> {
         child: Column(
           children: [
             const SizedBox(
-              height: 10,
+              height: 5,
             ),
             SizedBox(
               height: 400,
-              child:  ScoreLineChart(),
+              child: ScoreLineChart(),
             ),
-
             const SizedBox(
-              height: 30,
+              height: 5,
             ),
-            const Expanded(child: GetScore(),)
+            const Expanded(
+              child: GetScore(),
+            )
           ],
         ),
       ),

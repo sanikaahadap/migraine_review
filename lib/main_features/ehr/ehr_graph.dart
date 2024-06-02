@@ -8,7 +8,8 @@ class ScoreLineChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final currentUserUID = FirebaseAuth.instance.currentUser!.uid;
-    final CollectionReference scores = FirebaseFirestore.instance.collection('midas_scores');
+    final CollectionReference scores =
+        FirebaseFirestore.instance.collection('midas_scores');
 
     return StreamBuilder<QuerySnapshot>(
       stream: scores.where('uid', isEqualTo: currentUserUID).snapshots(),
@@ -28,15 +29,17 @@ class ScoreLineChart extends StatelessWidget {
 
         final scoreDataList = scoreDocs
             .map((doc) => ScoreData(
-          DateTime.fromMillisecondsSinceEpoch(doc['timestamp'].millisecondsSinceEpoch),
-          doc['score'].toDouble(),
-        ))
+                  DateTime.fromMillisecondsSinceEpoch(
+                      doc['timestamp'].millisecondsSinceEpoch),
+                  doc['score'].toDouble(),
+                ))
             .toList();
 
         scoreDataList.sort((a, b) => a.dateTime.compareTo(b.dateTime));
 
         final spots = scoreDataList
-            .map((data) => FlSpot(data.dateTime.millisecondsSinceEpoch.toDouble(), data.score))
+            .map((data) => FlSpot(
+                data.dateTime.millisecondsSinceEpoch.toDouble(), data.score))
             .toList();
 
         // Get the minimum and maximum dates for x-axis
@@ -54,8 +57,10 @@ class ScoreLineChart extends StatelessWidget {
 
         return Center(
           child: Container(
-            width: MediaQuery.of(context).size.width * 0.8, // Adjust width as needed
-            height: MediaQuery.of(context).size.height * 0.4, // Adjust height as needed
+            width: MediaQuery.of(context).size.width *
+                0.8, // Adjust width as needed
+            height: MediaQuery.of(context).size.height *
+                0.4, // Adjust height as needed
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8.0),
               color: Colors.white,
@@ -68,7 +73,7 @@ class ScoreLineChart extends StatelessWidget {
                     showTitles: false,
                     reservedSize: 22,
                     margin: 10,
-                    getTitles:  getXTitles,
+                    getTitles: getXTitles,
                     getTextStyles: (BuildContext context, double value) {
                       return const TextStyle(
                         color: Colors.black,
@@ -89,15 +94,17 @@ class ScoreLineChart extends StatelessWidget {
                   ),
                 ),
                 borderData: FlBorderData(show: true),
-                minX: scoreDataList.first.dateTime.millisecondsSinceEpoch.toDouble(),
-                maxX: scoreDataList.last.dateTime.millisecondsSinceEpoch.toDouble(),
+                minX: scoreDataList.first.dateTime.millisecondsSinceEpoch
+                    .toDouble(),
+                maxX: scoreDataList.last.dateTime.millisecondsSinceEpoch
+                    .toDouble(),
                 minY: 0,
                 maxY: 30, // Set maximum score value as needed
                 lineBarsData: [
                   LineChartBarData(
                     spots: spots,
                     isCurved: false,
-                    colors: [Colors.blue],
+                    colors: [const Color.fromARGB(255, 88, 180, 255)],
                     barWidth: 4,
                     isStrokeCapRound: true,
                     belowBarData: BarAreaData(show: false),
