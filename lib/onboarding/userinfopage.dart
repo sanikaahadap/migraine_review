@@ -1,35 +1,10 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:neurooooo/login/login.dart';
-import 'package:neurooooo/user_home/nav_bar.dart';
+import 'package:neurooooo/login/signup.dart';
+// import 'package:neurooooo/user_home/nav_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        textSelectionTheme: const TextSelectionThemeData(
-          cursorColor: Color(0xFF16666B), // Set the cursor color to #16666B
-        ),
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: const Color(0xFF16666B), // Set the button background color to #16666B
-          ),
-        ),
-      ),
-      home: const UserInfoPage(),
-    );
-  }
-}
 
 class UserInfoPage extends StatefulWidget {
   const UserInfoPage({super.key});
@@ -73,8 +48,6 @@ class UserInfoPageState extends State<UserInfoPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-    ),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -214,8 +187,6 @@ class UserInfoPageState extends State<UserInfoPage> {
                   ),
                   child: const Text('Proceed', style: TextStyle(color: Colors.white)),
                 ),
-
-
               ],
             ),
           ),
@@ -259,7 +230,7 @@ class DisclaimerPage extends StatelessWidget {
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 24.0),
               child: Text(
-                'The app is designed to help you keep track of your headache and coordinate with your physician. Your data will be kept confidential',
+                'The app is designed to help you keep track of your headache and coordinate with your physician. Your data will be kept confidential. It will be accessible to no one except you and your doctor.',
                 style: TextStyle(
                   color: Color(0xFF16666B),
                   fontSize: 15.0,
@@ -273,7 +244,7 @@ class DisclaimerPage extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const UserInfoPage()),
+                  MaterialPageRoute(builder: (context) => const SignUpPage()),
                 );
               },
               style: ElevatedButton.styleFrom(
@@ -290,6 +261,7 @@ class DisclaimerPage extends StatelessWidget {
     );
   }
 }
+
 
 class BackToLogin extends StatelessWidget {
   const BackToLogin({Key? key}) : super(key: key);

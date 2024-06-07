@@ -96,7 +96,7 @@ class SignUpPageState extends State<SignUpPage> {
           log("User created successfully");
           saveUser(); // Add this log
           Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const DisclaimerPage()));
+              MaterialPageRoute(builder: (context) => const UserInfoPage()));
         }
       } on FirebaseAuthException catch (ex) {
         log("FirebaseAuthException: ${ex.code}"); // Add this log

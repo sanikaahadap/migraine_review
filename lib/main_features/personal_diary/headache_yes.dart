@@ -26,6 +26,7 @@ class YesPageState extends State<YesPage> {
   String? _exerciseDuration;
   String? _screenTime;
   String? _migraineDescription;
+  Color borderBlueColor = const Color(0xFF16666B);
 
 
 
@@ -103,25 +104,47 @@ class YesPageState extends State<YesPage> {
                 ],
               ),
               const SizedBox(height: 20),
-              const Text('2. What was the severity:', style: TextStyle(color: Color(0xFF16666B), fontSize: 18, fontWeight: FontWeight.bold)),
-              DropdownButton<String>(
-                value: _headacheSeverity,
-                onChanged: (String? value) {
-                  setState(() {
-                    _headacheSeverity = value;
-                  });
-                },
-                items: <String>[
-                  'Mild',
-                  'Moderate',
-                  'Severe',
-                ].map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value, style: const TextStyle(color: Color(0xFF16666B)), textAlign: TextAlign.center,),
-                  );
-                }).toList(),
+              const Text('2. What was the severity?', style: TextStyle(color: Color(0xFF16666B), fontSize: 18, fontWeight: FontWeight.bold)),
+              const SizedBox(height: 7),
+              Container(
+                width: 200, // Adjust the width as needed
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: borderBlueColor, // Use the custom color for the border
+                    width: 1.0, // Choose the border width
+                  ),
+                  borderRadius: BorderRadius.circular(8.0), // Optional: Add border radius for rounded corners
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center, // Center the selected value horizontally
+                  children: [
+                    DropdownButton<String>(
+                      value: _headacheSeverity,
+                      onChanged: (String? value) {
+                        setState(() {
+                          _headacheSeverity = value;
+                        });
+                      },
+                      items: <String>[
+                        'Mild',
+                        'Moderate',
+                        'Severe',
+                      ].map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(
+                            value,
+                            style: const TextStyle(color: Color(0xFF16666B)),
+                            textAlign: TextAlign.center,
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  ],
+                ),
               ),
+
+
               const SizedBox(height: 20),
               const Text('3. What was the headache accompanied by:', style: TextStyle(color: Color(0xFF16666B), fontSize: 18, fontWeight: FontWeight.bold)),
               Column(
@@ -541,70 +564,114 @@ class YesPageState extends State<YesPage> {
               ),
               const SizedBox(height: 20),
               const Text('How much sleep did you get?', style: TextStyle(color: Color(0xFF16666B), fontSize: 18, fontWeight: FontWeight.bold)),
-              DropdownButton<String>(
-                value: _sleepDuration,
-                onChanged: (String? value) {
-                  setState(() {
-                    _sleepDuration = value;
-                  });
-                },
-                items: <String>[
-                  'Less than 3 hours',
-                  '3-5 hours',
-                  '5-8 hours',
-                  '8-10 hours',
-                  'More than 10 hours',
-                ].map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value, style: const TextStyle(color: Colors.black)),
-                  );
-                }).toList(),
+              const SizedBox(height: 7),
+              Container(
+                width: 200,
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: borderBlueColor, // Use the custom color for the border
+                    width: 1.0, // Choose the border width
+                  ),
+                  borderRadius: BorderRadius.circular(8.0), // Optional: Add border radius for rounded corners
+                ),
+                child: DropdownButton<String>(
+                  value: _sleepDuration,
+                  onChanged: (String? value) {
+                    setState(() {
+                      _sleepDuration = value;
+                    });
+                  },
+                  items: <String>[
+                    'Less than 3 hours',
+                    '3-5 hours',
+                    '5-8 hours',
+                    '8-10 hours',
+                    'More than 10 hours',
+                  ].map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(
+                        value,
+                        style: const TextStyle(color: Colors.black),
+                      ),
+                    );
+                  }).toList(),
+                ),
               ),
               const SizedBox(height: 20),
               const Text('For how long did you exercise? (in hours/minutes)', style: TextStyle(color: Color(0xFF16666B), fontSize: 18, fontWeight: FontWeight.bold)),
-              DropdownButton<String>(
-                value: _exerciseDuration,
-                onChanged: (String? value) {
-                  setState(() {
-                    _exerciseDuration = value;
-                  });
-                },
-                items: <String>[
-                  'Did not exercise',
-                  '15-20 minutes',
-                  '20-60 minutes',
-                  '1-2 hours hours',
-                  'More than 2 hours',
-                ].map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value, style: const TextStyle(color: Colors.black)),
-                  );
-                }).toList(),
+              const SizedBox(height: 7),
+              Container(
+                width: 200,
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: borderBlueColor, // Use the custom color for the border
+                    width: 1.0, // Choose the border width
+                  ),
+                  borderRadius: BorderRadius.circular(8.0), // Optional: Add border radius for rounded corners
+                ),
+                child: DropdownButton<String>(
+                  value: _exerciseDuration,
+                  onChanged: (String? value) {
+                    setState(() {
+                      _exerciseDuration = value;
+                    });
+                  },
+                  items: <String>[
+                    'Did not exercise',
+                    '15-20 minutes',
+                    '20-60 minutes',
+                    '1-2 hours hours',
+                    'More than 2 hours',
+                  ].map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(
+                        value,
+                        style: const TextStyle(color: Colors.black),
+                      ),
+                    );
+                  }).toList(),
+                ),
               ),
+
               const SizedBox(height: 20),
               const Text('How long do you work on mobile phones or computers? (in hours)', style: TextStyle(color: Color(0xFF16666B), fontSize: 18, fontWeight: FontWeight.bold)),
-              DropdownButton<String>(
-                value: _screenTime,
-                onChanged: (String? value) {
-                  setState(() {
-                    _screenTime = value;
-                  });
-                },
-                items: <String>[
-                  'Less than an hour',
-                  '1-2 hours',
-                  '2-4 hours',
-                  '4-6 hours',
-                  'More than 6 hours',
-                ].map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value, style: const TextStyle(color: Colors.black)),
-                  );
-                }).toList(),
+              const SizedBox(height: 7),
+              Container(
+                width: 200,
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: borderBlueColor, // Use the custom color for the border
+                    width: 1.0, // Choose the border width
+                  ),
+                  borderRadius: BorderRadius.circular(8.0), // Optional: Add border radius for rounded corners
+                ),
+                child: DropdownButton<String>(
+                  value: _screenTime,
+                  onChanged: (String? value) {
+                    setState(() {
+                      _screenTime = value;
+                    });
+                  },
+                  items: <String>[
+                    'Less than an hour',
+                    '1-2 hours',
+                    '2-4 hours',
+                    '4-6 hours',
+                    'More than 6 hours',
+                  ].map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(
+                        value,
+                        style: const TextStyle(color: Colors.black),
+                      ),
+                    );
+                  }).toList(),
+                ),
               ),
+
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {

@@ -19,6 +19,7 @@ class NoPageState extends State<NoPage> {
   String? _sleepDuration;
   String? _exerciseDuration;
   String? _screenTime;
+  Color borderBlueColor = const Color(0xFF16666B);
 
   @override
   Widget build(BuildContext context) {
@@ -154,70 +155,112 @@ class NoPageState extends State<NoPage> {
             ),
             const SizedBox(height: 20),
             const Text('How much sleep did you get?', style: TextStyle(color: Color(0xFF16666B), fontSize: 18, fontWeight: FontWeight.bold)),
-            DropdownButton<String>(
-              value: _sleepDuration,
-              onChanged: (String? value) {
-                setState(() {
-                  _sleepDuration = value;
-                });
-
-              },
-              items: <String>[
-                'Less than 3 hours',
-                '3-5 hours',
-                '5-8 hours',
-                '8-10 hours',
-                'More than 10 hours',
-              ].map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value, style: const TextStyle(color: Colors.black)),
-                );
-              }).toList(),
+            const SizedBox(height: 7),
+            Container(
+              width: 200,
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: borderBlueColor, // Use the custom color for the border
+                  width: 1.0, // Choose the border width
+                ),
+                borderRadius: BorderRadius.circular(8.0), // Optional: Add border radius for rounded corners
+              ),
+              child: DropdownButton<String>(
+                value: _sleepDuration,
+                onChanged: (String? value) {
+                  setState(() {
+                    _sleepDuration = value;
+                  });
+                },
+                items: <String>[
+                  'Less than 3 hours',
+                  '3-5 hours',
+                  '5-8 hours',
+                  '8-10 hours',
+                  'More than 10 hours',
+                ].map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(
+                      value,
+                      style: const TextStyle(color: Colors.black),
+                    ),
+                  );
+                }).toList(),
+              ),
             ),
             const SizedBox(height: 20),
             const Text('For how long did you exercise? (in hours/minutes)', style: TextStyle(color: Color(0xFF16666B), fontSize: 18, fontWeight: FontWeight.bold)),
-            DropdownButton<String>(
-              value: _exerciseDuration,
-              onChanged: (String? value) {
-                setState(() {
-                  _exerciseDuration = value;
-                });
-              },
-              items: <String>[
-                'Did not exercise',
-                '15-20 minutes',
-                '20-60 minutes',
-                'Between 1 to 2 hours',
-                'More than 2 hours',
-              ].map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value, style: const TextStyle(color: Colors.black)),
-                );
-              }).toList(),
+            const SizedBox(height: 7),
+            Container(
+              width: 200,
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: borderBlueColor, // Use the custom color for the border
+                  width: 1.0, // Choose the border width
+                ),
+                borderRadius: BorderRadius.circular(8.0), // Optional: Add border radius for rounded corners
+              ),
+              child: DropdownButton<String>(
+                value: _exerciseDuration,
+                onChanged: (String? value) {
+                  setState(() {
+                    _exerciseDuration = value;
+                  });
+                },
+                items: <String>[
+                  'Did not exercise',
+                  '15-20 minutes',
+                  '20-60 minutes',
+                  '1-2 hours hours',
+                  'More than 2 hours',
+                ].map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(
+                      value,
+                      style: const TextStyle(color: Colors.black),
+                    ),
+                  );
+                }).toList(),
+              ),
             ),
+
             const SizedBox(height: 20),
             const Text('How long do you work on mobile phones or computers? (in hours)', style: TextStyle(color: Color(0xFF16666B), fontSize: 18, fontWeight: FontWeight.bold)),
-            DropdownButton<String>(
-              value: _screenTime,
-              onChanged: (String? value) {
-                setState(() {
-                  _screenTime = value;
-                });
-              },
-              items: <String>[
-                'Less than an hour',
-                '1-2 hours',
-                '2-4 hours',
-                '4-6 hours',
-                'More than 6 hours',
-              ].map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value, style: const TextStyle(color: Colors.black)),
-                );
-              }).toList(),
+            const SizedBox(height: 7),
+            Container(
+              width: 200,
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: borderBlueColor, // Use the custom color for the border
+                  width: 1.0, // Choose the border width
+                ),
+                borderRadius: BorderRadius.circular(8.0), // Optional: Add border radius for rounded corners
+              ),
+              child: DropdownButton<String>(
+                value: _screenTime,
+                onChanged: (String? value) {
+                  setState(() {
+                    _screenTime = value;
+                  });
+                },
+                items: <String>[
+                  'Less than an hour',
+                  '1-2 hours',
+                  '2-4 hours',
+                  '4-6 hours',
+                  'More than 6 hours',
+                ].map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(
+                      value,
+                      style: const TextStyle(color: Colors.black),
+                    ),
+                  );
+                }).toList(),
+              ),
             ),
             const SizedBox(height: 20),
             ElevatedButton(

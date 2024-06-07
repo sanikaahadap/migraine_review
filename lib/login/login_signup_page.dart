@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:neurooooo/login/admin_login.dart';
 import 'package:neurooooo/login/login.dart';
-import 'package:neurooooo/login/signup.dart';
+import 'package:neurooooo/onboarding/userinfopage.dart';
 
 class LoginSignupPage extends StatelessWidget {
   const LoginSignupPage({super.key});
@@ -71,7 +71,7 @@ class LoginSignupPage extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const SignUpPage()),
+                      MaterialPageRoute(builder: (context) => const DisclaimerPage()),
                   );
                 },
                 style: ElevatedButton.styleFrom(
