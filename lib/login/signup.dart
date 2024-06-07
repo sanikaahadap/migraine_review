@@ -29,6 +29,8 @@ class SignUpPageState extends State<SignUpPage> {
       TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   DateTime? _selectedDate; // Nullable DateTime
+  bool _isObscured = true;
+  bool _isObscured2 = true;
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -85,7 +87,7 @@ class SignUpPageState extends State<SignUpPage> {
     } else if (password != cPassword) {
       log("Passwords do not match!");
     } else {
-      String hashedPassword = hashPassword(password);
+      // String hashedPassword = hashPassword(password);
 
       try {
         UserCredential userCredential = await FirebaseAuth.instance
@@ -297,15 +299,25 @@ class SignUpPageState extends State<SignUpPage> {
                   // Password field
                   TextFormField(
                     controller: _passwordController,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: 'Password',
-                      border: OutlineInputBorder(),
+                      border: const OutlineInputBorder(),
                       filled: true,
-                      fillColor: Color(0x80B2EBF2),
-                      contentPadding:
-                          EdgeInsets.fromLTRB(12.0, 15.0, 12.0, 15.0),
+                      fillColor: const Color(0x80B2EBF2), // Half lighter tint of the background color
+                      contentPadding: const EdgeInsets.fromLTRB(12.0, 15.0, 12.0, 15.0),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _isObscured ? Icons.visibility : Icons.visibility_off,
+                          color: Colors.grey,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _isObscured = !_isObscured;
+                          });
+                        },
+                      ),
                     ),
-                    obscureText: true,
+                    obscureText: _isObscured,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter a password';
@@ -319,15 +331,25 @@ class SignUpPageState extends State<SignUpPage> {
                   // Confirm Password field
                   TextFormField(
                     controller: _confirmPasswordController,
-                    decoration: const InputDecoration(
-                      labelText: 'Confirm Password',
-                      border: OutlineInputBorder(),
+                    decoration: InputDecoration(
+                      labelText: 'Password',
+                      border: const OutlineInputBorder(),
                       filled: true,
-                      fillColor: Color(0x80B2EBF2),
-                      contentPadding:
-                          EdgeInsets.fromLTRB(12.0, 15.0, 12.0, 15.0),
+                      fillColor: const Color(0x80B2EBF2), // Half lighter tint of the background color
+                      contentPadding: const EdgeInsets.fromLTRB(12.0, 15.0, 12.0, 15.0),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _isObscured2 ? Icons.visibility : Icons.visibility_off,
+                          color: Colors.grey,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _isObscured2 = !_isObscured2;
+                          });
+                        },
+                      ),
                     ),
-                    obscureText: true,
+                    obscureText: _isObscured2,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please confirm your password';

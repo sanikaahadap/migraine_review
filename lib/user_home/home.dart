@@ -142,7 +142,7 @@ class HomePageState extends State<HomePage> {
         title: Text(
           'Hello ${user.name}',
           style: const TextStyle(
-            fontSize: 22.0,
+            fontSize: 21.0,
             fontWeight: FontWeight.bold,
             color: Color(0xFF16666B),
           ),

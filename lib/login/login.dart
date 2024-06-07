@@ -24,6 +24,7 @@ class LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _showInvalidCredentials = false;
+  bool _isObscured = true;
 
   void login() async {
     String email = _emailController.text.trim();
@@ -114,16 +115,25 @@ class LoginPageState extends State<LoginPage> {
                   // Password field
                   TextFormField(
                     controller: _passwordController,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: 'Password',
-                      border: OutlineInputBorder(),
+                      border: const OutlineInputBorder(),
                       filled: true,
-                      fillColor: Color(
-                          0x80B2EBF2), // Half lighter tint of the background color
-                      contentPadding:
-                          EdgeInsets.fromLTRB(12.0, 15.0, 12.0, 15.0),
+                      fillColor: const Color(0x80B2EBF2), // Half lighter tint of the background color
+                      contentPadding: const EdgeInsets.fromLTRB(12.0, 15.0, 12.0, 15.0),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _isObscured ? Icons.visibility : Icons.visibility_off,
+                          color: Colors.grey,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _isObscured = !_isObscured;
+                          });
+                        },
+                      ),
                     ),
-                    obscureText: true,
+                    obscureText: _isObscured,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Enter a valid password';

@@ -66,8 +66,8 @@ class NoPageState extends State<NoPage> {
                 Slider(
                   value: _glassesOfWater,
                   min: 0,
-                  max: 10,
-                  divisions: 10,
+                  max: 9,
+                  divisions: 9,
                   label: _glassesOfWater.round().toString(),
                   onChanged: (double value) {
                     setState(() {
@@ -76,7 +76,24 @@ class NoPageState extends State<NoPage> {
                   },
                   activeColor: const Color(0xFF16666B),
                 ),
-                Text('Glasses: ${_glassesOfWater.toInt()}', style: const TextStyle(color: Color(0xFF16666B))),
+                const SizedBox(height: 1),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: List.generate(10, (index) {
+                    return Icon(
+                      Icons.local_drink,
+                      color: index <= _glassesOfWater ? const Color(0xFF16666B) : Colors.grey,
+                      size: 25,
+                    );
+                  }),
+                ),
+                const SizedBox(height: 16),
+                Center(
+                  child: Text(
+                    '${_glassesOfWater.toInt()} glasses',
+                    style: const TextStyle(color: Color(0xFF16666B)),
+                  ),
+                ),
               ],
             ),
             const SizedBox(height: 20),
