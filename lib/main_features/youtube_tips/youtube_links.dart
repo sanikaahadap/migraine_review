@@ -15,8 +15,8 @@ final videoTitles = [
   'Health Awareness on Analgesic Abuse (English)',
 ];
 
-class Feed extends StatelessWidget {
-  const Feed({super.key});
+class YoutubeTips extends StatelessWidget {
+  const YoutubeTips({super.key});
 
   @override
   Widget build(BuildContext context) {

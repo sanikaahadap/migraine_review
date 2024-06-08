@@ -43,8 +43,8 @@ class DoctorInfoPage extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            const SizedBox(height: 4),
-            // Doctor's Specialty
+
+            // Doctor's field of study
             const Text(
               'Neurologist',
               style: TextStyle(
@@ -61,7 +61,7 @@ class DoctorInfoPage extends StatelessWidget {
                 fontStyle: FontStyle.italic,
               ),
             ),
-            const SizedBox(height: 14),
+            const SizedBox(height: 8),
             // Achievements Title
             const Text(
               'Awards',
@@ -71,7 +71,7 @@ class DoctorInfoPage extends StatelessWidget {
                 decoration: TextDecoration.underline,
               ),
             ),
-            const SizedBox(height: 6),
+            const SizedBox(height: 4),
             // Achievements List
             Expanded(
               child: ListView(
@@ -83,7 +83,6 @@ class DoctorInfoPage extends StatelessWidget {
                       style: TextStyle(fontSize: 12),
                     ),
                   ),
-                  SizedBox(height: 0.5), // Adjust the gap here
                   ListTile(
                     leading: Icon(Icons.star, color: Color(0xFF16666B)),
                     title: Text(
@@ -91,7 +90,6 @@ class DoctorInfoPage extends StatelessWidget {
                       style: TextStyle(fontSize: 12),
                     ),
                   ),
-                  SizedBox(height: 0.5), // Adjust the gap here
                   ListTile(
                     leading: Icon(Icons.star, color: Color(0xFF16666B)),
                     title: Text(
@@ -99,7 +97,6 @@ class DoctorInfoPage extends StatelessWidget {
                       style: TextStyle(fontSize: 12),
                     ),
                   ),
-                  SizedBox(height: 0.5), // Adjust the gap here
                   ListTile(
                     leading: Icon(Icons.star, color: Color(0xFF16666B)),
                     title: Text(
@@ -110,7 +107,15 @@ class DoctorInfoPage extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(height: 10),
+            //Contact
+            const Text(
+              'Email : bindu.epilepsycare@gmail.com',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            const SizedBox(height: 4),
             // Hyperlink
             InkWell(
               onTap: _launchURL,
@@ -118,6 +123,7 @@ class DoctorInfoPage extends StatelessWidget {
                 'Visit Dr. Bindu Menon\'s Official Website',
                 style: TextStyle(
                   fontSize: 16,
+                  fontWeight: FontWeight.w500,
                   color: Color(0xFF16666B),
                   decoration: TextDecoration.underline,
                 ),

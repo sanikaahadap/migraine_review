@@ -265,37 +265,6 @@ class HomePageState extends State<HomePage> {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const CalendarPage()),
-                        );
-                      },
-                      icon: const Icon(Icons.calendar_today, color: Colors.white),
-                      label: 'Calendar',
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 20),
-
-                // Row 2
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    _buildCard(
-                      context: context,
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => const FAQsPage()),
-                        );
-                      },
-                      icon: const Icon(Icons.help_outline, color: Colors.white),
-                      label: 'FAQs',
-                    ),
-                    const SizedBox(width: 20),
-                    _buildCard(
-                      context: context,
-                      onPressed: () {
-                        Navigator.push(
-                          context,
                           MaterialPageRoute(builder: (context) => const DiaryPage()),
                         );
                       },
@@ -306,7 +275,7 @@ class HomePageState extends State<HomePage> {
                 ),
                 const SizedBox(height: 20),
 
-                // Row 3
+                // Row 2
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -332,6 +301,38 @@ class HomePageState extends State<HomePage> {
                       },
                       icon: const Icon(Icons.assignment_turned_in, color: Colors.white),
                       label: 'Migraine Logs',
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 20),
+
+                // Row 3
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    _buildCard(
+                      context: context,
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const FAQsPage()),
+                        );
+                      },
+                      icon: const Icon(Icons.help_outline, color: Colors.white),
+                      label: 'FAQs',
+                    ),
+                    const SizedBox(width: 20),
+                    _buildCard(
+                      context: context,
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const YoutubeTips()),
+                        );
+                      },
+                      icon: const Icon(Icons.videocam, color: Colors.white),
+                      label: 'Youtube Videos',
                     ),
                   ],
                 ),
@@ -367,7 +368,7 @@ class HomePageState extends State<HomePage> {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const Feed()),
+                  MaterialPageRoute(builder: (context) => const YoutubeTips()),
                 );
               },
             ),

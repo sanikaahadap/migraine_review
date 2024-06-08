@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:neurooooo/admin_home/admin_home.dart'; // Import the AdminHomePage
+import 'package:neurooooo/admin_home/admin_home.dart';
+import 'package:neurooooo/login/login_signup_page.dart'; // Import the AdminHomePage
 
 class AdminLoginPage extends StatefulWidget {
   const AdminLoginPage({Key? key}) : super(key: key);
@@ -9,8 +10,14 @@ class AdminLoginPage extends StatefulWidget {
 }
 
 class AdminLoginPageState extends State<AdminLoginPage> {
-  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _emailController.text = "bindumenon@gmail.com"; // Hard-coded email
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,13 +25,12 @@ class AdminLoginPageState extends State<AdminLoginPage> {
       appBar: AppBar(
         backgroundColor: const Color(0x80B2EBF2),
         title: const Text('Admin Login'),
-        automaticallyImplyLeading: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const AdminLoginPage()),
+              MaterialPageRoute(builder: (context) => const LoginSignupPage()),
             );
           },
         ),
@@ -45,13 +51,12 @@ class AdminLoginPageState extends State<AdminLoginPage> {
                 ),
               ),
               const SizedBox(height: 16.0),
-              // Username field
+              // email field
               TextField(
-                controller: _usernameController,
-                decoration: const InputDecoration(
-                  labelText: 'Username',
-                  hintText: 'Enter your username',
+                decoration:  InputDecoration(
+                  labelText: _emailController.text,
                 ),
+                enabled: false, // Makes the TextField read-only
               ),
               const SizedBox(height: 16.0),
               // Password field
@@ -67,9 +72,9 @@ class AdminLoginPageState extends State<AdminLoginPage> {
               ElevatedButton(
                 onPressed: () {
                   // Basic authentication
-                  if (_usernameController.text == 'test_admin' &&
-                      _passwordController.text == 'admin27') {
-                    Navigator.pushReplacement( // Navigate to AdminHomePage
+                  if (
+                      _passwordController.text == 'bindu') {
+                    Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(builder: (context) => AdminHomePage()),
                     );
@@ -80,7 +85,7 @@ class AdminLoginPageState extends State<AdminLoginPage> {
                       builder: (BuildContext context) {
                         return AlertDialog(
                           title: const Text('Error'),
-                          content: const Text('Invalid username or password.'),
+                          content: const Text('Incorrect password.'),
                           actions: <Widget>[
                             TextButton(
                               onPressed: () {
@@ -112,7 +117,7 @@ class AdminLoginPageState extends State<AdminLoginPage> {
 
   @override
   void dispose() {
-    _usernameController.dispose();
+    _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
   }

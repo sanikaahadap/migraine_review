@@ -19,15 +19,63 @@ class AdminHomePage extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text(
-                    'Admin Dashboard',
-                    style: TextStyle(
-                      color: Color(0xFF16666B),
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
+                  const Center(
+                    child: CircleAvatar(
+                      radius: 60,
+                      backgroundImage: AssetImage('assets/images/logo.png'),
                     ),
                   ),
                   const SizedBox(height: 20),
+                  Container(
+                    padding: const EdgeInsets.all(16.0),
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        colors: [Color(0xFF80DEEA), Color(0xFF16666B)],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                      borderRadius: BorderRadius.circular(10.0),
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Colors.black26,
+                          blurRadius: 10.0,
+                          offset: Offset(0, 5),
+                        ),
+                      ],
+                    ),
+                    child: const Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          'Welcome',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w500,
+                            fontStyle: FontStyle.italic,
+                          ),
+                        ),
+                        SizedBox(height: 5),
+                        Text(
+                          'Dr. Bindu Menon',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 28,
+                            fontWeight: FontWeight.bold,
+                            shadows: [
+                              Shadow(
+                                blurRadius: 10.0,
+                                color: Colors.black26,
+                                offset: Offset(3.0, 3.0),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+
                   ElevatedButton(
                     onPressed: () {
                       Navigator.push(
@@ -63,8 +111,7 @@ class AdminHomePage extends StatelessWidget {
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF16666B),
-                padding:
-                const EdgeInsets.symmetric(vertical: 10, horizontal: 25),
+                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 25),
               ),
               icon: const Icon(Icons.logout,
                   color: Colors.white), // Set the icon color to white

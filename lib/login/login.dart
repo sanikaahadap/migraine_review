@@ -217,18 +217,6 @@ class LoginPageState extends State<LoginPage> {
                       'Forgot Password?',
                       style: TextStyle(color: Color(0xFF16666B)),
                     ),
-                  ),const SizedBox(height: 10),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const SignInWithPhone()));
-                    },
-                    child: const Text(
-                      'Login with Phone Number',
-                      style: TextStyle(color: Color(0xFF16666B)),
-                    ),
                   ),
                   const SizedBox(height: 10),
                   GestureDetector(
