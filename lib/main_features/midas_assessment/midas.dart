@@ -1,10 +1,10 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'dart:developer';
 import 'package:neurooooo/user_home/nav_bar.dart';
 import 'dart:async';
+import 'package:neurooooo/user_home/midas_notifs.dart';
 
 class MIDASAssessmentPage extends StatefulWidget {
   const MIDASAssessmentPage({Key? key}) : super(key: key);
@@ -14,7 +14,8 @@ class MIDASAssessmentPage extends StatefulWidget {
 }
 
 class MIDASAssessmentPageState extends State<MIDASAssessmentPage> {
-  bool _canFillQuestionnaire = true; // Indicates whether the user can fill the questionnaire
+  bool _canFillQuestionnaire =
+      true; // Indicates whether the user can fill the questionnaire
   final String _uid = FirebaseAuth.instance.currentUser!.uid;
 
   @override
@@ -24,13 +25,15 @@ class MIDASAssessmentPageState extends State<MIDASAssessmentPage> {
   }
 
   Future<void> _checkQuestionnaireStatus() async {
-    DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('users').doc(_uid).get();
+    DocumentSnapshot userDoc =
+        await FirebaseFirestore.instance.collection('users').doc(_uid).get();
     if (userDoc.exists) {
       Map<String, dynamic>? data = userDoc.data() as Map<String, dynamic>?;
-      Timestamp? lastFilledTimestamp = data?['lastMIDASFilledTimestamp'] as Timestamp?;
+      Timestamp? lastFilledTimestamp =
+          data?['lastMIDASFilledTimestamp'] as Timestamp?;
       if (lastFilledTimestamp != null) {
-        // Check if two weeks have passed since the last filled timestamp
-        DateTime threeMonthsAgo = DateTime.now().subtract(const Duration(days: 179));
+        DateTime threeMonthsAgo =
+            DateTime.now().subtract(const Duration(days: 179));
         DateTime lastFilledDateTime = lastFilledTimestamp.toDate();
         if (lastFilledDateTime.isAfter(threeMonthsAgo)) {
           setState(() {
@@ -46,6 +49,9 @@ class MIDASAssessmentPageState extends State<MIDASAssessmentPage> {
     await FirebaseFirestore.instance.collection('users').doc(_uid).set({
       'lastMIDASFilledTimestamp': now,
     }, SetOptions(merge: true));
+
+    // Schedule the notification for 179 days later at 7 PM
+    await LocalNotifications.scheduleDailyNotification();
   }
 
   @override
@@ -74,20 +80,23 @@ class MIDASAssessmentPageState extends State<MIDASAssessmentPage> {
             ElevatedButton(
               onPressed: _canFillQuestionnaire
                   ? () {
-                _setQuestionnaireFilled().then((_) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const MIDASQuestions()),
-                  );
-                });
-              }
+                      _setQuestionnaireFilled().then((_) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const MIDASQuestions()),
+                        );
+                      });
+                    }
                   : null,
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF16666B), // Background color
                 foregroundColor: Colors.white, // Text color
               ),
               child: Text(
-                _canFillQuestionnaire ? 'Proceed to the Questionnaire' : 'Questionnaire already filled',
+                _canFillQuestionnaire
+                    ? 'Proceed to the Questionnaire'
+                    : 'Questionnaire already filled',
               ),
             ),
           ],
@@ -132,7 +141,8 @@ class MIDASQuestionsState extends State<MIDASQuestions> {
         // Navigate to the output page when all questions are answered
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => MIDASOutputPage(calculateScore())),
+          MaterialPageRoute(
+              builder: (context) => MIDASOutputPage(calculateScore())),
         );
       }
     });
@@ -238,11 +248,13 @@ class MIDASQuestionsState extends State<MIDASQuestions> {
                           width: MediaQuery.of(context).size.width / 2.2,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8.0),
-                            color: _selectedOptions[_currentPageIndex] == _options[index]
+                            color: _selectedOptions[_currentPageIndex] ==
+                                    _options[index]
                                 ? const Color(0xFF16666B)
                                 : Colors.white,
                             border: Border.all(
-                              color: _selectedOptions[_currentPageIndex] == _options[index]
+                              color: _selectedOptions[_currentPageIndex] ==
+                                      _options[index]
                                   ? const Color(0xFF16666B)
                                   : Colors.black,
                             ),
@@ -252,9 +264,11 @@ class MIDASQuestionsState extends State<MIDASQuestions> {
                               _selectOption(_currentPageIndex, _options[index]);
                             },
                             style: TextButton.styleFrom(
-                              backgroundColor: _selectedOptions[_currentPageIndex] == _options[index]
-                                  ? const Color(0xFF16666B)
-                                  : Colors.white,
+                              backgroundColor:
+                                  _selectedOptions[_currentPageIndex] ==
+                                          _options[index]
+                                      ? const Color(0xFF16666B)
+                                      : Colors.white,
                             ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -263,16 +277,19 @@ class MIDASQuestionsState extends State<MIDASQuestions> {
                                   _options[index],
                                   style: TextStyle(
                                     fontSize: 16,
-                                    color: _selectedOptions[_currentPageIndex] == _options[index]
-                                        ? Colors.white
-                                        : const Color(0xFF16666B),
+                                    color:
+                                        _selectedOptions[_currentPageIndex] ==
+                                                _options[index]
+                                            ? Colors.white
+                                            : const Color(0xFF16666B),
                                   ),
                                 ),
                                 const SizedBox(width: 5),
                                 Icon(
                                   _getIconForOption(_options[index]),
                                   size: 30,
-                                  color: _selectedOptions[_currentPageIndex] == _options[index]
+                                  color: _selectedOptions[_currentPageIndex] ==
+                                          _options[index]
                                       ? Colors.white
                                       : const Color(0xFF16666B),
                                 ),
@@ -282,49 +299,24 @@ class MIDASQuestionsState extends State<MIDASQuestions> {
                         );
                       }),
                     ),
+                    const SizedBox(height: 30),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        IconButton(
+                          onPressed: _previousPage,
+                          icon: const Icon(Icons.arrow_back),
+                        ),
+                        IconButton(
+                          onPressed: _nextPage,
+                          icon: const Icon(Icons.arrow_forward),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),
             ),
-            const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                TextButton(
-                  onPressed: _currentPageIndex == 0 ? null : _previousPage,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: const Color(0xFF16666B),
-                    ),
-                    child: const Text(
-                      'Previous',
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
-                TextButton(
-                  onPressed: _nextPage,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: const Color(0xFF16666B),
-                    ),
-                    child: Text(
-                      _currentPageIndex == 4 ? 'Submit' : 'Next',
-                      style: const TextStyle(
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 20),
           ],
         ),
       ),
@@ -332,113 +324,55 @@ class MIDASQuestionsState extends State<MIDASQuestions> {
   }
 }
 
-
 class MIDASOutputPage extends StatelessWidget {
   final int score;
 
-  const MIDASOutputPage(this.score, {super.key});
-
-  String getSeverityLevel(int score) {
-    if (score >= 0 && score <= 5) {
-      return 'Little or No Disability';
-    } else if (score >= 6 && score <= 10) {
-      return 'Mild Disability';
-    } else if (score >= 11 && score <= 20) {
-      return 'Moderate Disability';
-    } else {
-      return 'Severe Disability';
-    }
-  }
-
-  void _storeData(int score, String severity) {
-    FirebaseFirestore.instance
-        .collection('midas_scores')
-        .add({
-      'score': score,
-      'severity': severity,
-      'timestamp': Timestamp.now(),
-      'uid' : FirebaseAuth.instance.currentUser!.uid,
-    })
-        .then((value) => log("Score and Severity added"))
-        .catchError((error) => log("Failed to add score and severity: $error"));
-  }
+  const MIDASOutputPage(this.score, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    String severityLevel = getSeverityLevel(score);
-
-    // Store data when the page is built
-    _storeData(score, severityLevel);
-
-
     return Scaffold(
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 50.0, horizontal: 15.0),
-          child: Card(
-            elevation: 4,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: Container(
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
-                gradient: const LinearGradient(
-                  colors: [Color(0xFF16666B), Color(0xFF2193B0)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/images/midas_bg.png'),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text(
+                  'Your MIDAS Score is:',
+                  style: TextStyle(
+                    fontSize: 20.0,
+                    color: Color(0xFFFFFFFF),
+                  ),
                 ),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Center(
-                    child: Text(
-                      'Your MIDAS score is: $score',
-                      style: const TextStyle(
-                        fontSize: 22.0,
-                        color: Colors.white,
-                      ),
-                    ),
+                const SizedBox(height: 20),
+                Text(
+                  '$score',
+                  style: const TextStyle(
+                    fontSize: 60.0,
+                    color: Color(0xFFFFFFFF),
+                    fontWeight: FontWeight.bold,
                   ),
-                  const SizedBox(height: 20),
-                  Center(
-                    child: Text(
-                      'Severity Level: $severityLevel',
-                      style: const TextStyle(
-                        fontSize: 22.0,
-                        color: Colors.white,
-                      ),
-                    ),
+                ),
+                const SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF16666B),
+                    foregroundColor: Colors.white,
                   ),
-                  const SizedBox(height: 20),
-
-
-
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => const CustomBottomNavigationBar()));
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white,
-                      foregroundColor: const Color(0xFF16666B),
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                    child: const Text(
-                      'Go back to home page',
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Color(0xFF16666B),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+                  child: const Text('Return'),
+                ),
+              ],
             ),
           ),
         ),
@@ -446,4 +380,3 @@ class MIDASOutputPage extends StatelessWidget {
     );
   }
 }
-

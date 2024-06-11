@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'headache_no.dart';
 import 'headache_yes.dart';
 import 'dart:async';
+import 'package:neurooooo/user_home/local_notifs.dart';
 
 class DiaryPage extends StatefulWidget {
   const DiaryPage({super.key});
@@ -23,7 +24,8 @@ class DiaryPageState extends State<DiaryPage> {
   }
 
   Future<void> _checkDiaryStatus() async {
-    DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('users').doc(_uid).get();
+    DocumentSnapshot userDoc =
+        await FirebaseFirestore.instance.collection('users').doc(_uid).get();
     if (userDoc.exists) {
       Map<String, dynamic>? data = userDoc.data() as Map<String, dynamic>?;
       String? lastFilledDate = data?['lastFilledDate'] as String?;
@@ -33,6 +35,12 @@ class DiaryPageState extends State<DiaryPage> {
         setState(() {
           _canFillDiary = false;
         });
+        LocalNotifications.cancelNotification();
+      } else {
+        setState(() {
+          _canFillDiary = true;
+        });
+        LocalNotifications.scheduleDailyNotification();
       }
     }
   }
@@ -42,6 +50,8 @@ class DiaryPageState extends State<DiaryPage> {
     await FirebaseFirestore.instance.collection('users').doc(_uid).set({
       'lastFilledDate': today,
     }, SetOptions(merge: true));
+    LocalNotifications
+        .cancelNotification(); // Cancel the notification after diary is filled
   }
 
   @override
@@ -66,14 +76,14 @@ class DiaryPageState extends State<DiaryPage> {
             ElevatedButton(
               onPressed: _canFillDiary
                   ? () {
-                _setDiaryFilled().then((_) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const YesPage()),
-                  );
-                });
-              }
+                      _setDiaryFilled().then((_) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const YesPage()),
+                        );
+                      });
+                    }
                   : null,
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF16666B),
@@ -84,14 +94,14 @@ class DiaryPageState extends State<DiaryPage> {
             ElevatedButton(
               onPressed: _canFillDiary
                   ? () {
-                _setDiaryFilled().then((_) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const NoPage()),
-                  );
-                });
-              }
+                      _setDiaryFilled().then((_) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const NoPage()),
+                        );
+                      });
+                    }
                   : null,
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF16666B),
