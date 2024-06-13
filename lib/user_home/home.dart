@@ -7,9 +7,10 @@ import 'package:neurooooo/main_features/midas_assessment/midas.dart';
 import 'package:neurooooo/onboarding/animated_page.dart';
 import 'package:neurooooo/salient_features.dart';
 import 'package:neurooooo/user_home/doctor_info_page.dart';
-import 'package:neurooooo/user_home/settings.dart';
+import 'package:neurooooo/user_home/instruction_manual.dart';
 import 'package:neurooooo/main_features/faqs/faqs.dart';
 import 'package:neurooooo/main_features/calendar/calendar.dart';
+import 'package:neurooooo/user_home/privacy_policy.dart';
 import 'package:neurooooo/user_home/profile.dart';
 import 'package:neurooooo/main_features/personal_diary/diary.dart';
 import 'package:neurooooo/main_features/migraine_logs/migraine_logs.dart';
@@ -363,17 +364,7 @@ class HomePageState extends State<HomePage> {
               ),
             ),
             ListTile(
-              leading: const Icon(Icons.videocam), // Icon for YT videos
-              title: const Text('Youtube videos'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const YoutubeTips()),
-                );
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.healing), // Icon for Know Your Doctor
+              leading: const Icon(Icons.healing, color: Color(0xFF16666B)), // Icon for Know Your Doctor
               title: const Text('Know Your Doctor'),
               onTap: () {
                 Navigator.push(
@@ -383,7 +374,7 @@ class HomePageState extends State<HomePage> {
               },
             ),
             ListTile(
-              leading: const Icon(Icons.app_shortcut_sharp), // Icon for FAQs
+              leading: const Icon(Icons.app_shortcut_sharp, color: Color(0xFF16666B)), // Icon for FAQs
               title: const Text('Salient Features'),
               onTap: () {
                 Navigator.push(
@@ -392,9 +383,19 @@ class HomePageState extends State<HomePage> {
                 );
               },
             ),
+            ListTile(
+              leading: const Icon(Icons.privacy_tip, color: Color(0xFF16666B)), // Icon for YT videos
+              title: const Text('Privacy Policy'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const PrivacyPolicyDescription()),
+                );
+              },
+            ),
             const Divider(),
             ListTile(
-              leading: const Icon(Icons.logout), // Icon for Log Out
+              leading: const Icon(Icons.logout, color: Color(0xFF16666B)), // Icon for Log Out
               title: const Text('Log Out'),
               onTap:()=> signUserOut(context),
             ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:neurooooo/user_home/home.dart';
 import 'package:neurooooo/user_home/notifications.dart';
-import 'package:neurooooo/user_home/settings.dart';
+import 'package:neurooooo/user_home/instruction_manual.dart';
 
 class CustomBottomNavigationBar extends StatefulWidget {
   const CustomBottomNavigationBar({super.key});
@@ -23,7 +23,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
   final List<Widget> _pages = [
     const HomePage(),
     const AnalysisPage(),
-    const SettingsPage(),
+    const InstructionManualPage(),
   ];
 
   @override
@@ -45,8 +45,8 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
             label: 'Notifications',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Settings',
+            icon: Icon(Icons.help_outlined),
+            label: 'Instructions',
           ),
         ],
       ),
