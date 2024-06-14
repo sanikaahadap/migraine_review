@@ -98,8 +98,8 @@ class LocalNotifications {
       now.year,
       now.month,
       now.day,
-      18, // 6 PM
-      0,
+      22, // 6 PM
+      29,
     );
 
     const AndroidNotificationDetails androidNotificationDetails =
