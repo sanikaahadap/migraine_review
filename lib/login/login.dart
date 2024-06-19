@@ -7,6 +7,7 @@ import 'package:neurooooo/login/login_signup_page.dart';
 import 'package:neurooooo/login/phone_number_signin.dart';
 import 'package:neurooooo/onboarding/features.dart';
 import 'package:neurooooo/login/forgotpassword.dart';
+import 'package:neurooooo/onboarding/userinfopage.dart';
 import 'package:neurooooo/user_home/nav_bar.dart';
 import 'package:neurooooo/login/signup.dart';
 import 'package:crypto/crypto.dart';
@@ -223,7 +224,7 @@ class LoginPageState extends State<LoginPage> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const SignUpPage()),
+                        MaterialPageRoute(builder: (context) => const DisclaimerPage()),
                       );
                     },
                     child: const Text(
