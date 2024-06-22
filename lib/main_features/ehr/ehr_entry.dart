@@ -70,24 +70,24 @@ class Ehrmainpg extends StatelessWidget {
                     style: TextStyle(fontSize: 18, color: Colors.white)),
               ),
               const SizedBox(height: 40),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const Notifs()),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF16666B),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 60, vertical: 20),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                ),
-                child: const Text('View your diary entries',
-                    style: TextStyle(fontSize: 18, color: Colors.white)),
-              ),
+              // ElevatedButton(
+              //   onPressed: () {
+              //     Navigator.push(
+              //       context,
+              //       MaterialPageRoute(builder: (context) => const Notifs()),
+              //     );
+              //   },
+              //   style: ElevatedButton.styleFrom(
+              //     backgroundColor: const Color(0xFF16666B),
+              //     padding:
+              //         const EdgeInsets.symmetric(horizontal: 60, vertical: 20),
+              //     shape: RoundedRectangleBorder(
+              //       borderRadius: BorderRadius.circular(15),
+              //     ),
+              //   ),
+              //   child: const Text('View your diary entries',
+              //       style: TextStyle(fontSize: 18, color: Colors.white)),
+              // ),
             ],
           ),
         ),
