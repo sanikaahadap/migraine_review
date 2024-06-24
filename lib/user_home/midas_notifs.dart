@@ -6,6 +6,7 @@ import 'package:timezone/timezone.dart' as tz;
 import 'package:rxdart/rxdart.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MidasNotifs extends StatefulWidget {
   const MidasNotifs({super.key});
@@ -24,14 +25,14 @@ class _MidasNotifsState extends State<MidasNotifs> {
     super.initState();
     requestPermissions();
     listenToNotifications();
-    _scheduleNotificationIfNeeded();
+    _checkAndScheduleNotification();
   }
 
   requestPermissions() async {
-    if (await Permission.scheduleExactAlarm.request().isGranted) {
-      print("Exact alarm permission granted");
+    if (await Permission.notification.request().isGranted) {
+      print("Notification permission granted");
     } else {
-      print("Exact alarm permission denied");
+      print("Notification permission denied");
     }
   }
 
@@ -43,7 +44,7 @@ class _MidasNotifsState extends State<MidasNotifs> {
     });
   }
 
-  Future<void> _scheduleNotificationIfNeeded() async {
+  Future<void> _checkAndScheduleNotification() async {
     DocumentSnapshot userDoc =
         await FirebaseFirestore.instance.collection('users').doc(_uid).get();
     if (userDoc.exists) {
@@ -66,8 +67,16 @@ class _MidasNotifsState extends State<MidasNotifs> {
   Widget build(BuildContext context) {
     return ElevatedButton.icon(
       icon: Icon(Icons.notifications_outlined),
-      onPressed: () {
-        LocalNotifications.scheduleDailyNotification();
+      onPressed: () async {
+        TimeOfDay? pickedTime = await showTimePicker(
+          context: context,
+          initialTime: TimeOfDay(hour: 19, minute: 0),
+        );
+
+        if (pickedTime != null) {
+          await _saveNotificationTime(pickedTime);
+          LocalNotifications.scheduleDailyNotification();
+        }
       },
       label: Text("Schedule a daily notification for MIDAS"),
       style: ElevatedButton.styleFrom(
@@ -75,6 +84,12 @@ class _MidasNotifsState extends State<MidasNotifs> {
         foregroundColor: Colors.white, // text and icon color
       ),
     );
+  }
+
+  Future<void> _saveNotificationTime(TimeOfDay time) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('notification_hour', time.hour);
+    await prefs.setInt('notification_minute', time.minute);
   }
 }
 
@@ -113,17 +128,22 @@ class LocalNotifications {
         onDidReceiveBackgroundNotificationResponse: onNotificationTap);
   }
 
-  // schedule a notification 179 days after the last MIDAS assessment
+  // schedule a daily notification
   static Future<void> scheduleDailyNotification() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int hour = prefs.getInt('notification_hour') ?? 19; // Default to 7 PM
+    int minute =
+        prefs.getInt('notification_minute') ?? 0; // Default to 0 minutes
+
     final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
     final tz.TZDateTime scheduledDate = tz.TZDateTime(
       tz.local,
       now.year,
       now.month,
       now.day,
-      7,
-      0,
-    ).add(Duration(days: 179));
+      hour,
+      minute,
+    ).add(Duration(days: 1)); // Schedule for the next day
 
     const AndroidNotificationDetails androidNotificationDetails =
         AndroidNotificationDetails('your channel id', 'your channel name',

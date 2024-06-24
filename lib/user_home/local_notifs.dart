@@ -6,6 +6,7 @@ import 'package:timezone/timezone.dart' as tz;
 import 'package:rxdart/rxdart.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LocalNotifications {
   static final FlutterLocalNotificationsPlugin
@@ -42,15 +43,23 @@ class LocalNotifications {
         onDidReceiveBackgroundNotificationResponse: onNotificationTap);
   }
 
-  static Future<void> scheduleNotificationAtTime(TimeOfDay time) async {
+  static Future<void> scheduleNotificationAtTime() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? storedHour = prefs.getString('notificationHour');
+    final String? storedMinute = prefs.getString('notificationMinute');
+
+    int hour =
+        storedHour != null ? int.parse(storedHour) : 18; // Default to 6 PM
+    int minute = storedMinute != null ? int.parse(storedMinute) : 0;
+
     final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
     tz.TZDateTime scheduledDate = tz.TZDateTime(
       tz.local,
       now.year,
       now.month,
       now.day,
-      time.hour,
-      time.minute,
+      hour,
+      minute,
     );
 
     // Check if the scheduled time has already passed for today
@@ -98,7 +107,7 @@ class LocalNotifications {
 }
 
 class Notifs extends StatefulWidget {
-  const Notifs({super.key});
+  const Notifs({Key? key}) : super(key: key);
 
   @override
   State<Notifs> createState() => _NotifsState();
@@ -131,6 +140,13 @@ class _NotifsState extends State<Notifs> {
     });
   }
 
+  Future<void> _setNotificationTime(TimeOfDay selectedTime) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('notificationHour', selectedTime.hour.toString());
+    await prefs.setString('notificationMinute', selectedTime.minute.toString());
+    await LocalNotifications.scheduleNotificationAtTime();
+  }
+
   @override
   Widget build(BuildContext context) {
     return ElevatedButton.icon(
@@ -142,13 +158,13 @@ class _NotifsState extends State<Notifs> {
         );
 
         if (selectedTime != null) {
-          await LocalNotifications.scheduleNotificationAtTime(selectedTime);
+          await _setNotificationTime(selectedTime);
         }
       },
-      label: Text("Set Notification Time"),
+      label: Text("Schedule a daily notification for Diary"),
       style: ElevatedButton.styleFrom(
         backgroundColor: Color(0xFF16666B), // background color
-        foregroundColor: Colors.white, // text and icon colort and icon color
+        foregroundColor: Colors.white, // text and icon color
       ),
     );
   }

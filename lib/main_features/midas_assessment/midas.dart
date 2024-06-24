@@ -17,11 +17,19 @@ class MIDASAssessmentPageState extends State<MIDASAssessmentPage> {
   bool _canFillQuestionnaire =
       true; // Indicates whether the user can fill the questionnaire
   final String _uid = FirebaseAuth.instance.currentUser!.uid;
+  late Timer _dailyCheckTimer;
 
   @override
   void initState() {
     super.initState();
     _checkQuestionnaireStatus();
+    _startDailyCheck();
+  }
+
+  @override
+  void dispose() {
+    _dailyCheckTimer.cancel();
+    super.dispose();
   }
 
   Future<void> _checkQuestionnaireStatus() async {
@@ -39,9 +47,25 @@ class MIDASAssessmentPageState extends State<MIDASAssessmentPage> {
           setState(() {
             _canFillQuestionnaire = false;
           });
+        } else {
+          setState(() {
+            _canFillQuestionnaire = true;
+          });
+          LocalNotifications.scheduleDailyNotification();
         }
+      } else {
+        setState(() {
+          _canFillQuestionnaire = true;
+        });
+        LocalNotifications.scheduleDailyNotification();
       }
     }
+  }
+
+  void _startDailyCheck() {
+    _dailyCheckTimer = Timer.periodic(const Duration(days: 1), (timer) {
+      _checkQuestionnaireStatus();
+    });
   }
 
   Future<void> _setQuestionnaireFilled() async {
@@ -50,7 +74,7 @@ class MIDASAssessmentPageState extends State<MIDASAssessmentPage> {
       'lastMIDASFilledTimestamp': now,
     }, SetOptions(merge: true));
 
-    // Schedule the notification for 179 days later at 7 PM
+    // Schedule the notification for the next day
     await LocalNotifications.scheduleDailyNotification();
   }
 
@@ -329,50 +353,108 @@ class MIDASOutputPage extends StatelessWidget {
 
   const MIDASOutputPage(this.score, {Key? key}) : super(key: key);
 
+  String getSeverityLevel(int score) {
+    if (score >= 0 && score <= 5) {
+      return 'Little or No Disability';
+    } else if (score >= 6 && score <= 10) {
+      return 'Mild Disability';
+    } else if (score >= 11 && score <= 20) {
+      return 'Moderate Disability';
+    } else {
+      return 'Severe Disability';
+    }
+  }
+
+  void _storeData(int score, String severity) {
+    FirebaseFirestore.instance
+        .collection('midas_scores')
+        .add({
+          'score': score,
+          'severity': severity,
+          'timestamp': Timestamp.now(),
+          'uid': FirebaseAuth.instance.currentUser!.uid,
+        })
+        .then((value) => log("Score and Severity added"))
+        .catchError((error) => log("Failed to add score and severity: $error"));
+  }
+
   @override
   Widget build(BuildContext context) {
+    String severityLevel = getSeverityLevel(score);
+
+    // Store data when the page is built
+    _storeData(score, severityLevel);
+
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/images/midas_bg.png'),
-            fit: BoxFit.cover,
-          ),
-        ),
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text(
-                  'Your MIDAS Score is:',
-                  style: TextStyle(
-                    fontSize: 20.0,
-                    color: Color(0xFFFFFFFF),
-                  ),
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 50.0, horizontal: 15.0),
+          child: Card(
+            elevation: 4,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                gradient: const LinearGradient(
+                  colors: [Color(0xFF16666B), Color(0xFF2193B0)],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
                 ),
-                const SizedBox(height: 20),
-                Text(
-                  '$score',
-                  style: const TextStyle(
-                    fontSize: 60.0,
-                    color: Color(0xFFFFFFFF),
-                    fontWeight: FontWeight.bold,
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Center(
+                    child: Text(
+                      'Your MIDAS score is: $score',
+                      style: const TextStyle(
+                        fontSize: 22.0,
+                        color: Colors.white,
+                      ),
+                    ),
                   ),
-                ),
-                const SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF16666B),
-                    foregroundColor: Colors.white,
+                  const SizedBox(height: 20),
+                  Center(
+                    child: Text(
+                      'Severity Level: $severityLevel',
+                      style: const TextStyle(
+                        fontSize: 22.0,
+                        color: Colors.white,
+                      ),
+                    ),
                   ),
-                  child: const Text('Return'),
-                ),
-              ],
+                  const SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  const CustomBottomNavigationBar()));
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      foregroundColor: const Color(0xFF16666B),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 12),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    child: const Text(
+                      'Go back to home page',
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Color(0xFF16666B),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

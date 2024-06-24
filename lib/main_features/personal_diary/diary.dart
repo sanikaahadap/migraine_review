@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'headache_no.dart';
 import 'headache_yes.dart';
 import 'dart:async';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:neurooooo/user_home/local_notifs.dart';
 
 class DiaryPage extends StatefulWidget {
@@ -23,60 +24,62 @@ class DiaryPageState extends State<DiaryPage> {
     _checkDiaryStatus();
   }
 
-  Future<void> _setQuestionnaireFilled() async {
-    Timestamp now = Timestamp.now();
+  Future<void> _setDiaryFilled() async {
+    String today = DateTime.now().toIso8601String().split('T')[0];
     await FirebaseFirestore.instance.collection('users').doc(_uid).set({
-      'lastMIDASFilledTimestamp': now,
-      'lastDiaryFilledTimestamp': now, // Update this field as well
+      'lastFilledDate': today,
     }, SetOptions(merge: true));
+    setState(() {
+      _canFillDiary =
+          false; // Update _canFillDiary after setting the diary filled
+    });
+    LocalNotifications
+        .cancelNotification(); // Cancel the notification after diary is filled
   }
 
-// Update the logic to handle cases where the diary hasn't been filled by the specified time
   Future<void> _checkDiaryStatus() async {
     DocumentSnapshot userDoc =
         await FirebaseFirestore.instance.collection('users').doc(_uid).get();
     if (userDoc.exists) {
       Map<String, dynamic>? data = userDoc.data() as Map<String, dynamic>?;
       String? lastFilledDate = data?['lastFilledDate'] as String?;
-      TimeOfDay? notificationTime = TimeOfDay(
+      String today = DateTime.now().toIso8601String().split('T')[0];
+
+      TimeOfDay notificationTime = TimeOfDay(
           hour: 18, minute: 0); // Default time for notification at 6 PM
 
       // Check if the user has set a custom notification time
-      if (data != null &&
-          data['notificationHour'] != null &&
-          data['notificationMinute'] != null) {
-        notificationTime = TimeOfDay(
-            hour: data['notificationHour'], minute: data['notificationMinute']);
-      }
-
-      // Construct the scheduled notification time
-      final now = DateTime.now();
-      final scheduledNotificationDateTime = DateTime(now.year, now.month,
-          now.day, notificationTime.hour, notificationTime.minute);
-
-      if (lastFilledDate != null &&
-          DateTime.parse(lastFilledDate)
-              .isBefore(scheduledNotificationDateTime)) {
-        setState(() {
-          _canFillDiary = true;
-        });
-        LocalNotifications.scheduleNotificationAtTime(notificationTime);
-      } else {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      if (lastFilledDate == today) {
         setState(() {
           _canFillDiary = false;
         });
         LocalNotifications.cancelNotification();
+      } else {
+        setState(() {
+          _canFillDiary = true;
+        });
+        LocalNotifications.scheduleNotificationAtTime();
       }
-    }
-  }
 
-  Future<void> _setDiaryFilled() async {
-    String today = DateTime.now().toIso8601String().split('T')[0];
-    await FirebaseFirestore.instance.collection('users').doc(_uid).set({
-      'lastFilledDate': today,
-    }, SetOptions(merge: true));
-    LocalNotifications
-        .cancelNotification(); // Cancel the notification after diary is filled
+      if (prefs.containsKey('notificationHour') &&
+          prefs.containsKey('notificationMinute')) {
+        notificationTime = TimeOfDay(
+          hour: prefs.getInt('notificationHour')!,
+          minute: prefs.getInt('notificationMinute')!,
+        );
+      }
+
+      // Construct the scheduled notification time
+      final now = DateTime.now();
+      final scheduledNotificationDateTime = DateTime(
+        now.year,
+        now.month,
+        now.day,
+        notificationTime.hour,
+        notificationTime.minute,
+      );
+    }
   }
 
   @override
