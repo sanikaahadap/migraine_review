@@ -1,4 +1,5 @@
 // import 'dart:developer';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
@@ -17,7 +18,7 @@ class Storage {
     try {
       await storage.ref('test/$fileName').putFile(file);
     } on firebase_core.FirebaseException catch (e) {
-      print(e);
+      log(e as String);
     }
   }
 
@@ -25,7 +26,7 @@ class Storage {
     firebase_storage.ListResult results = await storage.ref('test').listAll();
 
     for (var ref in results.items) {
-      print('Found file: $ref ');
+      log('Found file: $ref ');
     }
 
     return results;

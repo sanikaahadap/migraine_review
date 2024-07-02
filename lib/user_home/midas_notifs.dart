@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -30,16 +32,16 @@ class _MidasNotifsState extends State<MidasNotifs> {
 
   requestPermissions() async {
     if (await Permission.notification.request().isGranted) {
-      print("Notification permission granted");
+      log("Notification permission granted");
     } else {
-      print("Notification permission denied");
+      log("Notification permission denied");
     }
   }
 
   listenToNotifications() {
-    print("Listening to notification");
+    log("Listening to notification");
     LocalNotifications.onClickNotification.stream.listen((event) {
-      print(event);
+      log(event);
       Navigator.pushNamed(context, '/another', arguments: event);
     });
   }
@@ -54,10 +56,10 @@ class _MidasNotifsState extends State<MidasNotifs> {
       if (lastFilledTimestamp != null) {
         DateTime lastFilledDateTime = lastFilledTimestamp.toDate();
         DateTime now = DateTime.now();
-        if (now.isAfter(lastFilledDateTime.add(Duration(days: 179)))) {
+        if (now.isAfter(lastFilledDateTime.add(const Duration(days: 179)))) {
           LocalNotifications.scheduleDailyNotification();
         } else {
-          print('Notification not needed yet.');
+          log('Notification not needed yet.');
         }
       }
     }
@@ -66,11 +68,11 @@ class _MidasNotifsState extends State<MidasNotifs> {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton.icon(
-      icon: Icon(Icons.notifications_outlined),
+      icon: const Icon(Icons.notifications_outlined),
       onPressed: () async {
         TimeOfDay? pickedTime = await showTimePicker(
           context: context,
-          initialTime: TimeOfDay(hour: 19, minute: 0),
+          initialTime: const TimeOfDay(hour: 19, minute: 0),
         );
 
         if (pickedTime != null) {
@@ -78,9 +80,9 @@ class _MidasNotifsState extends State<MidasNotifs> {
           LocalNotifications.scheduleDailyNotification();
         }
       },
-      label: Text("Schedule a daily notification for MIDAS"),
+      label: const Text("Schedule a quarterly notification for MIDAS"),
       style: ElevatedButton.styleFrom(
-        backgroundColor: Color(0xFF16666B), // background color
+        backgroundColor: const Color(0xFF16666B), // background color
         foregroundColor: Colors.white, // text and icon color
       ),
     );
@@ -113,9 +115,9 @@ class LocalNotifications {
         AndroidInitializationSettings('@mipmap/notif_icon');
     final DarwinInitializationSettings initializationSettingsDarwin =
         DarwinInitializationSettings(
-      onDidReceiveLocalNotification: (id, title, body, payload) => null,
+      onDidReceiveLocalNotification: (id, title, body, payload) {},
     );
-    final LinuxInitializationSettings initializationSettingsLinux =
+    const LinuxInitializationSettings initializationSettingsLinux =
         LinuxInitializationSettings(defaultActionName: 'Open notification');
     final InitializationSettings initializationSettings =
         InitializationSettings(
@@ -143,7 +145,7 @@ class LocalNotifications {
       now.day,
       hour,
       minute,
-    ).add(Duration(days: 1)); // Schedule for the next day
+    ).add(const Duration(days: 1)); // Schedule for the next day
 
     const AndroidNotificationDetails androidNotificationDetails =
         AndroidNotificationDetails('your channel id', 'your channel name',
@@ -154,7 +156,7 @@ class LocalNotifications {
     const NotificationDetails notificationDetails =
         NotificationDetails(android: androidNotificationDetails);
 
-    print('Scheduling notification for: $scheduledDate');
+    log('Scheduling notification for: $scheduledDate');
 
     await _flutterLocalNotificationsPlugin
         .zonedSchedule(
@@ -169,7 +171,7 @@ class LocalNotifications {
       matchDateTimeComponents: DateTimeComponents.time,
     )
         .catchError((error) {
-      print('Error scheduling notification: $error');
+      log('Error scheduling notification: $error');
     });
   }
 }

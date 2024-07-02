@@ -1,14 +1,9 @@
-import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:easy_pdf_viewer/easy_pdf_viewer.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-
 import '../main_features/ehr/pdf_upload.dart';
 
 class PatientDoc extends StatefulWidget {
   final String uid;
-
   const PatientDoc({Key? key, required this.uid}) : super(key: key);
 
   @override

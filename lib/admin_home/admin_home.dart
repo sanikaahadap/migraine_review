@@ -264,6 +264,7 @@ class ModelUser {
   }
 }
 
+//class to get list of user details
 class UserService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 

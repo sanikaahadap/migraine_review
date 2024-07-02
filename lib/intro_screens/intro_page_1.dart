@@ -31,6 +31,7 @@ class IntroPage1 extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 16.0),
               child: Text(
                 'Track And Assess',
+                textAlign: TextAlign.center,
                 style: TextStyle(
                   decoration: TextDecoration.none,
                   fontWeight: FontWeight.bold,
@@ -44,6 +45,7 @@ class IntroPage1 extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Text(
                 'Understand your migraine patterns by regularly checking in. This helps tailor your care for better results.',
+                textAlign: TextAlign.center,
                 style: TextStyle(
                   decoration: TextDecoration.none,
                   color: Colors.grey[700],

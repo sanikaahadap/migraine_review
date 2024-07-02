@@ -1,17 +1,16 @@
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:flutter/material.dart";
-import "package:neurooooo/main_features/ehr/ehr_getscores.dart";
-import "package:fl_chart/fl_chart.dart";
+import "package:neurooooo/main_features/ehr/ehr_get_scores.dart";
 import "package:neurooooo/main_features/ehr/ehr_graph.dart";
 
-class Ehrrec extends StatefulWidget {
-  const Ehrrec({super.key});
+class EhrRecordsPage extends StatefulWidget {
+  const EhrRecordsPage({super.key});
 
   @override
-  State<Ehrrec> createState() => _EhrrecState();
+  State<EhrRecordsPage> createState() => _EhrRecordsPageState();
 }
 
-class _EhrrecState extends State<Ehrrec> {
+class _EhrRecordsPageState extends State<EhrRecordsPage> {
   List<String> docIDs = [];
 
   Future getDocId() async {
@@ -34,20 +33,20 @@ class _EhrrecState extends State<Ehrrec> {
       appBar: AppBar(
         title: const Text("MIDAS Scores"),
       ),
-      body: Center(
+      body: const Center(
         child: Column(
           children: [
-            const SizedBox(
+            SizedBox(
               height: 5,
             ),
             SizedBox(
               height: 400,
-              child: ScoreLineChart(),
+              child: EhrGraphPage(),
             ),
-            const SizedBox(
+            SizedBox(
               height: 5,
             ),
-            const Expanded(
+            Expanded(
               child: GetScore(),
             )
           ],

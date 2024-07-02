@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_pdf_viewer/easy_pdf_viewer.dart';
@@ -46,7 +47,7 @@ class _DocUploadState extends State<DocUpload> {
         'download_url': downloadLink,
         'timestamp': FieldValue.serverTimestamp(),
       });
-      print("PDF Uploaded successfully");
+      log("PDF Uploaded successfully");
     }
     getAllPdf();
     setState(() {
@@ -142,12 +143,12 @@ class _DocUploadState extends State<DocUpload> {
             ),
       floatingActionButton: FloatingActionButton(
         onPressed: pickFile,
+        backgroundColor: const Color(0xFF16666B),
+        tooltip: 'Upload PDF',
         child: const Icon(
           Icons.upload_file,
           color: Colors.white,
         ),
-        backgroundColor: const Color(0xFF16666B),
-        tooltip: 'Upload PDF',
       ),
     );
   }

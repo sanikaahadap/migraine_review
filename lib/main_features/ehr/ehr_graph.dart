@@ -4,7 +4,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fl_chart/fl_chart.dart';
 
-class ScoreLineChart extends StatelessWidget {
+class EhrGraphPage extends StatelessWidget {
+  const EhrGraphPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     final currentUserUID = FirebaseAuth.instance.currentUser!.uid;
@@ -15,7 +17,7 @@ class ScoreLineChart extends StatelessWidget {
       stream: scores.where('uid', isEqualTo: currentUserUID).snapshots(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         }
 
         if (snapshot.hasError) {
@@ -24,7 +26,7 @@ class ScoreLineChart extends StatelessWidget {
 
         final scoreDocs = snapshot.data!.docs;
         if (scoreDocs.isEmpty) {
-          return Center(child: Text('No scores available'));
+          return const Center(child: Text('No scores available'));
         }
 
         final scoreDataList = scoreDocs

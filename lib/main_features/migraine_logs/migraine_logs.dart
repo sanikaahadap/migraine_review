@@ -1,6 +1,7 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:neurooooo/user_home/home.dart';
 import 'package:neurooooo/user_home/nav_bar.dart';
 
 class MigraineLogsPage extends StatefulWidget {
@@ -74,7 +75,7 @@ class MigraineLogsPageState extends State<MigraineLogsPage> {
       );
     } catch (e) {
       // Handle errors here
-      print('Error adding migraine log: $e');
+      log('Error adding migraine log: $e');
     }
   }
 

@@ -45,7 +45,7 @@ class DiaryPageState extends State<DiaryPage> {
       String? lastFilledDate = data?['lastFilledDate'] as String?;
       String today = DateTime.now().toIso8601String().split('T')[0];
 
-      TimeOfDay notificationTime = TimeOfDay(
+      TimeOfDay notificationTime = const TimeOfDay(
           hour: 18, minute: 0); // Default time for notification at 6 PM
 
       // Check if the user has set a custom notification time
@@ -72,6 +72,7 @@ class DiaryPageState extends State<DiaryPage> {
 
       // Construct the scheduled notification time
       final now = DateTime.now();
+      // ignore: unused_local_variable
       final scheduledNotificationDateTime = DateTime(
         now.year,
         now.month,

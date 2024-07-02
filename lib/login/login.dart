@@ -4,12 +4,10 @@ import 'dart:developer';
 import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:neurooooo/login/login_signup_page.dart';
-import 'package:neurooooo/login/phone_number_signin.dart';
 import 'package:neurooooo/onboarding/features.dart';
-import 'package:neurooooo/login/forgotpassword.dart';
-import 'package:neurooooo/onboarding/userinfopage.dart';
+import 'package:neurooooo/login/forgot_password.dart';
+import 'package:neurooooo/onboarding/user_info_page.dart';
 import 'package:neurooooo/user_home/nav_bar.dart';
-import 'package:neurooooo/login/signup.dart';
 import 'package:crypto/crypto.dart';
 
 class LoginPage extends StatefulWidget {
@@ -212,7 +210,7 @@ class LoginPageState extends State<LoginPage> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const Forgotpasspg()));
+                              builder: (context) => const ForgotPassword()));
                     },
                     child: const Text(
                       'Forgot Password?',

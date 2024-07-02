@@ -50,7 +50,6 @@ class IntroPage3 extends StatelessWidget {
                   decoration: TextDecoration.none,
                   color: Colors.grey[700],
                   fontSize: 12.0,
-
                 ),
               ),
             ),

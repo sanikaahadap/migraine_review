@@ -35,6 +35,7 @@ class SalientFeaturesPage extends StatelessWidget {
     },
   ];
 
+  // ignore: use_key_in_widget_constructors
   SalientFeaturesPage({Key? key});
 
   @override
@@ -125,4 +126,3 @@ class FeatureCard extends StatelessWidget {
     );
   }
 }
-

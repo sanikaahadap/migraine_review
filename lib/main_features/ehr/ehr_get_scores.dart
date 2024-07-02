@@ -4,14 +4,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
 
 class GetScore extends StatelessWidget {
-  const GetScore({super.key});
+  const GetScore({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     String currentUserUID = FirebaseAuth.instance.currentUser!.uid;
 
     CollectionReference scores =
-        FirebaseFirestore.instance.collection('midas_scores');
+    FirebaseFirestore.instance.collection('midas_scores');
 
     return Scaffold(
       body: StreamBuilder<QuerySnapshot>(
@@ -25,14 +25,14 @@ class GetScore extends StatelessWidget {
             return Center(
               child: Text(
                 'Error: ${snapshot.error}',
-                style: TextStyle(color: Colors.red, fontSize: 18),
+                style: const TextStyle(color: Colors.red, fontSize: 18),
               ),
             );
           }
 
           if (snapshot.data == null || snapshot.data!.docs.isEmpty) {
             // If no scores found for the current user, return a message
-            return Center(
+            return const Center(
               child: Text(
                 'No scores found.',
                 style: TextStyle(fontSize: 18, color: Colors.grey),
@@ -46,26 +46,43 @@ class GetScore extends StatelessWidget {
             itemBuilder: (context, index) {
               // Access each score document
               Map<String, dynamic> data =
-                  (snapshot.data!.docs[index].data() as Map<String, dynamic>);
+              (snapshot.data!.docs[index].data() as Map<String, dynamic>);
               String score = data['score'].toString();
 
               // Access the timestamp and format it to display the date
               Timestamp timestamp = data['timestamp'];
               DateTime dateTime = timestamp.toDate();
               String formattedDate =
-                  DateFormat.yMMMd().add_jm().format(dateTime);
+              DateFormat.yMMMd().add_jm().format(dateTime);
 
-              // Return a widget to display the score, day, and date
+              // Return a widget to display the score and date
               return Card(
                 margin: const EdgeInsets.symmetric(vertical: 8.0),
                 child: ListTile(
                   contentPadding: const EdgeInsets.all(16.0),
-                  title: Text(
-                    'MIDAS Score: $score',
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                  leading: Container(
+                    width: 50,
+                    height: 50,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.blue, // You can change the color here
+                    ),
+                    child: Center(
+                      child: Text(
+                        score,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18.0,
+                        ),
+                      ),
+                    ),
                   ),
-                  subtitle: Text('Recorded on: $formattedDate'),
-                  leading: Icon(Icons.score, color: Colors.blue),
+                  title: Text(
+                    formattedDate,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+
                 ),
               );
             },

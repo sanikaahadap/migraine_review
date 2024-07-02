@@ -1,14 +1,13 @@
 import 'dart:developer';
 import 'dart:convert';
 import 'dart:math' as math;
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:neurooooo/login/login.dart';
 import 'package:neurooooo/login/login_signup_page.dart';
 import 'package:neurooooo/models/user.dart';
-import 'package:neurooooo/onboarding/userinfopage.dart';
+import 'package:neurooooo/onboarding/user_info_page.dart';
 import 'package:intl/intl.dart';
 import 'package:crypto/crypto.dart';
 
@@ -26,7 +25,7 @@ class SignUpPageState extends State<SignUpPage> {
   final TextEditingController _dobController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
-      TextEditingController();
+  TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   DateTime? _selectedDate; // Nullable DateTime
   bool _isObscured = true;
@@ -149,7 +148,7 @@ class SignUpPageState extends State<SignUpPage> {
 
     if (name != "" && email != "" && phone != "" && dob != "") {
       String patientId =
-          generateUniqueCode(); // Generate unique 6-digit patient ID
+      generateUniqueCode(); // Generate unique 6-digit patient ID
       // Map<String, dynamic> userData = {
       //   "name": name,
       //   "email": email,
@@ -197,8 +196,8 @@ class SignUpPageState extends State<SignUpPage> {
             );
           },
         ),
-          // Your app bar content goes here
-          ),
+        // Your app bar content goes here
+      ),
       body: SingleChildScrollView(
         child: Container(
           padding: const EdgeInsets.all(16.0),
@@ -223,7 +222,7 @@ class SignUpPageState extends State<SignUpPage> {
                       filled: true,
                       fillColor: Color(0x80B2EBF2),
                       contentPadding:
-                          EdgeInsets.fromLTRB(12.0, 15.0, 12.0, 15.0),
+                      EdgeInsets.fromLTRB(12.0, 15.0, 12.0, 15.0),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -242,7 +241,7 @@ class SignUpPageState extends State<SignUpPage> {
                       filled: true,
                       fillColor: Color(0x80B2EBF2),
                       contentPadding:
-                          EdgeInsets.fromLTRB(12.0, 15.0, 12.0, 15.0),
+                      EdgeInsets.fromLTRB(12.0, 15.0, 12.0, 15.0),
                     ),
                     keyboardType: TextInputType.emailAddress,
                     validator: (value) {
@@ -264,7 +263,7 @@ class SignUpPageState extends State<SignUpPage> {
                       filled: true,
                       fillColor: Color(0x80B2EBF2),
                       contentPadding:
-                          EdgeInsets.fromLTRB(12.0, 15.0, 12.0, 15.0),
+                      EdgeInsets.fromLTRB(12.0, 15.0, 12.0, 15.0),
                     ),
                     keyboardType: TextInputType.phone,
                     validator: (value) {
@@ -286,7 +285,7 @@ class SignUpPageState extends State<SignUpPage> {
                       filled: true,
                       fillColor: Color(0x80B2EBF2),
                       contentPadding:
-                          EdgeInsets.fromLTRB(12.0, 15.0, 12.0, 15.0),
+                      EdgeInsets.fromLTRB(12.0, 15.0, 12.0, 15.0),
                     ),
                     keyboardType: TextInputType.datetime,
                     onTap: () {
@@ -305,24 +304,72 @@ class SignUpPageState extends State<SignUpPage> {
                       filled: true,
                       fillColor: const Color(0x80B2EBF2), // Half lighter tint of the background color
                       contentPadding: const EdgeInsets.fromLTRB(12.0, 15.0, 12.0, 15.0),
-                      suffixIcon: IconButton(
-                        icon: Icon(
-                          _isObscured ? Icons.visibility : Icons.visibility_off,
-                          color: Colors.grey,
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            _isObscured = !_isObscured;
-                          });
-                        },
+                      suffixIcon: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IconButton(
+                            icon: Icon(
+                              _isObscured ? Icons.visibility : Icons.visibility_off,
+                              color: Colors.grey,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _isObscured = !_isObscured;
+                              });
+                            },
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.help_outline, color: Colors.grey),
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: const Text('Password Criteria'),
+                                    content: const SingleChildScrollView(
+                                      child: ListBody(
+                                        children: [
+                                          Text('• At least 8 characters', textAlign: TextAlign.start),
+                                          Text('• Contains both upper and lower case letters', textAlign: TextAlign.start),
+                                          Text('• Contains at least one number', textAlign: TextAlign.start),
+                                          Text('• Contains at least one special character', textAlign: TextAlign.start),
+                                        ],
+                                      ),
+                                    ),
+                                    actions: [
+                                      TextButton(
+                                        child: const Text('OK'),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            },
+                          ),
+                        ],
                       ),
                     ),
                     obscureText: _isObscured,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter a password';
+                        return 'Enter a valid password';
                       } else if (value.length < 8) {
                         return 'Password must be at least 8 characters long';
+                      } else if (!RegExp(
+                          r'(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+{}|:;<>,.?/~]).{8,}')
+                          .hasMatch(value)) {
+                        String error = '';
+                        if (!RegExp(r'(?=.*[0-9])').hasMatch(value)) {
+                          error += 'At least one number required.\n';
+                        }
+                        if (!RegExp(r'(?=.*[!@#$%^&*()_+{}|:;<>,.?/~])')
+                            .hasMatch(value)) {
+                          error += 'At least one special symbol required.\n';
+                        }
+                        return error.trim();
                       }
                       return null;
                     },
@@ -332,21 +379,48 @@ class SignUpPageState extends State<SignUpPage> {
                   TextFormField(
                     controller: _confirmPasswordController,
                     decoration: InputDecoration(
-                      labelText: 'Password',
+                      labelText: 'Confirm Password',
                       border: const OutlineInputBorder(),
                       filled: true,
                       fillColor: const Color(0x80B2EBF2), // Half lighter tint of the background color
                       contentPadding: const EdgeInsets.fromLTRB(12.0, 15.0, 12.0, 15.0),
-                      suffixIcon: IconButton(
-                        icon: Icon(
-                          _isObscured2 ? Icons.visibility : Icons.visibility_off,
-                          color: Colors.grey,
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            _isObscured2 = !_isObscured2;
-                          });
-                        },
+                      suffixIcon: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IconButton(
+                            icon: Icon(
+                              _isObscured2 ? Icons.visibility : Icons.visibility_off,
+                              color: Colors.grey,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _isObscured2 = !_isObscured2;
+                              });
+                            },
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.help_outline, color: Colors.grey),
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: const Text('Confirm Password Criteria'),
+                                    content: const Text('Same as password entered above'),
+                                    actions: [
+                                      TextButton(
+                                        child: const Text('OK'),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            },
+                          ),
+                        ],
                       ),
                     ),
                     obscureText: _isObscured2,
@@ -447,3 +521,6 @@ class SignUpPageState extends State<SignUpPage> {
     }
   }
 }
+
+
+

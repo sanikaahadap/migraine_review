@@ -2,14 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:neurooooo/login/login_signup_page.dart';
-import 'package:neurooooo/main_features/ehr/ehr_entry.dart';
+import 'package:neurooooo/main_features/ehr/ehr_main_page.dart';
 import 'package:neurooooo/main_features/midas_assessment/midas.dart';
-import 'package:neurooooo/onboarding/animated_page.dart';
 import 'package:neurooooo/salient_features.dart';
 import 'package:neurooooo/user_home/doctor_info_page.dart';
-import 'package:neurooooo/user_home/instruction_manual.dart';
 import 'package:neurooooo/main_features/faqs/faqs.dart';
-import 'package:neurooooo/main_features/calendar/calendar.dart';
 import 'package:neurooooo/user_home/privacy_policy.dart';
 import 'package:neurooooo/user_home/profile.dart';
 import 'package:neurooooo/main_features/personal_diary/diary.dart';
@@ -72,7 +69,7 @@ class HomePageState extends State<HomePage> {
   void signUserOut(BuildContext context) {
     FirebaseAuth.instance.signOut().then((_) {
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => LoginSignupPage()),
+        MaterialPageRoute(builder: (context) => const LoginSignupPage()),
       );
     });
   }
@@ -83,7 +80,7 @@ class HomePageState extends State<HomePage> {
 
     DocumentSnapshot snap =
         await firebaseFirestore.collection('users').doc(currentUser.uid).get();
-    log('sssssssss ${snap["email"]}');
+    log('Email :  ${snap["email"]}');
     return ModelUser.fromSnap(snap);
   }
   Widget _buildCard({
@@ -254,7 +251,7 @@ class HomePageState extends State<HomePage> {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const Ehrmainpg()),
+                          MaterialPageRoute(builder: (context) => const EhrMainPage()),
                         );
                       },
                       icon: const Icon(Icons.assignment, color: Colors.white),

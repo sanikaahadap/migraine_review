@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -39,23 +41,23 @@ class AnalysisPageState extends State<AnalysisPage> {
       for (var doc in querySnapshot.docs) {
         List<dynamic> triggers = doc['headacheTriggers'];
 
-        print('Triggers for document ${doc.id}: $triggers');
+        log('Triggers for document ${doc.id}: $triggers');
 
         for (String trigger in triggers) {
           _triggersFrequency[trigger] = (_triggersFrequency[trigger] ?? 0) + 1;
         }
       }
 
-      print('Triggers frequency: $_triggersFrequency');
+      log('Triggers frequency: $_triggersFrequency');
 
       // Filter triggers that occur at least twice
       _triggersFrequency.removeWhere((key, value) => value < 2);
 
-      print('Filtered triggers frequency: $_triggersFrequency');
+      log('Filtered triggers frequency: $_triggersFrequency');
 
       setState(() {});
     } catch (e) {
-      print('Error analyzing data: $e');
+      log('Error analyzing data: $e');
     }
   }
 
@@ -158,14 +160,14 @@ class AnalysisPageState extends State<AnalysisPage> {
                       );
                     },
                   ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
-            Center(child: Notifs()),
-            SizedBox(
+            const Center(child: Notifs()),
+            const SizedBox(
               height: 20,
             ),
-            Center(child: MidasNotifs()),
+            const Center(child: MidasNotifs()),
           ],
         ),
       ),

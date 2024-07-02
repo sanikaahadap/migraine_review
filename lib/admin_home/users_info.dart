@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import 'package:neurooooo/admin_home/admin_home.dart';
-import 'package:neurooooo/admin_home/user_pdf_upload.dart';
 import 'package:neurooooo/admin_home/users_graph.dart';
-import 'package:neurooooo/main_features/ehr/ehr_graph.dart';
 import 'package:easy_pdf_viewer/easy_pdf_viewer.dart';
 
 class UserDetailsPage extends StatelessWidget {
@@ -16,12 +14,12 @@ class UserDetailsPage extends StatelessWidget {
   Widget build(BuildContext context)  {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xFF16666B),
+        backgroundColor: const Color(0xFF16666B),
         title: RichText(
           text: TextSpan(
             children: [
-              TextSpan(
-                text: 'Patient Details: ',
+              const TextSpan(
+                text: 'Patient : ',
                 style: TextStyle(
                   fontSize: 20.0, // Adjust the font size to fit the screen
                   color: Colors.white70, // Make sure the text color is visible
@@ -29,7 +27,7 @@ class UserDetailsPage extends StatelessWidget {
               ),
               TextSpan(
                 text: user.name,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.w900,
                 ),
@@ -41,14 +39,14 @@ class UserDetailsPage extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.all(16.0),
         children: [
-          _buildSectionTitle('Patient Details'),
+          // _buildSectionTitle('Patient Details'),
           _buildDetailItem('Name', user.name, Icons.person),
           _buildDetailItem('Age', _calculateAge(user.dob), Icons.cake),
           _buildGenderDetailItem(user.uid), // Use FutureBuilder for gender
 
           const SizedBox(height: 20),
 
-          _buildSectionTitle('EHR Scores'),
+          _buildSectionTitle('MIDAS Scores'),
           _buildEhrScores(user.uid), // Display EHR scores
 
           const SizedBox(height: 20),
@@ -155,7 +153,7 @@ class UserDetailsPage extends StatelessWidget {
           itemBuilder: (context, index) {
             Map<String, dynamic> data = documents[index].data() as Map<String, dynamic>;
 
-            double score = data['score']?.toDouble() ?? 0.0; // Provide a default value if score is null
+            int score = data['score']?.toInt() ?? 0; // Provide a default value if score is null
             Timestamp timestamp = data['timestamp'] as Timestamp; // Ensure timestamp is cast correctly
             DateTime dateTime = timestamp.toDate();
             String formattedDate = DateFormat.yMMMd().add_jm().format(dateTime);
@@ -163,9 +161,15 @@ class UserDetailsPage extends StatelessWidget {
             return Card(
               margin: const EdgeInsets.symmetric(vertical: 8.0),
               child: ListTile(
-                leading: const Icon(Icons.assessment, color: Colors.green),
-                title: Text('MIDAS Score: $score'),
-                subtitle: Text('Recorded on: $formattedDate'),
+                leading: CircleAvatar(
+                  radius: 20,
+                  backgroundColor: Colors.green,
+                  child: Text(
+                    '$score',
+                    style: const TextStyle(fontSize: 20.0,color: Colors.white, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                title: Text(formattedDate),
               ),
             );
           },
@@ -173,6 +177,7 @@ class UserDetailsPage extends StatelessWidget {
       },
     );
   }
+
 
   Widget _buildPatientDocuments(String uid) {
     return FutureBuilder<QuerySnapshot>(

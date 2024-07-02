@@ -2,13 +2,11 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:neurooooo/login/login.dart';
 import 'package:neurooooo/login/signup.dart';
-// import 'package:neurooooo/user_home/nav_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserInfoPage extends StatefulWidget {
   const UserInfoPage({super.key});
-
 
   @override
   UserInfoPageState createState() => UserInfoPageState();
@@ -19,31 +17,6 @@ class UserInfoPageState extends State<UserInfoPage> {
   final TextEditingController medicalConditionController = TextEditingController();
   final TextEditingController medicationsController = TextEditingController();
   final TextEditingController surgeriesController = TextEditingController();
-
-  // late String patientId = ''; // Variable to store patient_id
-  //
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   fetchPatientId(); // Fetch patient_id when the page initializes
-  // }
-  //
-  // void fetchPatientId() async {
-  //   String? uid = FirebaseAuth.instance.currentUser?.uid;
-  //   if (uid != null) {
-  //     try {
-  //       DocumentSnapshot userInfoDoc = await FirebaseFirestore.instance.collection('users').doc(uid).get();
-  //       if (userInfoDoc.exists) {
-  //         setState(() {
-  //           patientId = userInfoDoc['patient_id'];
-  //           log('Fetched patientId: $patientId'); // Add this for debugging
-  //         });
-  //       }
-  //     } catch (e) {
-  //       log("Error fetching patient_id: $e");
-  //     }
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -168,7 +141,7 @@ class UserInfoPageState extends State<UserInfoPage> {
                       }).catchError((error) {
                         // Handle errors if any
                         log("Failed to add user information: $error");
-                        // You might want to show a snackbar or dialog to inform the user about the failure
+                        // You might want to show a snack-bar or dialog to inform the user about the failure
                       });
                     } else {
                       // Handle the case when the user is not authenticated

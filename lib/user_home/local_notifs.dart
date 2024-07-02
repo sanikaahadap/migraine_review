@@ -1,11 +1,11 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 import 'package:rxdart/rxdart.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LocalNotifications {
@@ -28,10 +28,12 @@ class LocalNotifications {
         AndroidInitializationSettings('@mipmap/notif_icon');
     final DarwinInitializationSettings initializationSettingsDarwin =
         DarwinInitializationSettings(
+      // ignore: avoid_returning_null_for_void
       onDidReceiveLocalNotification: (id, title, body, payload) => null,
     );
+    // ignore: prefer_const_declarations
     final LinuxInitializationSettings initializationSettingsLinux =
-        LinuxInitializationSettings(defaultActionName: 'Open notification');
+        const LinuxInitializationSettings(defaultActionName: 'Open notification');
     final InitializationSettings initializationSettings =
         InitializationSettings(
             android: initializationSettingsAndroid,
@@ -91,7 +93,7 @@ class LocalNotifications {
       matchDateTimeComponents: DateTimeComponents.time,
     )
         .catchError((error) {
-      print('Error scheduling daily notification: $error');
+      log('Error scheduling daily notification: $error');
     });
   }
 
@@ -126,16 +128,16 @@ class _NotifsState extends State<Notifs> {
 
   requestPermissions() async {
     if (await Permission.scheduleExactAlarm.request().isGranted) {
-      print("Exact alarm permission granted");
+      log("Exact alarm permission granted");
     } else {
-      print("Exact alarm permission denied");
+      log("Exact alarm permission denied");
     }
   }
 
   listenToNotifications() {
-    print("Listening to notification");
+    log("Listening to notification");
     LocalNotifications.onClickNotification.stream.listen((event) {
-      print(event);
+      log(event);
       Navigator.pushNamed(context, '/another', arguments: event);
     });
   }
@@ -150,7 +152,7 @@ class _NotifsState extends State<Notifs> {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton.icon(
-      icon: Icon(Icons.notifications_outlined),
+      icon: const Icon(Icons.notifications_outlined),
       onPressed: () async {
         final selectedTime = await showTimePicker(
           context: context,
@@ -161,9 +163,9 @@ class _NotifsState extends State<Notifs> {
           await _setNotificationTime(selectedTime);
         }
       },
-      label: Text("Schedule a daily notification for Diary"),
+      label: const Text("Schedule a daily notification for Diary"),
       style: ElevatedButton.styleFrom(
-        backgroundColor: Color(0xFF16666B), // background color
+        backgroundColor: const Color(0xFF16666B), // background color
         foregroundColor: Colors.white, // text and icon color
       ),
     );

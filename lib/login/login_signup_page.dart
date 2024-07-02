@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:neurooooo/login/admin_login.dart';
 import 'package:neurooooo/login/login.dart';
-import 'package:neurooooo/onboarding/userinfopage.dart';
+import 'package:neurooooo/onboarding/user_info_page.dart';
 
 class LoginSignupPage extends StatelessWidget {
   const LoginSignupPage({super.key});
@@ -110,5 +110,3 @@ class LoginSignupPage extends StatelessWidget {
     );
   }
 }
-
-

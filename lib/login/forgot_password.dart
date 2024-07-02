@@ -1,16 +1,17 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class Forgotpasspg extends StatefulWidget {
-  const Forgotpasspg({super.key});
+class ForgotPassword extends StatefulWidget {
+  const ForgotPassword({super.key});
 
   @override
-  State<Forgotpasspg> createState() => _ForgotpasspgState();
+  State<ForgotPassword> createState() => _ForgotPasswordState();
 }
 
-class _ForgotpasspgState extends State<Forgotpasspg> {
+class _ForgotPasswordState extends State<ForgotPassword> {
   final TextEditingController _emailController = TextEditingController();
   @override
   void dispose() {
@@ -30,7 +31,7 @@ class _ForgotpasspgState extends State<Forgotpasspg> {
             );
           });
     } on FirebaseAuthException catch (e) {
-      print(e);
+      log(e as String);
       showDialog(
           context: context,
           builder: (context) {

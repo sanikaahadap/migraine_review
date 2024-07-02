@@ -11,6 +11,7 @@ class UserService {
       List<ModelUser> users = querySnapshot.docs.map((doc) => ModelUser.fromSnap(doc)).toList();
       return users;
     } catch (error) {
+      // ignore: avoid_print
       print('Error fetching users: $error');
       return []; // Return an empty list if an error occurs
     }

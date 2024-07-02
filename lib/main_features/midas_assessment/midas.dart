@@ -123,6 +123,16 @@ class MIDASAssessmentPageState extends State<MIDASAssessmentPage> {
                     : 'Questionnaire already filled',
               ),
             ),
+            const SizedBox(height: 20),
+            if (!_canFillQuestionnaire)
+              const Text(
+                'We\'ll notify you when its time to fill it again',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.red,
+                ),
+                textAlign: TextAlign.center,
+              ),
           ],
         ),
       ),

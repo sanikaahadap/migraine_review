@@ -2,13 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
 import '../main_features/ehr/ehr_graph.dart';
 
 class GraphChart extends StatelessWidget {
   final String uid;
 
-  GraphChart({required this.uid});
+  const GraphChart({super.key, required this.uid});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +18,7 @@ class GraphChart extends StatelessWidget {
       stream: scores.where('uid', isEqualTo: uid).snapshots(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         }
 
         if (snapshot.hasError) {
@@ -28,7 +27,7 @@ class GraphChart extends StatelessWidget {
 
         final scoreDocs = snapshot.data!.docs;
         if (scoreDocs.isEmpty) {
-          return Center(child: Text('No scores available'));
+          return const Center(child: Text('No scores available'));
         }
 
         final scoreDataList = scoreDocs
