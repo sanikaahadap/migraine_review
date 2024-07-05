@@ -11,7 +11,7 @@ class UserDetailsPage extends StatelessWidget {
   const UserDetailsPage({super.key, required this.user});
 
   @override
-  Widget build(BuildContext context)  {
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xFF16666B),
@@ -66,7 +66,8 @@ class UserDetailsPage extends StatelessWidget {
     DateTime dob = DateTime.parse(dobTimestamp); // Parsing string to DateTime
     DateTime now = DateTime.now();
     int age = now.year - dob.year;
-    if (now.month < dob.month || (now.month == dob.month && now.day < dob.day)) {
+    if (now.month < dob.month ||
+        (now.month == dob.month && now.day < dob.day)) {
       age--;
     }
     return age.toString();
@@ -78,7 +79,8 @@ class UserDetailsPage extends StatelessWidget {
 
     if (snapshot.exists) {
       final data = snapshot.data()!;
-      return data['gender'] ?? 'N/A'; // Provide default value if gender is missing
+      return data['gender'] ??
+          'N/A'; // Provide default value if gender is missing
     } else {
       return 'Error: User info not found';
     }
@@ -93,7 +95,8 @@ class UserDetailsPage extends StatelessWidget {
         }
 
         if (snapshot.hasError) {
-          return _buildDetailItem('Gender', 'Error: ${snapshot.error}', Icons.wc);
+          return _buildDetailItem(
+              'Gender', 'Error: ${snapshot.error}', Icons.wc);
         }
 
         return _buildDetailItem('Gender', snapshot.data ?? 'N/A', Icons.wc);
@@ -130,7 +133,11 @@ class UserDetailsPage extends StatelessWidget {
 
   Widget _buildEhrScores(String uid) {
     return FutureBuilder<QuerySnapshot>(
-      future: FirebaseFirestore.instance.collection('midas_scores').where('uid', isEqualTo: uid).get(),
+      future: FirebaseFirestore.instance
+          .collection('midas_scores')
+          .where('uid', isEqualTo: uid)
+          .orderBy('timestamp', descending: true)
+          .get(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
@@ -151,10 +158,13 @@ class UserDetailsPage extends StatelessWidget {
           physics: const NeverScrollableScrollPhysics(),
           itemCount: documents.length,
           itemBuilder: (context, index) {
-            Map<String, dynamic> data = documents[index].data() as Map<String, dynamic>;
+            Map<String, dynamic> data =
+                documents[index].data() as Map<String, dynamic>;
 
-            int score = data['score']?.toInt() ?? 0; // Provide a default value if score is null
-            Timestamp timestamp = data['timestamp'] as Timestamp; // Ensure timestamp is cast correctly
+            int score = data['score']?.toInt() ??
+                0; // Provide a default value if score is null
+            Timestamp timestamp = data['timestamp']
+                as Timestamp; // Ensure timestamp is cast correctly
             DateTime dateTime = timestamp.toDate();
             String formattedDate = DateFormat.yMMMd().add_jm().format(dateTime);
 
@@ -166,7 +176,10 @@ class UserDetailsPage extends StatelessWidget {
                   backgroundColor: Colors.green,
                   child: Text(
                     '$score',
-                    style: const TextStyle(fontSize: 20.0,color: Colors.white, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                        fontSize: 20.0,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold),
                   ),
                 ),
                 title: Text(formattedDate),
@@ -178,10 +191,12 @@ class UserDetailsPage extends StatelessWidget {
     );
   }
 
-
   Widget _buildPatientDocuments(String uid) {
     return FutureBuilder<QuerySnapshot>(
-      future: FirebaseFirestore.instance.collection('docs').where('uid', isEqualTo: uid).get(),
+      future: FirebaseFirestore.instance
+          .collection('docs')
+          .where('uid', isEqualTo: uid)
+          .get(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
@@ -202,14 +217,16 @@ class UserDetailsPage extends StatelessWidget {
           physics: const NeverScrollableScrollPhysics(),
           itemCount: documents.length,
           itemBuilder: (context, index) {
-            Map<String, dynamic> data = documents[index].data() as Map<String, dynamic>;
+            Map<String, dynamic> data =
+                documents[index].data() as Map<String, dynamic>;
             String pdfName = data['pdf_name'] ?? 'Unnamed Document';
             String pdfUrl = data['download_url'] ?? '';
 
             return Card(
               margin: const EdgeInsets.symmetric(vertical: 8.0),
               child: ListTile(
-                leading: const Icon(Icons.picture_as_pdf, color: Colors.redAccent),
+                leading:
+                    const Icon(Icons.picture_as_pdf, color: Colors.redAccent),
                 title: Text(pdfName),
                 onTap: () {
                   Navigator.of(context).push(

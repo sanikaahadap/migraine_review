@@ -71,15 +71,45 @@ class GraphChart extends StatelessWidget {
             padding: const EdgeInsets.all(16.0),
             child: LineChart(
               LineChartData(
+                axisTitleData: FlAxisTitleData(
+                  leftTitle: AxisTitle(
+                    margin: 15,
+                    showTitle: true,
+                    titleText: 'Scores',
+                    textStyle: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                    ),
+                  ),
+                  bottomTitle: AxisTitle(
+                    margin: 1,
+                    showTitle: true,
+                    titleText: 'Date',
+                    textStyle: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                    ),
+                  ),
+                ),
                 titlesData: FlTitlesData(
                   bottomTitles: SideTitles(
-                    showTitles: false,
-                    reservedSize: 22,
+                    showTitles: true,
+                    reservedSize: 10,
                     margin: 10,
-                    getTitles: getXTitles,
+                    getTitles: (value) {
+                      // Here we determine which titles to show based on the value
+                      // This is a simple example; adjust logic as needed
+                      int index = value.toInt();
+                      if (index % 5 == 0) {
+                        // Show titles for every 5th index
+                        return DateFormat('MM/dd').format(
+                            DateTime.fromMillisecondsSinceEpoch(value.toInt()));
+                      }
+                      return '';
+                    },
                     getTextStyles: (BuildContext context, double value) {
                       return const TextStyle(
-                        color: Colors.black,
+                        color: Colors.blue,
                         fontSize: 12,
                       );
                     },
@@ -107,7 +137,7 @@ class GraphChart extends StatelessWidget {
                   LineChartBarData(
                     spots: spots,
                     isCurved: false,
-                    colors: [const Color.fromARGB(255, 88, 180, 255)],
+                    colors: [const Color.fromARGB(255, 85, 190, 83)],
                     barWidth: 4,
                     isStrokeCapRound: true,
                     belowBarData: BarAreaData(show: false),
