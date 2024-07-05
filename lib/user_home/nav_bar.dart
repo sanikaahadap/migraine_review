@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:neurooooo/user_home/home.dart';
-import 'package:neurooooo/user_home/notifications.dart';
+import 'package:neurooooo/user_home/trigger_notifi.dart';
 import 'package:neurooooo/user_home/instruction_manual.dart';
 
 class CustomBottomNavigationBar extends StatefulWidget {
@@ -33,7 +33,8 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: selectedIndex,
         type: BottomNavigationBarType.fixed,
-        selectedItemColor: const Color(0xFF16666B), // Color for the selected item
+        selectedItemColor:
+            const Color(0xFF16666B), // Color for the selected item
         onTap: _navigate,
         items: const [
           BottomNavigationBarItem(

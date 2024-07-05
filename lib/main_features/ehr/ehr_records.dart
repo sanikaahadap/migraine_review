@@ -18,8 +18,8 @@ class _EhrRecordsPageState extends State<EhrRecordsPage> {
         .collection('midas_scores')
         .get()
         .then((snapshot) => snapshot.docs.forEach((document) {
-      docIDs.add(document.reference.id);
-    }));
+              docIDs.add(document.reference.id);
+            }));
   }
 
   final List<Color> gradientColors = [
@@ -33,7 +33,8 @@ class _EhrRecordsPageState extends State<EhrRecordsPage> {
       builder: (BuildContext context) {
         return AlertDialog(
           backgroundColor: const Color(0xff16666b), // Custom theme color
-          title: const Text('MIDAS Scores Information', style: TextStyle(color: Colors.white)),
+          title: const Text('MIDAS Scores Information',
+              style: TextStyle(color: Colors.white)),
           content: const SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -45,7 +46,8 @@ class _EhrRecordsPageState extends State<EhrRecordsPage> {
                 SizedBox(height: 10),
                 Text(
                   'Score Ranges:',
-                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: 5),
                 Text(
@@ -67,7 +69,8 @@ class _EhrRecordsPageState extends State<EhrRecordsPage> {
                 SizedBox(height: 10),
                 Text(
                   'Disclaimer:',
-                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: 5),
                 Text(
@@ -106,15 +109,9 @@ class _EhrRecordsPageState extends State<EhrRecordsPage> {
         child: Column(
           children: [
             SizedBox(
-              height: 5,
+              height: 20,
             ),
-            SizedBox(
-              height: 400,
-              child: EhrGraphPage(),
-            ),
-            SizedBox(
-              height: 5,
-            ),
+            EhrGraphPage(),
             Expanded(
               child: GetScore(),
             )

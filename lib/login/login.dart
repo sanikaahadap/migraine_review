@@ -70,8 +70,8 @@ class LoginPageState extends State<LoginPage> {
             );
           },
         ),
-          // Your app bar content goes here
-          ),
+        // Your app bar content goes here
+      ),
       body: SingleChildScrollView(
         child: Container(
           padding: const EdgeInsets.all(16.0),
@@ -118,8 +118,10 @@ class LoginPageState extends State<LoginPage> {
                       labelText: 'Password',
                       border: const OutlineInputBorder(),
                       filled: true,
-                      fillColor: const Color(0x80B2EBF2), // Half lighter tint of the background color
-                      contentPadding: const EdgeInsets.fromLTRB(12.0, 15.0, 12.0, 15.0),
+                      fillColor: const Color(
+                          0x80B2EBF2), // Half lighter tint of the background color
+                      contentPadding:
+                          const EdgeInsets.fromLTRB(12.0, 15.0, 12.0, 15.0),
                       suffixIcon: IconButton(
                         icon: Icon(
                           _isObscured ? Icons.visibility : Icons.visibility_off,
@@ -222,7 +224,8 @@ class LoginPageState extends State<LoginPage> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const DisclaimerPage()),
+                        MaterialPageRoute(
+                            builder: (context) => const DisclaimerPage()),
                       );
                     },
                     child: const Text(
@@ -235,7 +238,8 @@ class LoginPageState extends State<LoginPage> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const Features()),
+                        MaterialPageRoute(
+                            builder: (context) => const Features()),
                       );
                     },
                     child: const Text(

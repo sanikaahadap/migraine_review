@@ -59,62 +59,92 @@ class EhrGraphPage extends StatelessWidget {
 
         return Center(
           child: Container(
-            width: MediaQuery.of(context).size.width *
-                0.8, // Adjust width as needed
-            height: MediaQuery.of(context).size.height *
-                0.4, // Adjust height as needed
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8.0),
-              color: Colors.white,
-            ),
-            padding: const EdgeInsets.all(16.0),
-            child: LineChart(
-              LineChartData(
-                titlesData: FlTitlesData(
-                  bottomTitles: SideTitles(
-                    showTitles: false,
-                    reservedSize: 22,
-                    margin: 10,
-                    getTitles: getXTitles,
-                    getTextStyles: (BuildContext context, double value) {
-                      return const TextStyle(
-                        color: Colors.black,
-                        fontSize: 12,
-                      );
-                    },
-                  ),
-                  leftTitles: SideTitles(
-                    interval: 5,
-                    showTitles: true,
-                    reservedSize: 10,
-                    getTextStyles: (BuildContext context, double value) {
-                      return const TextStyle(
-                        color: Colors.black,
-                        fontSize: 12,
-                      );
-                    },
-                  ),
-                ),
-                borderData: FlBorderData(show: true),
-                minX: scoreDataList.first.dateTime.millisecondsSinceEpoch
-                    .toDouble(),
-                maxX: scoreDataList.last.dateTime.millisecondsSinceEpoch
-                    .toDouble(),
-                minY: 0,
-                maxY: 30, // Set maximum score value as needed
-                lineBarsData: [
-                  LineChartBarData(
-                    spots: spots,
-                    isCurved: false,
-                    colors: [const Color.fromARGB(255, 88, 180, 255)],
-                    barWidth: 4,
-                    isStrokeCapRound: true,
-                    belowBarData: BarAreaData(show: false),
-                  ),
-                ],
+              width: MediaQuery.of(context).size.width *
+                  0.8, // Adjust width as needed
+              height: MediaQuery.of(context).size.height *
+                  0.4, // Adjust height as needed
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8.0),
+                color: Colors.white,
               ),
-            ),
-          ),
+              padding: const EdgeInsets.all(16.0),
+              child: LineChart(
+                LineChartData(
+                  axisTitleData: FlAxisTitleData(
+                    leftTitle: AxisTitle(
+                      margin: 15,
+                      showTitle: true,
+                      titleText: 'Scores',
+                      textStyle: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                      ),
+                    ),
+                    bottomTitle: AxisTitle(
+                      margin: 1,
+                      showTitle: true,
+                      titleText: 'Date',
+                      textStyle: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                      ),
+                    ),
+                  ),
+                  titlesData: FlTitlesData(
+                    bottomTitles: SideTitles(
+                      showTitles: true,
+                      reservedSize: 10,
+                      margin: 10,
+                      getTitles: (value) {
+                        // Here we determine which titles to show based on the value
+                        // This is a simple example; adjust logic as needed
+                        int index = value.toInt();
+                        if (index % 5 == 0) {
+                          // Show titles for every 5th index
+                          return DateFormat('MM/dd').format(
+                              DateTime.fromMillisecondsSinceEpoch(
+                                  value.toInt()));
+                        }
+                        return '';
+                      },
+                      getTextStyles: (BuildContext context, double value) {
+                        return const TextStyle(
+                          color: Colors.blue,
+                          fontSize: 12,
+                        );
+                      },
+                    ),
+                    leftTitles: SideTitles(
+                      interval: 5,
+                      showTitles: true,
+                      reservedSize: 10,
+                      getTextStyles: (BuildContext context, double value) {
+                        return const TextStyle(
+                          color: Colors.black,
+                          fontSize: 12,
+                        );
+                      },
+                    ),
+                  ),
+                  borderData: FlBorderData(show: true),
+                  minX: scoreDataList.first.dateTime.millisecondsSinceEpoch
+                      .toDouble(),
+                  maxX: scoreDataList.last.dateTime.millisecondsSinceEpoch
+                      .toDouble(),
+                  minY: 0,
+                  maxY: 30, // Set maximum score value as needed
+                  lineBarsData: [
+                    LineChartBarData(
+                      spots: spots,
+                      isCurved: false,
+                      colors: [const Color.fromARGB(255, 85, 190, 83)],
+                      barWidth: 4,
+                      isStrokeCapRound: true,
+                      belowBarData: BarAreaData(show: false),
+                    ),
+                  ],
+                ),
+              )),
         );
       },
     );

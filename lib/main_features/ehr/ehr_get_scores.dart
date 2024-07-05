@@ -11,11 +11,14 @@ class GetScore extends StatelessWidget {
     String currentUserUID = FirebaseAuth.instance.currentUser!.uid;
 
     CollectionReference scores =
-    FirebaseFirestore.instance.collection('midas_scores');
+        FirebaseFirestore.instance.collection('midas_scores');
 
     return Scaffold(
       body: StreamBuilder<QuerySnapshot>(
-        stream: scores.where('uid', isEqualTo: currentUserUID).snapshots(),
+        stream: scores
+            .where('uid', isEqualTo: currentUserUID)
+            .orderBy('timestamp', descending: true)
+            .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -46,14 +49,14 @@ class GetScore extends StatelessWidget {
             itemBuilder: (context, index) {
               // Access each score document
               Map<String, dynamic> data =
-              (snapshot.data!.docs[index].data() as Map<String, dynamic>);
+                  (snapshot.data!.docs[index].data() as Map<String, dynamic>);
               String score = data['score'].toString();
 
               // Access the timestamp and format it to display the date
               Timestamp timestamp = data['timestamp'];
               DateTime dateTime = timestamp.toDate();
               String formattedDate =
-              DateFormat.yMMMd().add_jm().format(dateTime);
+                  DateFormat.yMMMd().add_jm().format(dateTime);
 
               // Return a widget to display the score and date
               return Card(
@@ -65,7 +68,7 @@ class GetScore extends StatelessWidget {
                     height: 50,
                     decoration: const BoxDecoration(
                       shape: BoxShape.circle,
-                      color: Colors.blue, // You can change the color here
+                      color: Color(0xFF16666B), // You can change the color here
                     ),
                     child: Center(
                       child: Text(
@@ -82,7 +85,6 @@ class GetScore extends StatelessWidget {
                     formattedDate,
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
-
                 ),
               );
             },
