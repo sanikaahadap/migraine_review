@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:neurooooo/admin_home/admin_home.dart';
-import 'package:neurooooo/login/login_signup_page.dart'; // Import the AdminHomePage
+import 'package:neurooooo/login/login_signup_page.dart';
+import 'package:neurooooo/login/forgot_password.dart'; // Import the ForgotPasswordPage
 
 class AdminLoginPage extends StatefulWidget {
   const AdminLoginPage({Key? key}) : super(key: key);
@@ -12,6 +13,7 @@ class AdminLoginPage extends StatefulWidget {
 class AdminLoginPageState extends State<AdminLoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  bool _obscureText = true;
 
   @override
   void initState() {
@@ -52,28 +54,31 @@ class AdminLoginPageState extends State<AdminLoginPage> {
               ),
               const SizedBox(height: 16.0),
               // email field
-              TextField(
-                decoration:  InputDecoration(
-                  labelText: _emailController.text,
-                ),
-                enabled: false, // Makes the TextField read-only
-              ),
-              const SizedBox(height: 16.0),
+
               // Password field
               TextField(
                 controller: _passwordController,
-                obscureText: true,
-                decoration: const InputDecoration(
+                obscureText: _obscureText,
+                decoration: InputDecoration(
                   labelText: 'Password',
                   hintText: 'Enter your password',
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _obscureText ? Icons.visibility : Icons.visibility_off,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _obscureText = !_obscureText;
+                      });
+                    },
+                  ),
                 ),
               ),
               const SizedBox(height: 16.0),
               ElevatedButton(
                 onPressed: () {
                   // Basic authentication
-                  if (
-                      _passwordController.text == 'bindu') {
+                  if (_passwordController.text == 'password_9') {
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(builder: (context) => AdminHomePage()),
@@ -106,6 +111,19 @@ class AdminLoginPageState extends State<AdminLoginPage> {
                 child: const Text(
                   'Login',
                   style: TextStyle(fontSize: 17.0, color: Colors.white),
+                ),
+              ),
+              const SizedBox(height: 16.0),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const ForgotPassword()),
+                  );
+                },
+                child: const Text(
+                  'Forgot Password?',
+                  style: TextStyle(color: Color(0xFF16666B)),
                 ),
               ),
             ],
