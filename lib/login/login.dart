@@ -1,61 +1,28 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'dart:developer';
-import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:neurooooo/login/login_signup_page.dart';
-import 'package:neurooooo/onboarding/features.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:neurooooo/admin_home/admin_home.dart';
 import 'package:neurooooo/login/forgot_password.dart';
-import 'package:neurooooo/onboarding/user_info_page.dart';
+import 'package:neurooooo/onboarding/features.dart';
 import 'package:neurooooo/user_home/nav_bar.dart';
-import 'package:crypto/crypto.dart';
+// import 'package:crypto/crypto.dart';
+// import 'dart:convert';
+import 'dart:developer';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+  const LoginPage({Key? key}) : super(key: key);
 
   @override
-  LoginPageState createState() => LoginPageState();
+  _LoginPageState createState() => _LoginPageState();
 }
 
-class LoginPageState extends State<LoginPage> {
-  bool _isButtonPressed = false;
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  bool _obscureText = true;
+  bool _isButtonPressed = false;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _showInvalidCredentials = false;
-  bool _isObscured = true;
-
-  void login() async {
-    String email = _emailController.text.trim();
-    String password = _passwordController.text.trim();
-
-    if (email.isEmpty || password.isEmpty) {
-      log("Please fill all the fields!");
-    } else {
-      String hashedPassword = hashPassword(password);
-      log(hashedPassword);
-      try {
-        UserCredential userCredential =
-            await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: email,
-          password: password,
-        );
-        if (userCredential.user != null) {
-          Navigator.popUntil(context, (route) => route.isFirst);
-          Navigator.pushReplacement(
-            context,
-            CupertinoPageRoute(
-                builder: (context) => const CustomBottomNavigationBar()),
-          );
-        }
-      } on FirebaseAuthException catch (ex) {
-        log(ex.code.toString());
-        setState(() {
-          _showInvalidCredentials = true;
-        });
-      }
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,10 +31,7 @@ class LoginPageState extends State<LoginPage> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const LoginSignupPage()),
-            );
+            Navigator.pop(context);
           },
         ),
         // Your app bar content goes here
@@ -79,6 +43,7 @@ class LoginPageState extends State<LoginPage> {
             child: Form(
               key: _formKey,
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const SizedBox(height: 20.0),
                   // Logo image
@@ -98,7 +63,7 @@ class LoginPageState extends State<LoginPage> {
                       fillColor: Color(
                           0x80B2EBF2), // Half lighter tint of the background color
                       contentPadding:
-                          EdgeInsets.fromLTRB(12.0, 15.0, 12.0, 15.0),
+                      EdgeInsets.fromLTRB(12.0, 15.0, 12.0, 15.0),
                     ),
                     keyboardType: TextInputType.emailAddress,
                     validator: (value) {
@@ -114,6 +79,7 @@ class LoginPageState extends State<LoginPage> {
                   // Password field
                   TextFormField(
                     controller: _passwordController,
+                    obscureText: _obscureText,
                     decoration: InputDecoration(
                       labelText: 'Password',
                       border: const OutlineInputBorder(),
@@ -121,43 +87,36 @@ class LoginPageState extends State<LoginPage> {
                       fillColor: const Color(
                           0x80B2EBF2), // Half lighter tint of the background color
                       contentPadding:
-                          const EdgeInsets.fromLTRB(12.0, 15.0, 12.0, 15.0),
+                      const EdgeInsets.fromLTRB(12.0, 15.0, 12.0, 15.0),
                       suffixIcon: IconButton(
                         icon: Icon(
-                          _isObscured ? Icons.visibility : Icons.visibility_off,
+                          _obscureText
+                              ? Icons.visibility
+                              : Icons.visibility_off,
                           color: Colors.grey,
                         ),
                         onPressed: () {
                           setState(() {
-                            _isObscured = !_isObscured;
+                            _obscureText = !_obscureText;
                           });
                         },
                       ),
                     ),
-                    obscureText: _isObscured,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Enter a valid password';
                       } else if (value.length < 8) {
                         return 'Password must be at least 8 characters long';
                       } else if (!RegExp(
-                              r'(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+{}|:;<>,.?/~`]).{8,}')
+                          r'(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+{}|:;<>,.?/~`]).{8,}')
                           .hasMatch(value)) {
-                        String error = '';
-                        if (!RegExp(r'(?=.*[0-9])').hasMatch(value)) {
-                          error += 'At least one number required.\n';
-                        }
-                        if (!RegExp(r'(?=.*[!@#$%^&*()_+{}|:;<>,.?/~`])')
-                            .hasMatch(value)) {
-                          error += 'At least one special symbol required.\n';
-                        }
-                        return error.trim();
+                        return 'Password must contain at least one letter, one number, and one special character';
                       }
                       return null;
                     },
                   ),
                   const SizedBox(height: 40.0),
-                  // Login button without affecting email and password fields
+                  // Login button
                   InkWell(
                     onTap: () {
                       _onLoginButtonPressed();
@@ -210,9 +169,11 @@ class LoginPageState extends State<LoginPage> {
                   GestureDetector(
                     onTap: () {
                       Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const ForgotPassword()));
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const ForgotPassword(),
+                        ),
+                      );
                     },
                     child: const Text(
                       'Forgot Password?',
@@ -225,7 +186,8 @@ class LoginPageState extends State<LoginPage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const DisclaimerPage()),
+                          builder: (context) => const Features(),
+                        ),
                       );
                     },
                     child: const Text(
@@ -239,7 +201,8 @@ class LoginPageState extends State<LoginPage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const Features()),
+                          builder: (context) => const Features(),
+                        ),
                       );
                     },
                     child: const Text(
@@ -256,16 +219,47 @@ class LoginPageState extends State<LoginPage> {
     );
   }
 
-  String hashPassword(String password) {
-    var bytes = utf8.encode(password);
-    var digest = sha256.convert(bytes);
-    return digest.toString();
+  void _onLoginButtonPressed() async {
+    if (_formKey.currentState!.validate()) {
+      try {
+        // Authenticate with Firebase
+        UserCredential userCredential =
+        await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: _emailController.text.trim(),
+          password: _passwordController.text.trim(),
+        );
+
+        // Get user document from Firestore
+        DocumentSnapshot userDoc = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(userCredential.user!.uid)
+            .get();
+
+        // Check if user has admin_role set to true
+        if (userDoc.exists && userDoc['admin_role'] == true) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => AdminHomePage()),
+          );
+        } else {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => CustomBottomNavigationBar()),
+          );
+        }
+      } catch (e) {
+        setState(() {
+          _showInvalidCredentials = true;
+        });
+        log('Error: $e');
+      }
+    }
   }
 
-  void _onLoginButtonPressed() {
-    if (_formKey.currentState!.validate()) {
-      // Perform login logic here using _emailController.text and _passwordController.text
-      login();
-    }
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
   }
 }

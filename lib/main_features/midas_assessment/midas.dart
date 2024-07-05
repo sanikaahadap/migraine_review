@@ -15,7 +15,7 @@ class MIDASAssessmentPage extends StatefulWidget {
 
 class MIDASAssessmentPageState extends State<MIDASAssessmentPage> {
   bool _canFillQuestionnaire =
-      true; // Indicates whether the user can fill the questionnaire
+  true; // Indicates whether the user can fill the questionnaire
   final String _uid = FirebaseAuth.instance.currentUser!.uid;
   late Timer _dailyCheckTimer;
 
@@ -34,14 +34,14 @@ class MIDASAssessmentPageState extends State<MIDASAssessmentPage> {
 
   Future<void> _checkQuestionnaireStatus() async {
     DocumentSnapshot userDoc =
-        await FirebaseFirestore.instance.collection('users').doc(_uid).get();
+    await FirebaseFirestore.instance.collection('users').doc(_uid).get();
     if (userDoc.exists) {
       Map<String, dynamic>? data = userDoc.data() as Map<String, dynamic>?;
       Timestamp? lastFilledTimestamp =
-          data?['lastMIDASFilledTimestamp'] as Timestamp?;
+      data?['lastMIDASFilledTimestamp'] as Timestamp?;
       if (lastFilledTimestamp != null) {
         DateTime threeMonthsAgo =
-            DateTime.now().subtract(const Duration(days: 179));
+        DateTime.now().subtract(const Duration(days: 179));
         DateTime lastFilledDateTime = lastFilledTimestamp.toDate();
         if (lastFilledDateTime.isAfter(threeMonthsAgo)) {
           setState(() {
@@ -78,22 +78,96 @@ class MIDASAssessmentPageState extends State<MIDASAssessmentPage> {
     await LocalNotifications.scheduleDailyNotification();
   }
 
+  void _showInfoDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: const Color(0xff16666b), // Custom theme color
+          title: const Text(
+            'MIDAS Scores Information',
+            style: TextStyle(color: Colors.white),
+          ),
+          content: const SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'MIDAS scores provide a measure of migraine disability. The scores help to understand the impact of migraines on daily activities. Higher scores indicate greater disability.',
+                  style: TextStyle(color: Colors.white),
+                ),
+                SizedBox(height: 10),
+                Text(
+                  'Score Ranges:',
+                  style: TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: 5),
+                Text(
+                  '0-5: Little or no disability',
+                  style: TextStyle(color: Colors.white),
+                ),
+                Text(
+                  '6-10: Mild disability',
+                  style: TextStyle(color: Colors.white),
+                ),
+                Text(
+                  '11-20: Moderate disability',
+                  style: TextStyle(color: Colors.white),
+                ),
+                Text(
+                  '21+: Severe disability',
+                  style: TextStyle(color: Colors.white),
+                ),
+                SizedBox(height: 10),
+                Text(
+                  'Disclaimer:',
+                  style: TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: 5),
+                Text(
+                  'MIDAS scores are not an accurate measure of a patient\'s migraine levels. They are a preliminary score, and patients must consult their professional neurologist for a perfect diagnosis.',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Close', style: TextStyle(color: Colors.white)),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'MIDAS Assessment',
+          'Migraine Assessment',
           style: TextStyle(color: Colors.white),
         ),
         backgroundColor: const Color(0xFF16666B),
+        actions: [
+          IconButton(
+            onPressed: _showInfoDialog,
+            icon: const Icon(Icons.info_outline, color: Colors.white),
+          ),
+        ],
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Text(
-              'MIDAS Assessment',
+              'MIDAS Test',
               style: TextStyle(
                 color: Color(0xFF16666B),
                 fontSize: 24,
@@ -104,14 +178,14 @@ class MIDASAssessmentPageState extends State<MIDASAssessmentPage> {
             ElevatedButton(
               onPressed: _canFillQuestionnaire
                   ? () {
-                      _setQuestionnaireFilled().then((_) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const MIDASQuestions()),
-                        );
-                      });
-                    }
+                _setQuestionnaireFilled().then((_) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const MIDASQuestions()),
+                  );
+                });
+              }
                   : null,
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF16666B), // Background color
@@ -283,12 +357,12 @@ class MIDASQuestionsState extends State<MIDASQuestions> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8.0),
                             color: _selectedOptions[_currentPageIndex] ==
-                                    _options[index]
+                                _options[index]
                                 ? const Color(0xFF16666B)
                                 : Colors.white,
                             border: Border.all(
                               color: _selectedOptions[_currentPageIndex] ==
-                                      _options[index]
+                                  _options[index]
                                   ? const Color(0xFF16666B)
                                   : Colors.black,
                             ),
@@ -299,10 +373,10 @@ class MIDASQuestionsState extends State<MIDASQuestions> {
                             },
                             style: TextButton.styleFrom(
                               backgroundColor:
-                                  _selectedOptions[_currentPageIndex] ==
-                                          _options[index]
-                                      ? const Color(0xFF16666B)
-                                      : Colors.white,
+                              _selectedOptions[_currentPageIndex] ==
+                                  _options[index]
+                                  ? const Color(0xFF16666B)
+                                  : Colors.white,
                             ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -312,10 +386,10 @@ class MIDASQuestionsState extends State<MIDASQuestions> {
                                   style: TextStyle(
                                     fontSize: 16,
                                     color:
-                                        _selectedOptions[_currentPageIndex] ==
-                                                _options[index]
-                                            ? Colors.white
-                                            : const Color(0xFF16666B),
+                                    _selectedOptions[_currentPageIndex] ==
+                                        _options[index]
+                                        ? Colors.white
+                                        : const Color(0xFF16666B),
                                   ),
                                 ),
                                 const SizedBox(width: 5),
@@ -323,7 +397,7 @@ class MIDASQuestionsState extends State<MIDASQuestions> {
                                   _getIconForOption(_options[index]),
                                   size: 30,
                                   color: _selectedOptions[_currentPageIndex] ==
-                                          _options[index]
+                                      _options[index]
                                       ? Colors.white
                                       : const Color(0xFF16666B),
                                 ),
@@ -379,11 +453,11 @@ class MIDASOutputPage extends StatelessWidget {
     FirebaseFirestore.instance
         .collection('midas_scores')
         .add({
-          'score': score,
-          'severity': severity,
-          'timestamp': Timestamp.now(),
-          'uid': FirebaseAuth.instance.currentUser!.uid,
-        })
+      'score': score,
+      'severity': severity,
+      'timestamp': Timestamp.now(),
+      'uid': FirebaseAuth.instance.currentUser!.uid,
+    })
         .then((value) => log("Score and Severity added"))
         .catchError((error) => log("Failed to add score and severity: $error"));
   }
@@ -444,7 +518,7 @@ class MIDASOutputPage extends StatelessWidget {
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
-                                  const CustomBottomNavigationBar()));
+                              const CustomBottomNavigationBar()));
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,
