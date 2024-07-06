@@ -112,6 +112,7 @@ class FAQItem extends StatelessWidget {
           padding: const EdgeInsets.all(10),
           child: Text(
             answer,
+            textAlign: TextAlign.justify,
             style: const TextStyle(
               fontSize: 16,
               color: Colors.black87,

@@ -12,7 +12,7 @@ class SalientFeaturesPage extends StatelessWidget {
     {
       'title': 'Tailored Lifestyle Tips',
       'description':
-      'Curated advice, custom-fit for your lifestyle, empowering you to conquer migraines with practical, personalized guidance.',
+      'Curated advice, custom-fit for your lifestyle, empowering you to conquer migraines with practical and personalized guidance.',
       'image': 'assets/intro_images/intro_2.png'
     },
     {
@@ -108,14 +108,16 @@ class FeatureCard extends StatelessWidget {
               children: [
                 Text(
                   title,
+                  textAlign: TextAlign.start,
                   style: const TextStyle(
-                    fontSize: 20,
+                    fontSize: 19,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 const SizedBox(height: 5),
                 Text(
                   description,
+                  textAlign: TextAlign.justify,
                   style: const TextStyle(fontSize: 16),
                 ),
               ],

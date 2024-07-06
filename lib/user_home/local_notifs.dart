@@ -163,7 +163,11 @@ class _NotifsState extends State<Notifs> {
           await _setNotificationTime(selectedTime);
         }
       },
-      label: const Text("Schedule a daily notification for Diary"),
+      label: const Text("Schedule a daily notification for Diary",
+        style: TextStyle(
+            fontSize: 15.0
+        ),
+      ),
       style: ElevatedButton.styleFrom(
         backgroundColor: const Color(0xFF16666B), // background color
         foregroundColor: Colors.white, // text and icon color

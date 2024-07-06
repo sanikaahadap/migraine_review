@@ -39,7 +39,6 @@ class UserDetailsPage extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.all(16.0),
         children: [
-          // _buildSectionTitle('Patient Details'),
           _buildDetailItem('Name', user.name, Icons.person),
           _buildDetailItem('Age', _calculateAge(user.dob), Icons.cake),
           _buildGenderDetailItem(user.uid), // Use FutureBuilder for gender

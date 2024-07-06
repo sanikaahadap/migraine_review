@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:neurooooo/user_home/nav_bar.dart';
 
@@ -28,6 +29,7 @@ class MigraineLogsPageState extends State<MigraineLogsPage> {
   bool _ctMriScan = false; // Track CT/MRI scan
   int _painKillersPerMonth = 0; // Track pain killers per month
   final int _monthsOfPainkillerUse = 0; // Track months of painkiller use
+  final String _uid = FirebaseAuth.instance.currentUser!.uid;
 
   final List<String> _durationOptions = [
     '15 mins',
@@ -58,6 +60,7 @@ class MigraineLogsPageState extends State<MigraineLogsPage> {
       'painKillersPerMonth': _painKillersPerMonth,
       'monthsOfPainkillerUse': _monthsOfPainkillerUse,
       'timestamp': DateTime.now(),
+      'uid': FirebaseAuth.instance.currentUser!.uid,
     };
 
     try {

@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:neurooooo/login/login_signup_page.dart';
 import 'package:neurooooo/main_features/ehr/ehr_main_page.dart';
 import 'package:neurooooo/main_features/midas_assessment/midas.dart';
-import 'package:neurooooo/salient_features.dart';
-import 'package:neurooooo/user_home/doctor_info_page.dart';
+import 'package:neurooooo/sidebar/salient_features.dart';
+import 'package:neurooooo/sidebar/doctor_info_page.dart';
 import 'package:neurooooo/main_features/faqs/faqs.dart';
-import 'package:neurooooo/user_home/privacy_policy.dart';
+import 'package:neurooooo/sidebar/privacy_policy.dart';
 import 'package:neurooooo/user_home/profile.dart';
 import 'package:neurooooo/main_features/personal_diary/diary.dart';
 import 'package:neurooooo/main_features/migraine_logs/migraine_logs.dart';
@@ -26,7 +26,7 @@ class HomePage extends StatefulWidget {
 class HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   ModelUser user = ModelUser(
-      email: '', name: '', uid: '', phone: '', dob: '', patient_id: '');
+      email: '', name: '', uid: '', phone: '', dob: '');
   // String _userName = '';
   Timer? _timer;
   int _currentIndex = 0;

@@ -80,7 +80,12 @@ class _MidasNotifsState extends State<MidasNotifs> {
           LocalNotifications.scheduleDailyNotification();
         }
       },
-      label: const Text("Schedule a quarterly notification for MIDAS"),
+      label: const Text(
+          "Schedule a quarterly notification for MIDAS",
+      style: TextStyle(
+        fontSize: 15.0
+      ),
+      ),
       style: ElevatedButton.styleFrom(
         backgroundColor: const Color(0xFF16666B), // background color
         foregroundColor: Colors.white, // text and icon color

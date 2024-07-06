@@ -6,6 +6,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class DocUpload extends StatefulWidget {
   const DocUpload({super.key});
@@ -97,7 +98,7 @@ class _DocUploadState extends State<DocUpload> {
   void showPreUploadAlert() {
     showAlert(
       "Attention",
-      "File size shouldn't exceed 1 MB and please rename the file accordingly.",
+      "File size shouldn't exceed 1 mb and please rename the file as report type_your name.",
       onOkPressed: pickFile,
     );
   }
@@ -109,6 +110,8 @@ class _DocUploadState extends State<DocUpload> {
         .where('uid', isEqualTo: currentUserUID)
         .get();
     pdfData = results.docs.map((e) => e.data()).toList();
+    // Sort by timestamp in descending order
+    pdfData.sort((a, b) => b['timestamp'].compareTo(a['timestamp']));
     setState(() {});
   }
 
@@ -140,41 +143,45 @@ class _DocUploadState extends State<DocUpload> {
       ),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
-          : GridView.builder(
+          : pdfData.isEmpty
+          ? const Center(child: Text('No PDFs uploaded yet.'))
+          : ListView.builder(
         itemCount: pdfData.length,
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-        ),
         itemBuilder: (context, index) {
+          // Format timestamp to readable date
+          DateTime uploadedDate =
+          pdfData[index]['timestamp'].toDate();
+          String formattedDate =
+          DateFormat('dd MMM yyyy').format(uploadedDate);
           return Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.symmetric(
+                vertical: 8.0, horizontal: 16.0),
             child: InkWell(
               onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => PDFViewerScreen(
-                      pdfurl: pdfData[index]['download_url'],
-                    ),
+                    builder: (context) =>
+                        PDFViewerScreen(
+                          pdfurl: pdfData[index]['download_url'],
+                        ),
                   ),
                 );
               },
-              child: Container(
-                decoration: BoxDecoration(
-                  border: Border.all(),
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Image.asset(
-                      "assets/images/pdf.png",
-                      height: 120,
-                      width: 100,
-                    ),
-                    Text(
-                      pdfData[index]['pdf_name'],
-                      style: const TextStyle(fontSize: 10),
-                    ),
-                  ],
+              child: Card(
+                child: ListTile(
+                  leading: Image.asset(
+                    "assets/images/pdf.png",
+                    height: 40,
+                    width: 32,
+                  ),
+                  title: Text(
+                    pdfData[index]['pdf_name'],
+                    style: const TextStyle(fontSize: 14),
+                  ),
+                  subtitle: Text(
+                    formattedDate,
+                    style: const TextStyle(fontSize: 12),
+                  ),
                 ),
               ),
             ),

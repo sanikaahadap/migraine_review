@@ -139,13 +139,17 @@ class DiaryPageState extends State<DiaryPage> {
             ),
             const SizedBox(height: 20),
             if (!_canFillDiary)
-              const Text(
-                'You have already filled the diary today, come again to fill it tomorrow',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.red,
+              const Padding(
+                padding: EdgeInsets.all(4.0),
+                child: Text(
+                  'You have already filled the diary today, come again to fill it tomorrow',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.red,
+                    leadingDistribution: TextLeadingDistribution.proportional
+                  ),
+                  textAlign: TextAlign.center,
                 ),
-                textAlign: TextAlign.center,
               ),
           ],
         ),

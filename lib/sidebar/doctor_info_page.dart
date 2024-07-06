@@ -80,6 +80,7 @@ class DoctorInfoPage extends StatelessWidget {
                     title: Text(
                       'Mridha Spirit of Neurology Humanitarian Award (2022) by American Academy of Neurology',
                       style: TextStyle(fontSize: 12),
+                      textAlign: TextAlign.justify,
                     ),
                   ),
                   ListTile(
@@ -87,6 +88,7 @@ class DoctorInfoPage extends StatelessWidget {
                     title: Text(
                       'A. B. Baker Teacher Recognition Award (2022) by American Academy of Neurology',
                       style: TextStyle(fontSize: 12),
+                      textAlign: TextAlign.justify,
                     ),
                   ),
                   ListTile(
@@ -94,6 +96,7 @@ class DoctorInfoPage extends StatelessWidget {
                     title: Text(
                       'J J Rao Oration Award (2019) by the Geriatric Society of India',
                       style: TextStyle(fontSize: 12),
+                      textAlign: TextAlign.justify,
                     ),
                   ),
                   ListTile(
@@ -101,6 +104,7 @@ class DoctorInfoPage extends StatelessWidget {
                     title: Text(
                       'H. C. Bajoria oration Award (2016) by Indian Epilepsy Association and Indian Epilepsy Society',
                       style: TextStyle(fontSize: 12),
+                      textAlign: TextAlign.justify,
                     ),
                   ),
                 ],

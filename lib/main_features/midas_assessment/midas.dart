@@ -541,7 +541,7 @@ class MIDASOutputPage extends StatelessWidget {
                     child: const Text(
                       'Go back to home page',
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: 17,
                         color: Color(0xFF16666B),
                       ),
                     ),

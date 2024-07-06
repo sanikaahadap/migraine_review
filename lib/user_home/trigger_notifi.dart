@@ -101,7 +101,7 @@ class AnalysisPageState extends State<AnalysisPage> {
               'Potential Headache Triggers:',
               style: TextStyle(
                 color: Color(0xFF16666B),
-                fontSize: 18,
+                fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -112,7 +112,7 @@ class AnalysisPageState extends State<AnalysisPage> {
                       'No potential triggers found yet',
                       style: TextStyle(
                         color: Color(0xFF16666B),
-                        fontSize: 16,
+                        fontSize: 18,
                       ),
                     ),
                   )
@@ -160,13 +160,9 @@ class AnalysisPageState extends State<AnalysisPage> {
                       );
                     },
                   ),
-            const SizedBox(
-              height: 20,
-            ),
+            const SizedBox(height: 40,),
             const Center(child: Notifs()),
-            const SizedBox(
-              height: 20,
-            ),
+            const SizedBox(height: 30,),
             const Center(child: MidasNotifs()),
           ],
         ),
