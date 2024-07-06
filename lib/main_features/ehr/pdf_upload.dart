@@ -21,24 +21,59 @@ class _DocUploadState extends State<DocUpload> {
 
   Future<String> uploadPDF(String fileName, File file) async {
     final reference =
-        FirebaseStorage.instance.ref().child("pdfs/$fileName.pdf");
+    FirebaseStorage.instance.ref().child("pdfs/$fileName.pdf");
     final uploadTask = reference.putFile(file);
     await uploadTask.whenComplete(() {});
     final downloadLink = await reference.getDownloadURL();
     return downloadLink;
   }
 
+  void showAlert(String title, String content, {VoidCallback? onOkPressed}) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(content),
+          actions: <Widget>[
+            TextButton(
+              child: const Text("OK"),
+              onPressed: () {
+                Navigator.of(context).pop();
+                if (onOkPressed != null) {
+                  onOkPressed();
+                }
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   void pickFile() async {
     setState(() {
       isLoading = true;
     });
+
     final pickedFile = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['pdf'],
     );
+
     if (pickedFile != null) {
       String fileName = pickedFile.files[0].name;
       File file = File(pickedFile.files[0].path!);
+
+      // Check file size
+      if (file.lengthSync() > 1024 * 1024) {
+        showAlert("Error", "File size exceeds 1 MB limit.");
+        setState(() {
+          isLoading = false;
+        });
+        return;
+      }
+
       final downloadLink = await uploadPDF(fileName, file);
 
       await FirebaseFirestore.instance.collection('docs').add({
@@ -47,12 +82,24 @@ class _DocUploadState extends State<DocUpload> {
         'download_url': downloadLink,
         'timestamp': FieldValue.serverTimestamp(),
       });
+
       log("PDF Uploaded successfully");
+      showAlert("Success", "PDF Uploaded successfully.");
     }
+
     getAllPdf();
+
     setState(() {
       isLoading = false;
     });
+  }
+
+  void showPreUploadAlert() {
+    showAlert(
+      "Attention",
+      "File size shouldn't exceed 1 MB and please rename the file accordingly.",
+      onOkPressed: pickFile,
+    );
   }
 
   void getAllPdf() async {
@@ -94,55 +141,48 @@ class _DocUploadState extends State<DocUpload> {
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
           : GridView.builder(
-              itemCount: pdfData.length,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                childAspectRatio: 0.7,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
-              ),
-              padding: const EdgeInsets.all(10.0),
-              itemBuilder: (context, index) {
-                return InkWell(
-                  onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => PDFViewerScreen(
-                          pdfurl: pdfData[index]['download_url'],
-                        ),
-                      ),
-                    );
-                  },
-                  child: Card(
-                    color: Colors.white,
-                    elevation: 4,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Image.asset(
-                          "assets/images/pdf.png",
-                          height: 120,
-                          width: 100,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            pdfData[index]['pdf_name'],
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(fontSize: 10),
-                          ),
-                        ),
-                      ],
+        itemCount: pdfData.length,
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+        ),
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: InkWell(
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => PDFViewerScreen(
+                      pdfurl: pdfData[index]['download_url'],
                     ),
                   ),
                 );
               },
+              child: Container(
+                decoration: BoxDecoration(
+                  border: Border.all(),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Image.asset(
+                      "assets/images/pdf.png",
+                      height: 120,
+                      width: 100,
+                    ),
+                    Text(
+                      pdfData[index]['pdf_name'],
+                      style: const TextStyle(fontSize: 10),
+                    ),
+                  ],
+                ),
+              ),
             ),
+          );
+        },
+      ),
       floatingActionButton: FloatingActionButton(
-        onPressed: pickFile,
+        onPressed: showPreUploadAlert,
         backgroundColor: const Color(0xFF16666B),
         tooltip: 'Upload PDF',
         child: const Icon(

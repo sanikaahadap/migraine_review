@@ -85,8 +85,9 @@ class MIDASAssessmentPageState extends State<MIDASAssessmentPage> {
         return AlertDialog(
           backgroundColor: const Color(0xff16666b), // Custom theme color
           title: const Text(
-            'MIDAS Scores Information',
+            'MIDAS Score Information',
             style: TextStyle(color: Colors.white),
+            textAlign: TextAlign.center,
           ),
           content: const SingleChildScrollView(
             child: Column(
@@ -95,40 +96,48 @@ class MIDASAssessmentPageState extends State<MIDASAssessmentPage> {
                 Text(
                   'MIDAS scores provide a measure of migraine disability. The scores help to understand the impact of migraines on daily activities. Higher scores indicate greater disability.',
                   style: TextStyle(color: Colors.white),
+                  textAlign: TextAlign.justify,
                 ),
                 SizedBox(height: 10),
                 Text(
                   'Score Ranges:',
                   style: TextStyle(
                       color: Colors.white, fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.justify,
                 ),
                 SizedBox(height: 5),
                 Text(
                   '0-5: Little or no disability',
                   style: TextStyle(color: Colors.white),
+                  textAlign: TextAlign.justify,
                 ),
                 Text(
                   '6-10: Mild disability',
                   style: TextStyle(color: Colors.white),
+                  textAlign: TextAlign.justify,
                 ),
                 Text(
                   '11-20: Moderate disability',
                   style: TextStyle(color: Colors.white),
+                  textAlign: TextAlign.justify,
                 ),
                 Text(
                   '21+: Severe disability',
                   style: TextStyle(color: Colors.white),
+                  textAlign: TextAlign.justify,
                 ),
                 SizedBox(height: 10),
                 Text(
                   'Disclaimer:',
                   style: TextStyle(
                       color: Colors.white, fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.justify,
                 ),
                 SizedBox(height: 5),
                 Text(
                   'MIDAS scores are not an accurate measure of a patient\'s migraine levels. They are a preliminary score, and patients must consult their professional neurologist for a perfect diagnosis.',
                   style: TextStyle(color: Colors.white),
+                  textAlign: TextAlign.justify,
                 ),
               ],
             ),

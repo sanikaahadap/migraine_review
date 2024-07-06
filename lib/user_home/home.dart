@@ -59,8 +59,6 @@ class HomePageState extends State<HomePage> {
   }
 
 
-
-
   void getDetails() async {
     user = await getUserDetails();
     setState(() {});

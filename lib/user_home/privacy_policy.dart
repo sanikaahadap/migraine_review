@@ -33,6 +33,7 @@ class PrivacyPolicyDescription extends StatelessWidget {
                     color: Colors.white,
                     fontSize: 18,
                   ),
+                  textAlign: TextAlign.justify,
                 ),
               ),
             ),
