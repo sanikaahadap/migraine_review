@@ -9,10 +9,8 @@ class MigraineLogDetailPage extends StatelessWidget {
   String displayValue(dynamic value) {
     if (value == null) {
       return 'Not available';
-    } else if (value == true) {
-      return 'Yes';
-    } else if (value == false) {
-      return 'No';
+    } else if (value is bool) {
+      return value ? 'Yes' : 'No';
     } else {
       return value.toString();
     }
@@ -31,8 +29,11 @@ class MigraineLogDetailPage extends StatelessWidget {
               flex: 4,
               child: Text(
                 '$title:',
-                // textHeightBehavior: TextHeightBehavior(leadingDistribution: TextLeadingDistribution.proportional),
-                style: const TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold, color: Color(0xFF16666B)),
+                style: const TextStyle(
+                  fontSize: 14.0,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF16666B),
+                ),
               ),
             ),
             const SizedBox(width: 8.0),
@@ -62,10 +63,9 @@ class MigraineLogDetailPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              buildDetailCard('Duration Index', log['durationIndex'].toString()),
+              buildDetailCard('Duration Index', log['durationOption'].toString()),
               buildDetailCard('Pain Severity', log['painSeverity'].toString()),
               buildDetailCard('Character', log['selectedCharacter'].join(', ')),
-              buildDetailCard('Severity', log['selectedSeverity'].toString()),
               buildDetailCard('Difficulty in Work', displayValue(log['difficultyInWork'])),
               buildDetailCard('Nausea', displayValue(log['nausea'])),
               buildDetailCard('Vomiting', displayValue(log['vomiting'])),
@@ -74,8 +74,8 @@ class MigraineLogDetailPage extends StatelessWidget {
               buildDetailCard('Osmophobia', displayValue(log['osmophobia'])),
               buildDetailCard('Blurring of Vision', displayValue(log['blurringOfVision'])),
               buildDetailCard('CT/MRI Scan', displayValue(log['ctMriScan'])),
-              buildDetailCard('Pain Killers per Month', log['painKillersPerMonth'].toString()),
-              buildDetailCard('Months of Painkiller Use', log['monthsOfPainkillerUse'].toString()),
+              buildDetailCard('Pain Killers per Month', log['painKillersPerMonth'] != null ? log['painKillersPerMonth'].toString() : 'Not available'),
+              buildDetailCard('Months of Painkiller Use', log['monthsOfPainkillerUse'] != null ? log['monthsOfPainkillerUse'].toString() : 'Not available'),
               buildDetailCard('Timestamp', (log['timestamp'] as Timestamp).toDate().toString()),
             ],
           ),

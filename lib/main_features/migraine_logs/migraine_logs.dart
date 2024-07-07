@@ -13,23 +13,20 @@ class MigraineLogsPage extends StatefulWidget {
 }
 
 class MigraineLogsPageState extends State<MigraineLogsPage> {
-  bool showOtherCharacterTextField = false; // Track checkbox state
-  int _durationIndex = 0; // Index for duration options
-  int _painSeverity = 1; // Initial pain severity
-  int? _selectedLocation; // Track selected location of headache
-  final List<String> _selectedCharacter = []; // Track selected character of headache
-  int? _selectedSeverity; // Track selected severity of headache
-  bool _difficultyInWork = false; // Track difficulty in work
-  bool _nausea = false; // Track nausea
-  bool _vomiting = false; // Track vomiting
-  bool _photophobia = false; // Track photophobia
-  bool _phonophobia = false; // Track phonophobia
-  bool _osmophobia = false; // Track osmophobia
-  bool _blurringOfVision = false; // Track blurring of vision
-  bool _ctMriScan = false; // Track CT/MRI scan
-  int _painKillersPerMonth = 0; // Track pain killers per month
-  final int _monthsOfPainkillerUse = 0; // Track months of painkiller use
-  final String _uid = FirebaseAuth.instance.currentUser!.uid;
+  String? _durationOption;
+  int _painSeverity = 1;
+  String? _selectedLocation;
+  final List<String> _selectedCharacter = [];
+  bool _difficultyInWork = false;
+  bool _nausea = false;
+  bool _vomiting = false;
+  bool _photophobia = false;
+  bool _phonophobia = false;
+  bool _osmophobia = false;
+  bool _blurringOfVision = false;
+  bool _ctMriScan = false;
+  int? _painKillersPerMonth;
+  int? _monthsOfPainkillerUse;
 
   final List<String> _durationOptions = [
     '15 mins',
@@ -41,14 +38,13 @@ class MigraineLogsPageState extends State<MigraineLogsPage> {
     'More than 12 hrs'
   ];
 
-  Future<void> _submitMigraineLog() async {
+  void _submitMigraineLog() async {
     // Create a map with the values to be stored
     Map<String, dynamic> migraineLog = {
-      'durationIndex': _durationIndex,
+      'durationOption': _durationOption,
       'painSeverity': _painSeverity,
-      'selectedLocation': _selectedLocation,
+      'selectedLocation': _selectedLocation ?? '',
       'selectedCharacter': _selectedCharacter,
-      'selectedSeverity': _selectedSeverity,
       'difficultyInWork': _difficultyInWork,
       'nausea': _nausea,
       'vomiting': _vomiting,
@@ -69,32 +65,52 @@ class MigraineLogsPageState extends State<MigraineLogsPage> {
           .collection('migraine_logs')
           .add(migraineLog);
 
-      // Navigate to the log response page
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => LogResponsePage(date: DateTime.now()),
-        ),
-      );
+      // Show confirmation dialog
+      _showConfirmationDialog();
     } catch (e) {
       // Handle errors here
       log('Error adding migraine log: $e');
     }
   }
 
+  void _showConfirmationDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Log Submitted'),
+          content: const Text('Your migraine log has been successfully submitted.'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const CustomBottomNavigationBar(),
+                  ),
+                );
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Migraine Logs', style: TextStyle(color: Colors.white)),
+        title: const Text('Migraine Logs'),
         backgroundColor: const Color(0xFF16666B),
-        // backgroundColor: const Color(0xFF16666B), // Set app bar color
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+          children: <Widget>[
             const SizedBox(height: 20.0),
             const Text(
               'How long have you been having headaches? (months)',
@@ -103,17 +119,15 @@ class MigraineLogsPageState extends State<MigraineLogsPage> {
             const SizedBox(height: 8.0),
             Container(
               decoration: BoxDecoration(
-                border: Border.all(
-                    color: const Color(0xFF16666B)), // Set border color
-                borderRadius: BorderRadius.circular(8.0), // Set border radius
+                border: Border.all(color: const Color(0xFF16666B)),
+                borderRadius: BorderRadius.circular(8.0),
               ),
               child: const TextField(
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   hintText: 'Enter number of months',
-                  contentPadding:
-                  EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
-                  border: InputBorder.none, // Remove default border
+                  contentPadding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+                  border: InputBorder.none,
                 ),
               ),
             ),
@@ -125,17 +139,15 @@ class MigraineLogsPageState extends State<MigraineLogsPage> {
             const SizedBox(height: 8.0),
             Container(
               decoration: BoxDecoration(
-                border: Border.all(
-                    color: const Color(0xFF16666B)), // Set border color
-                borderRadius: BorderRadius.circular(8.0), // Set border radius
+                border: Border.all(color: const Color(0xFF16666B)),
+                borderRadius: BorderRadius.circular(8.0),
               ),
               child: const TextField(
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   hintText: 'Enter number of headaches',
-                  contentPadding:
-                  EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
-                  border: InputBorder.none, // Remove default border
+                  contentPadding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+                  border: InputBorder.none,
                 ),
               ),
             ),
@@ -145,20 +157,29 @@ class MigraineLogsPageState extends State<MigraineLogsPage> {
               style: TextStyle(color: Color(0xFF16666B), fontSize: 18.0),
             ),
             const SizedBox(height: 8.0),
-            DropdownButton<int>(
-              value: _durationIndex,
-              onChanged: (int? newValue) {
-                setState(() {
-                  _durationIndex = newValue!;
-                });
-              },
-              items: _durationOptions.map((String value) {
-                return DropdownMenuItem<int>(
-                  value: _durationOptions.indexOf(value),
-                  child: Text(value,
-                      style: const TextStyle(color: Color(0xFF16666B))),
-                );
-              }).toList(),
+            Container(
+              decoration: BoxDecoration(
+                border: Border.all(color: const Color(0xFF16666B)),
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              child: DropdownButton<String>(
+                value: _durationOption,
+                onChanged: (String? newValue) {
+                  setState(() {
+                    _durationOption = newValue;
+                  });
+                },
+                items: _durationOptions.map((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value, style: const TextStyle(color: Color(0xFF16666B))),
+                  );
+                }).toList(),
+                isExpanded: true,
+                underline: Container(
+                  height: 0,
+                ),
+              ),
             ),
             const SizedBox(height: 20.0),
             const Text(
@@ -166,44 +187,40 @@ class MigraineLogsPageState extends State<MigraineLogsPage> {
               style: TextStyle(color: Color(0xFF16666B), fontSize: 18.0),
             ),
             const SizedBox(height: 8.0),
-            // Radio buttons for location of headache (left, right, complete)
             Column(
               children: [
                 RadioListTile(
-                  title: const Text('Left',
-                      style: TextStyle(color: Color(0xFF16666B))),
-                  value: 0,
+                  title: const Text('Left', style: TextStyle(color: Color(0xFF16666B))),
+                  value: 'Left',
                   groupValue: _selectedLocation,
-                  onChanged: (int? value) {
+                  onChanged: (String? value) {
                     setState(() {
-                      _selectedLocation = value!;
+                      _selectedLocation = value;
                     });
                   },
-                  activeColor: const Color(0xFF16666B), // Set active color
+                  activeColor: const Color(0xFF16666B),
                 ),
                 RadioListTile(
-                  title: const Text('Right',
-                      style: TextStyle(color: Color(0xFF16666B))),
-                  value: 1,
+                  title: const Text('Right', style: TextStyle(color: Color(0xFF16666B))),
+                  value: 'Right',
                   groupValue: _selectedLocation,
-                  onChanged: (int? value) {
+                  onChanged: (String? value) {
                     setState(() {
-                      _selectedLocation = value!;
+                      _selectedLocation = value;
                     });
                   },
-                  activeColor: const Color(0xFF16666B), // Set active color
+                  activeColor: const Color(0xFF16666B),
                 ),
                 RadioListTile(
-                  title: const Text('Complete',
-                      style: TextStyle(color: Color(0xFF16666B))),
-                  value: 2,
+                  title: const Text('Complete', style: TextStyle(color: Color(0xFF16666B))),
+                  value: 'Complete',
                   groupValue: _selectedLocation,
-                  onChanged: (int? value) {
+                  onChanged: (String? value) {
                     setState(() {
-                      _selectedLocation = value!;
+                      _selectedLocation = value;
                     });
                   },
-                  activeColor: const Color(0xFF16666B), // Set active color
+                  activeColor: const Color(0xFF16666B),
                 ),
               ],
             ),
@@ -213,12 +230,10 @@ class MigraineLogsPageState extends State<MigraineLogsPage> {
               style: TextStyle(color: Color(0xFF16666B), fontSize: 18.0),
             ),
             const SizedBox(height: 8.0),
-            // Checkbox list for character of headache
             Column(
               children: [
                 CheckboxListTile(
-                  title: const Text('Throbbing',
-                      style: TextStyle(color: Color(0xFF16666B))),
+                  title: const Text('Throbbing', style: TextStyle(color: Color(0xFF16666B))),
                   value: _selectedCharacter.contains('Throbbing'),
                   onChanged: (bool? value) {
                     setState(() {
@@ -229,26 +244,24 @@ class MigraineLogsPageState extends State<MigraineLogsPage> {
                       }
                     });
                   },
-                  activeColor: const Color(0xFF16666B), // Set active color
+                  activeColor: const Color(0xFF16666B),
                 ),
                 CheckboxListTile(
-                  title: const Text('Tight',
-                      style: TextStyle(color: Color(0xFF16666B))),
-                  value: _selectedCharacter.contains('Tight'),
+                  title: const Text('Pulsating', style: TextStyle(color: Color(0xFF16666B))),
+                  value: _selectedCharacter.contains('Pulsating'),
                   onChanged: (bool? value) {
                     setState(() {
                       if (value!) {
-                        _selectedCharacter.add('Tight');
+                        _selectedCharacter.add('Pulsating');
                       } else {
-                        _selectedCharacter.remove('Tight');
+                        _selectedCharacter.remove('Pulsating');
                       }
                     });
                   },
-                  activeColor: const Color(0xFF16666B), // Set active color
+                  activeColor: const Color(0xFF16666B),
                 ),
                 CheckboxListTile(
-                  title: const Text('Sharp',
-                      style: TextStyle(color: Color(0xFF16666B))),
+                  title: const Text('Sharp', style: TextStyle(color: Color(0xFF16666B))),
                   value: _selectedCharacter.contains('Sharp'),
                   onChanged: (bool? value) {
                     setState(() {
@@ -259,241 +272,120 @@ class MigraineLogsPageState extends State<MigraineLogsPage> {
                       }
                     });
                   },
-                  activeColor: const Color(0xFF16666B), // Set active color
+                  activeColor: const Color(0xFF16666B),
                 ),
                 CheckboxListTile(
-                  title: const Text('Others',
-                      style: TextStyle(color: Color(0xFF16666B))),
-                  value: showOtherCharacterTextField,
+                  title: const Text('Dull', style: TextStyle(color: Color(0xFF16666B))),
+                  value: _selectedCharacter.contains('Dull'),
                   onChanged: (bool? value) {
                     setState(() {
-                      showOtherCharacterTextField = value!;
+                      if (value!) {
+                        _selectedCharacter.add('Dull');
+                      } else {
+                        _selectedCharacter.remove('Dull');
+                      }
                     });
                   },
-                  activeColor: const Color(0xFF16666B), // Set active color
+                  activeColor: const Color(0xFF16666B),
                 ),
               ],
             ),
-            if (showOtherCharacterTextField)
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(
-                      color: const Color(0xFF16666B)), // Set border color
-                  borderRadius: BorderRadius.circular(8.0), // Set border radius
-                ),
-                child: const TextField(
-                  decoration: InputDecoration(
-                    labelText: 'Other Character',
-                    border: InputBorder.none, // Remove default border
-                    contentPadding:
-                    EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
-                  ),
-                ),
-              ),
             const SizedBox(height: 20.0),
             const Text(
-              'Pain Severity',
+              'Severity of headache',
               style: TextStyle(color: Color(0xFF16666B), fontSize: 18.0),
             ),
+            const SizedBox(height: 8.0),
             Slider(
               value: _painSeverity.toDouble(),
-              min: 0,
+              min: 1,
               max: 10,
-              divisions: 10,
+              divisions: 9,
               onChanged: (double value) {
                 setState(() {
                   _painSeverity = value.toInt();
                 });
               },
-              activeColor: const Color(0xFF16666B), // Set active color
-            ),
-            Image.asset(
-              'assets/images/VAS.jpeg', // Replace 'your_image.png' with your image asset path
-              width: 386,
-              height: 130,
-            ),
-
-            const SizedBox(height: 20.0),
-            const Text(
-              'Are most of your headaches',
-              style: TextStyle(color: Color(0xFF16666B), fontSize: 18.0),
-            ),
-            const SizedBox(height: 8.0),
-            // Radio buttons for severity of headaches (mild, moderate, severe)
-            Column(
-              children: [
-                RadioListTile(
-                  title: const Text('Mild',
-                      style: TextStyle(color: Color(0xFF16666B))),
-                  value: 0,
-                  groupValue: _selectedSeverity,
-                  onChanged: (int? value) {
-                    setState(() {
-                      _selectedSeverity = value!;
-                    });
-                  },
-                  activeColor: const Color(0xFF16666B), // Set active color
-                ),
-                RadioListTile(
-                  title: const Text('Moderate',
-                      style: TextStyle(color: Color(0xFF16666B))),
-                  value: 1,
-                  groupValue: _selectedSeverity,
-                  onChanged: (int? value) {
-                    setState(() {
-                      _selectedSeverity = value!;
-                    });
-                  },
-                  activeColor: const Color(0xFF16666B), // Set active color
-                ),
-                RadioListTile(
-                  title: const Text('Severe',
-                      style: TextStyle(color: Color(0xFF16666B))),
-                  value: 2,
-                  groupValue: _selectedSeverity,
-                  onChanged: (int? value) {
-                    setState(() {
-                      _selectedSeverity = value!;
-                    });
-                  },
-                  activeColor: const Color(0xFF16666B), // Set active color
-                ),
-              ],
-            ),
-
-            const SizedBox(height: 20.0),
-            const Text(
-              'Do you find difficulty in continuing your work when you have these headaches?',
-              style: TextStyle(color: Color(0xFF16666B), fontSize: 18.0),
-            ),
-            const SizedBox(height: 8.0),
-            // Radio buttons for difficulty in work (Yes or No)
-            Column(
-              children: [
-                RadioListTile(
-                  title: const Text('Yes',
-                      style: TextStyle(color: Color(0xFF16666B))),
-                  value: true,
-                  groupValue: _difficultyInWork,
-                  onChanged: (bool? value) {
-                    setState(() {
-                      _difficultyInWork = value!;
-                    });
-                  },
-                  activeColor: const Color(0xFF16666B), // Set active color
-                ),
-                RadioListTile(
-                  title: const Text('No',
-                      style: TextStyle(color: Color(0xFF16666B))),
-                  value: false,
-                  groupValue: _difficultyInWork,
-                  onChanged: (bool? value) {
-                    setState(() {
-                      _difficultyInWork = value!;
-                    });
-                  },
-                  activeColor: const Color(0xFF16666B), // Set active color
-                ),
-              ],
+              activeColor: const Color(0xFF16666B),
+              label: 'Pain Severity: $_painSeverity',
             ),
             const SizedBox(height: 20.0),
             const Text(
-              'During headache, do you have:',
+              'Other Symptoms',
               style: TextStyle(color: Color(0xFF16666B), fontSize: 18.0),
             ),
             const SizedBox(height: 8.0),
-            // Checkbox list for symptoms during headache
             Column(
               children: [
                 CheckboxListTile(
-                  title: const Text('Nausea',
-                      style: TextStyle(color: Color(0xFF16666B))),
+                  title: const Text('Difficulty in work', style: TextStyle(color: Color(0xFF16666B))),
+                  value: _difficultyInWork,
+                  onChanged: (bool? value) {
+                    setState(() {
+                      _difficultyInWork = value ?? false;
+                    });
+                  },
+                  activeColor: const Color(0xFF16666B),
+                ),
+                CheckboxListTile(
+                  title: const Text('Nausea', style: TextStyle(color: Color(0xFF16666B))),
                   value: _nausea,
                   onChanged: (bool? value) {
                     setState(() {
-                      _nausea = value!;
+                      _nausea = value ?? false;
                     });
                   },
-                  activeColor: const Color(0xFF16666B), // Set active color
+                  activeColor: const Color(0xFF16666B),
                 ),
                 CheckboxListTile(
-                  title: const Text('Vomiting',
-                      style: TextStyle(color: Color(0xFF16666B))),
+                  title: const Text('Vomiting', style: TextStyle(color: Color(0xFF16666B))),
                   value: _vomiting,
                   onChanged: (bool? value) {
                     setState(() {
-                      _vomiting = value!;
+                      _vomiting = value ?? false;
                     });
                   },
-                  activeColor: const Color(0xFF16666B), // Set active color
+                  activeColor: const Color(0xFF16666B),
                 ),
                 CheckboxListTile(
-                  title: const Text('Photophobia',
-                      style: TextStyle(color: Color(0xFF16666B))),
+                  title: const Text('Photophobia', style: TextStyle(color: Color(0xFF16666B))),
                   value: _photophobia,
                   onChanged: (bool? value) {
                     setState(() {
-                      _photophobia = value!;
+                      _photophobia = value ?? false;
                     });
                   },
-                  activeColor: const Color(0xFF16666B), // Set active color
+                  activeColor: const Color(0xFF16666B),
                 ),
                 CheckboxListTile(
-                  title: const Text('Phonophobia',
-                      style: TextStyle(color: Color(0xFF16666B))),
+                  title: const Text('Phonophobia', style: TextStyle(color: Color(0xFF16666B))),
                   value: _phonophobia,
                   onChanged: (bool? value) {
                     setState(() {
-                      _phonophobia = value!;
+                      _phonophobia = value ?? false;
                     });
                   },
-                  activeColor: const Color(0xFF16666B), // Set active color
+                  activeColor: const Color(0xFF16666B),
                 ),
                 CheckboxListTile(
-                  title: const Text('Osmophobia',
-                      style: TextStyle(color: Color(0xFF16666B))),
+                  title: const Text('Osmophobia', style: TextStyle(color: Color(0xFF16666B))),
                   value: _osmophobia,
                   onChanged: (bool? value) {
                     setState(() {
-                      _osmophobia = value!;
+                      _osmophobia = value ?? false;
                     });
                   },
-                  activeColor: const Color(0xFF16666B), // Set active color
+                  activeColor: const Color(0xFF16666B),
                 ),
-              ],
-            ),
-            const SizedBox(height: 20.0),
-            const Text(
-              'Before headache, do you have blurring of vision during or after the headache?',
-              style: TextStyle(color: Color(0xFF16666B), fontSize: 18.0),
-            ),
-            const SizedBox(height: 8.0),
-            // Radio buttons for blurring of vision (Yes or No)
-            Column(
-              children: [
-                RadioListTile(
-                  title: const Text('Yes',
-                      style: TextStyle(color: Color(0xFF16666B))),
-                  value: true,
-                  groupValue: _blurringOfVision,
+                CheckboxListTile(
+                  title: const Text('Blurring of Vision', style: TextStyle(color: Color(0xFF16666B))),
+                  value: _blurringOfVision,
                   onChanged: (bool? value) {
                     setState(() {
-                      _blurringOfVision = value!;
+                      _blurringOfVision = value ?? false;
                     });
                   },
-                  activeColor: const Color(0xFF16666B), // Set active color
-                ),
-                RadioListTile(
-                  title: const Text('No',
-                      style: TextStyle(color: Color(0xFF16666B))),
-                  value: false,
-                  groupValue: _blurringOfVision,
-                  onChanged: (bool? value) {
-                    setState(() {
-                      _blurringOfVision = value!;
-                    });
-                  },
-                  activeColor: const Color(0xFF16666B), // Set active color
+                  activeColor: const Color(0xFF16666B),
                 ),
               ],
             ),
@@ -534,88 +426,53 @@ class MigraineLogsPageState extends State<MigraineLogsPage> {
             ),
             const SizedBox(height: 20.0),
             const Text(
-              'How many pain killers do you take in a month?',
+              'Painkillers per month',
               style: TextStyle(color: Color(0xFF16666B), fontSize: 18.0),
             ),
             const SizedBox(height: 8.0),
-            // Text field for number of pain killers per month
             Container(
               decoration: BoxDecoration(
-                border: Border.all(
-                    color: const Color(0xFF16666B)), // Set border color
-                borderRadius: BorderRadius.circular(8.0), // Set border radius
+                border: Border.all(color: const Color(0xFF16666B)),
+                borderRadius: BorderRadius.circular(8.0),
               ),
-              child: TextField(
+              child: const TextField(
                 keyboardType: TextInputType.number,
-                onChanged: (value) {
-                  _painKillersPerMonth = int.tryParse(value) ?? 0;
-                },
-                decoration: const InputDecoration(
-                  hintText: 'Enter number of pain killers',
-                  contentPadding:
-                  EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
-                  border: InputBorder.none, // Remove default border
+                decoration: InputDecoration(
+                  hintText: 'Enter number of painkillers',
+                  contentPadding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+                  border: InputBorder.none,
                 ),
               ),
             ),
             const SizedBox(height: 20.0),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: _submitMigraineLog,
-        icon: const Icon(Icons.save,
-            color: Colors.white), // Set icon with white color
-        label: const Text('Submit',
-            style:
-            TextStyle(color: Colors.white)), // Set label with white color
-        backgroundColor: const Color(0xFF16666B), // Set button background color
-      ),
-    );
-  }
-}
-
-class LogResponsePage extends StatelessWidget {
-  final DateTime date;
-
-  const LogResponsePage({Key? key, required this.date}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Response Recorded'),
-        backgroundColor: const Color(0xFF16666B), // Set app bar color
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
             const Text(
-              'Response recorded on',
+              'Months of Painkiller Use',
               style: TextStyle(color: Color(0xFF16666B), fontSize: 18.0),
             ),
-            Text(
-              '${date.day}/${date.month}/${date.year}',
-              style: const TextStyle(
-                  color: Color(0xFF16666B),
-                  fontSize: 24.0,
-                  fontWeight: FontWeight.bold),
+            const SizedBox(height: 8.0),
+            Container(
+              decoration: BoxDecoration(
+                border: Border.all(color: const Color(0xFF16666B)),
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              child: const TextField(
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  hintText: 'Enter number of months',
+                  contentPadding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+                  border: InputBorder.none,
+                ),
+              ),
             ),
             const SizedBox(height: 20.0),
+
             ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const CustomBottomNavigationBar()),
-                );
-              },
+              onPressed: _submitMigraineLog,
               style: ElevatedButton.styleFrom(
-                backgroundColor:
-                const Color(0xFF16666B), // Set button background color
+                backgroundColor: const Color(0xFF16666B),
+                textStyle: const TextStyle(color: Colors.white),
               ),
-              child: const Text('Back to Home',
-                  style: TextStyle(color: Colors.white)),
+              child: const Text('Submit'),
             ),
           ],
         ),
