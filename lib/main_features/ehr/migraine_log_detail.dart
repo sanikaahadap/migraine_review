@@ -26,9 +26,9 @@ class MigraineLogDetailPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
-              flex: 4,
+              flex: 7,
               child: Text(
-                '$title:',
+                '$title :',
                 style: const TextStyle(
                   fontSize: 14.0,
                   fontWeight: FontWeight.bold,
@@ -38,7 +38,7 @@ class MigraineLogDetailPage extends StatelessWidget {
             ),
             const SizedBox(width: 8.0),
             Expanded(
-              flex: 3,
+              flex: 4,
               child: Text(
                 value,
                 style: const TextStyle(fontSize: 16.0, color: Color(0xFF16666B)),
@@ -63,7 +63,9 @@ class MigraineLogDetailPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              buildDetailCard('Duration Index', log['durationOption'].toString()),
+              buildDetailCard('Headache Duration (months)', log['headacheDurationMonths'] != null ? log['headacheDurationMonths'].toString() : 'Not available'),
+              buildDetailCard('Headaches per Month', log['headachesPerMonth'] != null ? log['headachesPerMonth'].toString() : 'Not available'),
+              buildDetailCard('Duration of Headache', log['durationOfHeadache'].toString()),
               buildDetailCard('Pain Severity', log['painSeverity'].toString()),
               buildDetailCard('Character', log['selectedCharacter'].join(', ')),
               buildDetailCard('Difficulty in Work', displayValue(log['difficultyInWork'])),
