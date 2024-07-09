@@ -14,8 +14,7 @@ class MIDASAssessmentPage extends StatefulWidget {
 }
 
 class MIDASAssessmentPageState extends State<MIDASAssessmentPage> {
-  bool _canFillQuestionnaire =
-  true; // Indicates whether the user can fill the questionnaire
+  bool _canFillQuestionnaire = true; // Indicates whether the user can fill the questionnaire
   final String _uid = FirebaseAuth.instance.currentUser!.uid;
   late Timer _dailyCheckTimer;
 
@@ -224,6 +223,8 @@ class MIDASAssessmentPageState extends State<MIDASAssessmentPage> {
                 ),
                 textAlign: TextAlign.center,
               ),
+            const SizedBox(height: 20)
+
           ],
         ),
       ),

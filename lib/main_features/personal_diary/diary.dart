@@ -95,7 +95,7 @@ class DiaryPageState extends State<DiaryPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             const Text(
-              'Did you have a headache today?',
+              'Are you having a headache today?',
               style: TextStyle(
                 fontSize: 20,
                 color: Color(0xFF16666B),

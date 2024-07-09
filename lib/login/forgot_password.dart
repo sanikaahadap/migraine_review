@@ -90,7 +90,47 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                   style: TextStyle(color: Colors.white),
                 ),
               ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Center(
+              child: Container(
+                padding: const EdgeInsets.all(16.0),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12.0),
+                  border: Border.all(color: Colors.redAccent),
+                ),
+                child: const Column(
+
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+
+                    Text(
+                      'Your password should have',
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                        color: Colors.redAccent,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      '• At least 8 characters',
+                      textAlign: TextAlign.start,
+                      style: TextStyle(color: Colors.redAccent),
+                    ),
+                    Text(
+                      '• At least 1 number',
+                      textAlign: TextAlign.start,
+                      style: TextStyle(color: Colors.redAccent),
+                    ),
+                  ],
+                ),
+              ),
             )
+
+
           ],
         ),
       ),

@@ -1,9 +1,9 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
-import 'package:neurooooo/login/login.dart';
 import 'package:neurooooo/login/signup.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:neurooooo/user_home/nav_bar.dart';
 
 class UserInfoPage extends StatefulWidget {
   const UserInfoPage({super.key});
@@ -17,35 +17,14 @@ class UserInfoPageState extends State<UserInfoPage> {
   final TextEditingController medicalConditionController = TextEditingController();
   final TextEditingController medicationsController = TextEditingController();
   final TextEditingController surgeriesController = TextEditingController();
-  late DateTime currentBackPressTime;
 
-  @override
-  void initState() {
-    super.initState();
-    currentBackPressTime = DateTime.now();
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: PopScope(
         canPop: false,
-        onPopInvoked: (didPop) {
-          if (didPop) {
-            DateTime now = DateTime.now();
-            if (now.difference(currentBackPressTime) > const Duration(seconds: 2)) {
-              currentBackPressTime = now;
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Press back again to exit'),
-                  duration: Duration(seconds: 2),
-                ),
-              );
-            } else {
-              Navigator.of(context).pop(true); // Exit the app
-            }
-          }
-        },
+
         child: Center(
           child: Padding(
             padding: const EdgeInsets.all(16.0),
@@ -161,7 +140,7 @@ class UserInfoPageState extends State<UserInfoPage> {
                           // Navigate to the next page after storing data
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => const BackToLogin()),
+                            MaterialPageRoute(builder: (context) => const CustomBottomNavigationBar()),
                           );
                         }).catchError((error) {
                           // Handle errors if any
@@ -257,66 +236,6 @@ class DisclaimerPage extends StatelessWidget {
         ),
       ),
 
-    );
-  }
-}
-
-class BackToLogin extends StatelessWidget {
-  const BackToLogin({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF16666B),
-      ),
-      body: PopScope(
-        canPop: false,
-        onPopInvoked: (didPop) {
-          if (didPop) {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => const LoginPage()),
-            );
-          }
-        },
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text(
-                  'Account created successfully, please log in again',
-                  style: TextStyle(
-                    color: Color(0xFF16666B),
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => const LoginPage()),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF16666B),
-                    padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
-                  ),
-                  child: const Text(
-                    'Back to Login',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
     );
   }
 }

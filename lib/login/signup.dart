@@ -287,9 +287,7 @@ class SignUpPageState extends State<SignUpPage> {
                                         child: ListBody(
                                           children: [
                                             Text('• At least 8 characters', textAlign: TextAlign.start),
-                                            Text('• Contains both upper and lower case letters', textAlign: TextAlign.start),
                                             Text('• Contains at least one number', textAlign: TextAlign.start),
-                                            Text('• Contains at least one special character', textAlign: TextAlign.start),
                                           ],
                                         ),
                                       ),
@@ -316,15 +314,11 @@ class SignUpPageState extends State<SignUpPage> {
                         } else if (value.length < 8) {
                           return 'Password must be at least 8 characters long';
                         } else if (!RegExp(
-                            r'(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+{}|:;<>,.?/~]).{8,}')
+                            r'(?=.*[a-z])(?=.*[0-9]).{8,}')
                             .hasMatch(value)) {
                           String error = '';
                           if (!RegExp(r'(?=.*[0-9])').hasMatch(value)) {
                             error += 'At least one number required.\n';
-                          }
-                          if (!RegExp(r'(?=.*[!@#$%^&*()_+{}|:;<>,.?/~])')
-                              .hasMatch(value)) {
-                            error += 'At least one special symbol required.\n';
                           }
                           return error.trim();
                         }

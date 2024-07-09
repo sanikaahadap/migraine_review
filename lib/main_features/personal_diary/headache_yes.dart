@@ -27,13 +27,7 @@ class YesPageState extends State<YesPage> {
   String? _screenTime;
   String? _migraineDescription;
   Color borderBlueColor = const Color(0xFF16666B);
-  late DateTime currentBackPressTime;
 
-  @override
-  void initState() {
-    super.initState();
-    currentBackPressTime = DateTime.now();
-  }
 
   @override
   Widget build(BuildContext context) {

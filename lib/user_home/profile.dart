@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:neurooooo/user_home/nav_bar.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -61,6 +62,17 @@ class ProfilePageState extends State<ProfilePage> {
       appBar: AppBar(
         title: const Text('Profile', style: TextStyle(color: Colors.white)),
         backgroundColor: const Color(0xFF16666B),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const CustomBottomNavigationBar(),
+              ),
+            );
+          },
+        ),
       ),
       body: FutureBuilder(
         future: _userData,

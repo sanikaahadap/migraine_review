@@ -115,9 +115,13 @@ class _LoginPageState extends State<LoginPage> {
                         } else if (value.length < 8) {
                           return 'Password must be at least 8 characters long';
                         } else if (!RegExp(
-                            r'(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+{}|:;<>,.?/~`]).{8,}')
+                            r'(?=.*[a-z])(?=.*[0-9]).{8,}')
                             .hasMatch(value)) {
-                          return 'Password must contain at least one letter, one number, and one special character';
+                          String error = '';
+                          if (!RegExp(r'(?=.*[0-9])').hasMatch(value)) {
+                            error += 'At least one number required.\n';
+                          }
+                          return error.trim();
                         }
                         return null;
                       },
