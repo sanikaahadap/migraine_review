@@ -112,12 +112,12 @@ class SignUpPageState extends State<SignUpPage> {
 
     if (name != "" && email != "" && phone != "" && dob != "") {
       ModelUser user = ModelUser(
-          uid: FirebaseAuth.instance.currentUser!.uid,
-          name: name,
-          email: email,
-          phone: phone,
-          dob: dob,
-          );
+        uid: FirebaseAuth.instance.currentUser!.uid,
+        name: name,
+        email: email,
+        phone: phone,
+        dob: dob,
+      );
       try {
         await FirebaseFirestore.instance
             .collection("users")
@@ -153,313 +153,316 @@ class SignUpPageState extends State<SignUpPage> {
         ),
         // Your app bar content goes here
       ),
-      body: SingleChildScrollView(
-        child: Container(
-          padding: const EdgeInsets.all(16.0),
-          child: Center(
-            child: Form(
-              key: _formKey,
-              child: Column(
-                children: [
-                  // Logo image
-                  Image.asset(
-                    'assets/images/logo.png',
-                    height: MediaQuery.of(context).size.height * 0.15,
-                    fit: BoxFit.contain,
-                  ),
-                  const SizedBox(height: 20.0),
-                  // Name field
-                  TextFormField(
-                    controller: _nameController,
-                    decoration: const InputDecoration(
-                      labelText: 'Name',
-                      border: OutlineInputBorder(),
-                      filled: true,
-                      fillColor: Color(0x80B2EBF2),
-                      contentPadding:
-                      EdgeInsets.fromLTRB(12.0, 15.0, 12.0, 15.0),
+      body: PopScope(
+        canPop: false,
+        child:SingleChildScrollView(
+          child: Container(
+            padding: const EdgeInsets.all(16.0),
+            child: Center(
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    // Logo image
+                    Image.asset(
+                      'assets/images/logo.png',
+                      height: MediaQuery.of(context).size.height * 0.15,
+                      fit: BoxFit.contain,
                     ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter your name';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 16.0),
-                  // Email field
-                  TextFormField(
-                    controller: _emailController,
-                    decoration: const InputDecoration(
-                      labelText: 'Email',
-                      border: OutlineInputBorder(),
-                      filled: true,
-                      fillColor: Color(0x80B2EBF2),
-                      contentPadding:
-                      EdgeInsets.fromLTRB(12.0, 15.0, 12.0, 15.0),
-                    ),
-                    keyboardType: TextInputType.emailAddress,
-                    validator: (value) {
-                      if (value == null ||
-                          value.isEmpty ||
-                          !value.contains('@')) {
-                        return 'Enter a valid email address';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 16.0),
-                  // Phone number field
-                  TextFormField(
-                    controller: _phoneController,
-                    decoration: const InputDecoration(
-                      labelText: 'Phone Number',
-                      border: OutlineInputBorder(),
-                      filled: true,
-                      fillColor: Color(0x80B2EBF2),
-                      contentPadding:
-                      EdgeInsets.fromLTRB(12.0, 15.0, 12.0, 15.0),
-                    ),
-                    keyboardType: TextInputType.phone,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter your phone number';
-                      } else if (!RegExp(r'^[0-9]{10}$').hasMatch(value)) {
-                        return 'Enter a valid 10-digit phone number';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 16.0),
-                  // Date of Birth field
-                  TextFormField(
-                    controller: _dobController,
-                    decoration: const InputDecoration(
-                      labelText: 'Date of Birth',
-                      border: OutlineInputBorder(),
-                      filled: true,
-                      fillColor: Color(0x80B2EBF2),
-                      contentPadding:
-                      EdgeInsets.fromLTRB(12.0, 15.0, 12.0, 15.0),
-                    ),
-                    keyboardType: TextInputType.datetime,
-                    onTap: () {
-                      _selectDate(context);
-                    },
-                    readOnly: true,
-                    validator: _validateBirthDate,
-                  ),
-                  const SizedBox(height: 16.0),
-                  // Password field
-                  TextFormField(
-                    controller: _passwordController,
-                    decoration: InputDecoration(
-                      labelText: 'Password',
-                      border: const OutlineInputBorder(),
-                      filled: true,
-                      fillColor: const Color(0x80B2EBF2), // Half lighter tint of the background color
-                      contentPadding: const EdgeInsets.fromLTRB(12.0, 15.0, 12.0, 15.0),
-                      suffixIcon: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          IconButton(
-                            icon: Icon(
-                              _isObscured ? Icons.visibility : Icons.visibility_off,
-                              color: Colors.grey,
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                _isObscured = !_isObscured;
-                              });
-                            },
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.help_outline, color: Colors.grey),
-                            onPressed: () {
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    title: const Text('Password Criteria'),
-                                    content: const SingleChildScrollView(
-                                      child: ListBody(
-                                        children: [
-                                          Text('• At least 8 characters', textAlign: TextAlign.start),
-                                          Text('• Contains both upper and lower case letters', textAlign: TextAlign.start),
-                                          Text('• Contains at least one number', textAlign: TextAlign.start),
-                                          Text('• Contains at least one special character', textAlign: TextAlign.start),
-                                        ],
-                                      ),
-                                    ),
-                                    actions: [
-                                      TextButton(
-                                        child: const Text('OK'),
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                      ),
-                                    ],
-                                  );
-                                },
-                              );
-                            },
-                          ),
-                        ],
+                    const SizedBox(height: 20.0),
+                    // Name field
+                    TextFormField(
+                      controller: _nameController,
+                      decoration: const InputDecoration(
+                        labelText: 'Name',
+                        border: OutlineInputBorder(),
+                        filled: true,
+                        fillColor: Color(0x80B2EBF2),
+                        contentPadding:
+                        EdgeInsets.fromLTRB(12.0, 15.0, 12.0, 15.0),
                       ),
-                    ),
-                    obscureText: _isObscured,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Enter a valid password';
-                      } else if (value.length < 8) {
-                        return 'Password must be at least 8 characters long';
-                      } else if (!RegExp(
-                          r'(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+{}|:;<>,.?/~]).{8,}')
-                          .hasMatch(value)) {
-                        String error = '';
-                        if (!RegExp(r'(?=.*[0-9])').hasMatch(value)) {
-                          error += 'At least one number required.\n';
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your name';
                         }
-                        if (!RegExp(r'(?=.*[!@#$%^&*()_+{}|:;<>,.?/~])')
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 16.0),
+                    // Email field
+                    TextFormField(
+                      controller: _emailController,
+                      decoration: const InputDecoration(
+                        labelText: 'Email',
+                        border: OutlineInputBorder(),
+                        filled: true,
+                        fillColor: Color(0x80B2EBF2),
+                        contentPadding:
+                        EdgeInsets.fromLTRB(12.0, 15.0, 12.0, 15.0),
+                      ),
+                      keyboardType: TextInputType.emailAddress,
+                      validator: (value) {
+                        if (value == null ||
+                            value.isEmpty ||
+                            !value.contains('@')) {
+                          return 'Enter a valid email address';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 16.0),
+                    // Phone number field
+                    TextFormField(
+                      controller: _phoneController,
+                      decoration: const InputDecoration(
+                        labelText: 'Phone Number',
+                        border: OutlineInputBorder(),
+                        filled: true,
+                        fillColor: Color(0x80B2EBF2),
+                        contentPadding:
+                        EdgeInsets.fromLTRB(12.0, 15.0, 12.0, 15.0),
+                      ),
+                      keyboardType: TextInputType.phone,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your phone number';
+                        } else if (!RegExp(r'^[0-9]{10}$').hasMatch(value)) {
+                          return 'Enter a valid 10-digit phone number';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 16.0),
+                    // Date of Birth field
+                    TextFormField(
+                      controller: _dobController,
+                      decoration: const InputDecoration(
+                        labelText: 'Date of Birth',
+                        border: OutlineInputBorder(),
+                        filled: true,
+                        fillColor: Color(0x80B2EBF2),
+                        contentPadding:
+                        EdgeInsets.fromLTRB(12.0, 15.0, 12.0, 15.0),
+                      ),
+                      keyboardType: TextInputType.datetime,
+                      onTap: () {
+                        _selectDate(context);
+                      },
+                      readOnly: true,
+                      validator: _validateBirthDate,
+                    ),
+                    const SizedBox(height: 16.0),
+                    // Password field
+                    TextFormField(
+                      controller: _passwordController,
+                      decoration: InputDecoration(
+                        labelText: 'Password',
+                        border: const OutlineInputBorder(),
+                        filled: true,
+                        fillColor: const Color(0x80B2EBF2), // Half lighter tint of the background color
+                        contentPadding: const EdgeInsets.fromLTRB(12.0, 15.0, 12.0, 15.0),
+                        suffixIcon: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton(
+                              icon: Icon(
+                                _isObscured ? Icons.visibility : Icons.visibility_off,
+                                color: Colors.grey,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  _isObscured = !_isObscured;
+                                });
+                              },
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.help_outline, color: Colors.grey),
+                              onPressed: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: const Text('Password Criteria'),
+                                      content: const SingleChildScrollView(
+                                        child: ListBody(
+                                          children: [
+                                            Text('• At least 8 characters', textAlign: TextAlign.start),
+                                            Text('• Contains both upper and lower case letters', textAlign: TextAlign.start),
+                                            Text('• Contains at least one number', textAlign: TextAlign.start),
+                                            Text('• Contains at least one special character', textAlign: TextAlign.start),
+                                          ],
+                                        ),
+                                      ),
+                                      actions: [
+                                        TextButton(
+                                          child: const Text('OK'),
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                      obscureText: _isObscured,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Enter a valid password';
+                        } else if (value.length < 8) {
+                          return 'Password must be at least 8 characters long';
+                        } else if (!RegExp(
+                            r'(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+{}|:;<>,.?/~]).{8,}')
                             .hasMatch(value)) {
-                          error += 'At least one special symbol required.\n';
+                          String error = '';
+                          if (!RegExp(r'(?=.*[0-9])').hasMatch(value)) {
+                            error += 'At least one number required.\n';
+                          }
+                          if (!RegExp(r'(?=.*[!@#$%^&*()_+{}|:;<>,.?/~])')
+                              .hasMatch(value)) {
+                            error += 'At least one special symbol required.\n';
+                          }
+                          return error.trim();
                         }
-                        return error.trim();
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 16.0),
-                  // Confirm Password field
-                  TextFormField(
-                    controller: _confirmPasswordController,
-                    decoration: InputDecoration(
-                      labelText: 'Confirm Password',
-                      border: const OutlineInputBorder(),
-                      filled: true,
-                      fillColor: const Color(0x80B2EBF2), // Half lighter tint of the background color
-                      contentPadding: const EdgeInsets.fromLTRB(12.0, 15.0, 12.0, 15.0),
-                      suffixIcon: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          IconButton(
-                            icon: Icon(
-                              _isObscured2 ? Icons.visibility : Icons.visibility_off,
-                              color: Colors.grey,
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 16.0),
+                    // Confirm Password field
+                    TextFormField(
+                      controller: _confirmPasswordController,
+                      decoration: InputDecoration(
+                        labelText: 'Confirm Password',
+                        border: const OutlineInputBorder(),
+                        filled: true,
+                        fillColor: const Color(0x80B2EBF2), // Half lighter tint of the background color
+                        contentPadding: const EdgeInsets.fromLTRB(12.0, 15.0, 12.0, 15.0),
+                        suffixIcon: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton(
+                              icon: Icon(
+                                _isObscured2 ? Icons.visibility : Icons.visibility_off,
+                                color: Colors.grey,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  _isObscured2 = !_isObscured2;
+                                });
+                              },
                             ),
-                            onPressed: () {
-                              setState(() {
-                                _isObscured2 = !_isObscured2;
-                              });
-                            },
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.help_outline, color: Colors.grey),
-                            onPressed: () {
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    title: const Text('Confirm Password Criteria'),
-                                    content: const Text('Same as password entered above'),
-                                    actions: [
-                                      TextButton(
-                                        child: const Text('OK'),
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                      ),
-                                    ],
-                                  );
-                                },
-                              );
-                            },
-                          ),
-                        ],
+                            IconButton(
+                              icon: const Icon(Icons.help_outline, color: Colors.grey),
+                              onPressed: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: const Text('Confirm Password Criteria'),
+                                      content: const Text('Same as password entered above'),
+                                      actions: [
+                                        TextButton(
+                                          child: const Text('OK'),
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              },
+                            ),
+                          ],
+                        ),
                       ),
+                      obscureText: _isObscured2,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please confirm your password';
+                        } else if (value != _passwordController.text) {
+                          return 'Passwords do not match';
+                        }
+                        return null;
+                      },
                     ),
-                    obscureText: _isObscured2,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please confirm your password';
-                      } else if (value != _passwordController.text) {
-                        return 'Passwords do not match';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 12.0),
-                  // Sign Up button
-                  InkWell(
-                    onTap: () {
-                      _onSignUpButtonPressed();
-                    },
-                    onTapDown: (_) {
-                      setState(() {
-                        _isButtonPressed = true;
-                      });
-                    },
-                    onTapCancel: () {
-                      setState(() {
-                        _isButtonPressed = false;
-                      });
-                    },
-                    onTapUp: (_) {
-                      setState(() {
-                        _isButtonPressed = false;
-                      });
-                    },
-                    child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 300),
-                      width: 170.0,
-                      height: 45.0,
-                      decoration: BoxDecoration(
-                        color: _isButtonPressed
-                            ? Colors.white
-                            : const Color(0xFF16666B),
-                        borderRadius: BorderRadius.circular(12.0),
-                      ),
-                      child: Center(
-                        child: Text(
-                          'Sign Up',
-                          style: TextStyle(
-                            fontSize: 17.0,
-                            color: _isButtonPressed
-                                ? const Color(0xFF16666B)
-                                : Colors.white,
+                    const SizedBox(height: 12.0),
+                    // Sign Up button
+                    InkWell(
+                      onTap: () {
+                        _onSignUpButtonPressed();
+                      },
+                      onTapDown: (_) {
+                        setState(() {
+                          _isButtonPressed = true;
+                        });
+                      },
+                      onTapCancel: () {
+                        setState(() {
+                          _isButtonPressed = false;
+                        });
+                      },
+                      onTapUp: (_) {
+                        setState(() {
+                          _isButtonPressed = false;
+                        });
+                      },
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 300),
+                        width: 170.0,
+                        height: 45.0,
+                        decoration: BoxDecoration(
+                          color: _isButtonPressed
+                              ? Colors.white
+                              : const Color(0xFF16666B),
+                          borderRadius: BorderRadius.circular(12.0),
+                        ),
+                        child: Center(
+                          child: Text(
+                            'Sign Up',
+                            style: TextStyle(
+                              fontSize: 17.0,
+                              color: _isButtonPressed
+                                  ? const Color(0xFF16666B)
+                                  : Colors.white,
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 1.0),
-                  // Already have an account? Login text
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        'Already have an account?',
-                        style: TextStyle(
-                            color: Colors.grey[700]), // Dark gray color
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          // Navigate to login page
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const LoginPage()),
-                          );
-                        },
-                        child: const Text(
-                          'Login',
+                    const SizedBox(height: 1.0),
+                    // Already have an account? Login text
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          'Already have an account?',
                           style: TextStyle(
-                              color: Color(0xFF16666B)), // Color #16666B
+                              color: Colors.grey[700]), // Dark gray color
                         ),
-                      ),
-                    ],
-                  ),
-                ],
+                        TextButton(
+                          onPressed: () {
+                            // Navigate to login page
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const LoginPage()),
+                            );
+                          },
+                          child: const Text(
+                            'Login',
+                            style: TextStyle(
+                                color: Color(0xFF16666B)), // Color #16666B
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

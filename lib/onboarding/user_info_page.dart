@@ -17,150 +17,176 @@ class UserInfoPageState extends State<UserInfoPage> {
   final TextEditingController medicalConditionController = TextEditingController();
   final TextEditingController medicationsController = TextEditingController();
   final TextEditingController surgeriesController = TextEditingController();
+  late DateTime currentBackPressTime;
+
+  @override
+  void initState() {
+    super.initState();
+    currentBackPressTime = DateTime.now();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const Text(
-                  'Tell us about yourself',
-                  style: TextStyle(
-                    fontSize: 24.0,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF16666B), // Text color similar to features page
-                  ),
-                  textAlign: TextAlign.center,
+      body: PopScope(
+        canPop: false,
+        onPopInvoked: (didPop) {
+          if (didPop) {
+            DateTime now = DateTime.now();
+            if (now.difference(currentBackPressTime) > const Duration(seconds: 2)) {
+              currentBackPressTime = now;
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Press back again to exit'),
+                  duration: Duration(seconds: 2),
                 ),
+              );
+            } else {
+              Navigator.of(context).pop(true); // Exit the app
+            }
+          }
+        },
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const Text(
+                    'Tell us about yourself',
+                    style: TextStyle(
+                      fontSize: 24.0,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF16666B), // Text color similar to features page
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
 
-                const SizedBox(height: 16.0),
-                const Text(
-                  'What is your gender?',
-                  style: TextStyle(
-                    color: Color(0xFF16666B), // Text color
-                  ),
-                ),
-                const SizedBox(height: 8), // Adding some space between text and text field
-                TextFormField(
-                  controller: genderController,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey), // Default border color
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Color(0xFF16666B)), // Border color when focused
+                  const SizedBox(height: 16.0),
+                  const Text(
+                    'What is your gender?',
+                    style: TextStyle(
+                      color: Color(0xFF16666B), // Text color
                     ),
                   ),
-                  maxLines: null,
-                ),
-                const SizedBox(height: 8.0),
-                const Text(
-                  'Do you have any existing medical conditions? If yes, please specify.',
-                  style: TextStyle(
-                    color: Color(0xFF16666B), // Text color
-                  ),
-                ),
-                const SizedBox(height: 8), // Adding some space between text and text field
-                TextFormField(
-                  controller: medicalConditionController,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey), // Default border color
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Color(0xFF16666B)), // Border color when focused
-                    ),
-                  ),
-                  maxLines: null,
-                ),
-                const SizedBox(height: 8.0),
-                const Text(
-                  'List any current medications you are taking (prescription or over-the-counter).',
-                  style: TextStyle(
-                    color: Color(0xFF16666B), // Text color
-                  ),
-                ),
-                const SizedBox(height: 8), // Adding some space between text and text field
-                TextFormField(
-                  controller: medicationsController,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey), // Default border color
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Color(0xFF16666B)), // Border color when focused
-                    ),
-                  ),
-                  maxLines: null,
-                ),
-                const SizedBox(height: 8.0),
-                const Text(
-                  'Have you had any surgeries or hospitalizations in the past? If yes, please provide details.',
-                  style: TextStyle(
-                    color: Color(0xFF16666B), // Text color
-                  ),
-                ),
-                const SizedBox(height: 8), // Adding some space between text and text field
-                TextFormField(
-                  controller: surgeriesController,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey), // Default border color
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Color(0xFF16666B)), // Border color when focused
-                    ),
-                  ),
-                  maxLines: null,
-                ),
-                const SizedBox(height: 30.0),
-                ElevatedButton(
-                  onPressed: () {
-                    String? uid = FirebaseAuth.instance.currentUser?.uid;
-
-                    if (uid != null) {
-                      // Store data in Firestore
-                      FirebaseFirestore.instance.collection('user_info').doc(FirebaseAuth.instance.currentUser?.uid).set({
-                        'uid': FirebaseAuth.instance.currentUser?.uid,
-                        'gender': genderController.text,
-                        'medicalCondition': medicalConditionController.text,
-                        'medications': medicationsController.text,
-                        'surgeries': surgeriesController.text,
-                      }).then((value) {
-                        // Navigate to the next page after storing data
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => const BackToLogin()),
-                        );
-                      }).catchError((error) {
-                        // Handle errors if any
-                        log("Failed to add user information: $error");
-                        // You might want to show a snack-bar or dialog to inform the user about the failure
-                      });
-                    } else {
-                      // Handle the case when the user is not authenticated
-                      log("User is not authenticated.");
-                    }
-                  },
-                  // Styling for the button
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all<Color>(const Color(0xFF16666B)), // Button background color
-                    elevation: MaterialStateProperty.all<double>(2), // Elevation of the button
-                    shape: MaterialStateProperty.all<OutlinedBorder>(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8), // Button border radius
+                  const SizedBox(height: 8), // Adding some space between text and text field
+                  TextFormField(
+                    controller: genderController,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey), // Default border color
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Color(0xFF16666B)), // Border color when focused
                       ),
                     ),
+                    maxLines: null,
                   ),
-                  child: const Text('Proceed', style: TextStyle(color: Colors.white)),
-                ),
-              ],
+                  const SizedBox(height: 8.0),
+                  const Text(
+                    'Do you have any existing medical conditions? If yes, please specify.',
+                    style: TextStyle(
+                      color: Color(0xFF16666B), // Text color
+                    ),
+                  ),
+                  const SizedBox(height: 8), // Adding some space between text and text field
+                  TextFormField(
+                    controller: medicalConditionController,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey), // Default border color
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Color(0xFF16666B)), // Border color when focused
+                      ),
+                    ),
+                    maxLines: null,
+                  ),
+                  const SizedBox(height: 8.0),
+                  const Text(
+                    'List any current medications you are taking (prescription or over-the-counter).',
+                    style: TextStyle(
+                      color: Color(0xFF16666B), // Text color
+                    ),
+                  ),
+                  const SizedBox(height: 8), // Adding some space between text and text field
+                  TextFormField(
+                    controller: medicationsController,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey), // Default border color
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Color(0xFF16666B)), // Border color when focused
+                      ),
+                    ),
+                    maxLines: null,
+                  ),
+                  const SizedBox(height: 8.0),
+                  const Text(
+                    'Have you had any surgeries or hospitalizations in the past? If yes, please provide details.',
+                    style: TextStyle(
+                      color: Color(0xFF16666B), // Text color
+                    ),
+                  ),
+                  const SizedBox(height: 8), // Adding some space between text and text field
+                  TextFormField(
+                    controller: surgeriesController,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey), // Default border color
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Color(0xFF16666B)), // Border color when focused
+                      ),
+                    ),
+                    maxLines: null,
+                  ),
+                  const SizedBox(height: 30.0),
+                  ElevatedButton(
+                    onPressed: () {
+                      String? uid = FirebaseAuth.instance.currentUser?.uid;
+
+                      if (uid != null) {
+                        // Store data in Firestore
+                        FirebaseFirestore.instance.collection('user_info').doc(FirebaseAuth.instance.currentUser?.uid).set({
+                          'uid': FirebaseAuth.instance.currentUser?.uid,
+                          'gender': genderController.text,
+                          'medicalCondition': medicalConditionController.text,
+                          'medications': medicationsController.text,
+                          'surgeries': surgeriesController.text,
+                        }).then((value) {
+                          // Navigate to the next page after storing data
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const BackToLogin()),
+                          );
+                        }).catchError((error) {
+                          // Handle errors if any
+                          log("Failed to add user information: $error");
+                          // You might want to show a snack-bar or dialog to inform the user about the failure
+                        });
+                      } else {
+                        // Handle the case when the user is not authenticated
+                        log("User is not authenticated.");
+                      }
+                    },
+                    // Styling for the button
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all<Color>(const Color(0xFF16666B)), // Button background color
+                      elevation: MaterialStateProperty.all<double>(2), // Elevation of the button
+                      shape: MaterialStateProperty.all<OutlinedBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8), // Button border radius
+                        ),
+                      ),
+                    ),
+                    child: const Text('Proceed', style: TextStyle(color: Colors.white)),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -235,7 +261,6 @@ class DisclaimerPage extends StatelessWidget {
   }
 }
 
-
 class BackToLogin extends StatelessWidget {
   const BackToLogin({Key? key}) : super(key: key);
 
@@ -245,39 +270,50 @@ class BackToLogin extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: const Color(0xFF16666B),
       ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text(
-                'Account created successfully, please log in again',
-                style: TextStyle(
-                  color: Color(0xFF16666B),
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
+      body: PopScope(
+        canPop: false,
+        onPopInvoked: (didPop) {
+          if (didPop) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const LoginPage()),
+            );
+          }
+        },
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text(
+                  'Account created successfully, please log in again',
+                  style: TextStyle(
+                    color: Color(0xFF16666B),
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const LoginPage()),
-                  ); // Implement navigation to login page
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF16666B),
-                  padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
+                const SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => const LoginPage()),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF16666B),
+                    padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
+                  ),
+                  child: const Text(
+                    'Back to Login',
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
-                child: const Text(
-                  'Back to Login',
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

@@ -32,22 +32,6 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
     return Scaffold(
       body: PopScope(
         canPop: false,
-        onPopInvoked: (didPop) {
-          if (didPop) {
-            DateTime now = DateTime.now();
-            if (now.difference(currentBackPressTime) > const Duration(seconds: 2)) {
-              currentBackPressTime = now;
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Press back again to exit'),
-                  duration: Duration(seconds: 2),
-                ),
-              );
-            } else {
-              Navigator.of(context).pop(true); // Exit the app
-            }
-          }
-        },
         child: _pages[selectedIndex],
       ),
       bottomNavigationBar: BottomNavigationBar(

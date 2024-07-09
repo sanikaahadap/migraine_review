@@ -16,7 +16,7 @@ class MigraineLogsPageState extends State<MigraineLogsPage> {
   int? _headacheDurationMonths;
   int? _headachesPerMonth;
   bool showOtherCharacterTextField = false; // Track checkbox state
-   String? _durationOfHeadache; // Index for duration options
+  String? _durationOfHeadache; // Index for duration options
   int _painSeverity = 1; // Initial pain severity
   int? _selectedLocation; // Track selected location of headache
   final List<String> _selectedCharacter = []; // Track selected character of headache
@@ -64,11 +64,35 @@ class MigraineLogsPageState extends State<MigraineLogsPage> {
           .add(migraineLog);
 
       // Navigate to the log response page
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => LogResponsePage(date: DateTime.now()),
-        ),
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("Confirmation"),
+            content: const Text("Are you sure you want to submit this response?"),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  // Close the dialog
+                  Navigator.of(context).pop();
+                  // Navigate to the new page
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const CustomBottomNavigationBar()),
+                  );
+                },
+                child: const Text("Yes"),
+              ),
+              TextButton(
+                onPressed: () {
+                  // Close the dialog without navigating
+                  Navigator.of(context).pop();
+                },
+                child: const Text("No"),
+              ),
+            ],
+          );
+        },
       );
     } catch (e) {
       // Handle errors here
@@ -623,56 +647,6 @@ class MigraineLogsPageState extends State<MigraineLogsPage> {
             style:
             TextStyle(color: Colors.white)), // Set label with white color
         backgroundColor: const Color(0xFF16666B), // Set button background color
-      ),
-    );
-  }
-}
-
-class LogResponsePage extends StatelessWidget {
-  final DateTime date;
-
-  const LogResponsePage({Key? key, required this.date}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Response Recorded',
-        style: TextStyle(color: Colors.white),),
-        backgroundColor: const Color(0xFF16666B), // Set app bar color
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text(
-              'Response recorded on',
-              style: TextStyle(color: Color(0xFF16666B), fontSize: 18.0),
-            ),
-            Text(
-              '${date.day}/${date.month}/${date.year}',
-              style: const TextStyle(
-                  color: Color(0xFF16666B),
-                  fontSize: 24.0,
-                  fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 20.0),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const CustomBottomNavigationBar()),
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor:
-                const Color(0xFF16666B), // Set button background color
-              ),
-              child: const Text('Back to Home',
-                  style: TextStyle(color: Colors.white)),
-            ),
-          ],
-        ),
       ),
     );
   }

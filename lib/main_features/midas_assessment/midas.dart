@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'dart:developer';
+// import 'dart:developer';
 import 'package:neurooooo/user_home/nav_bar.dart';
 import 'dart:async';
 import 'package:neurooooo/user_home/midas_notifs.dart';
@@ -467,8 +467,8 @@ class MIDASOutputPage extends StatelessWidget {
       'timestamp': Timestamp.now(),
       'uid': FirebaseAuth.instance.currentUser!.uid,
     })
-        .then((value) => log("Score and Severity added"))
-        .catchError((error) => log("Failed to add score and severity: $error"));
+        .then((value) => print("Score and Severity added"))
+        .catchError((error) => print("Failed to add score and severity: $error"));
   }
 
   @override
@@ -479,74 +479,88 @@ class MIDASOutputPage extends StatelessWidget {
     _storeData(score, severityLevel);
 
     return Scaffold(
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 50.0, horizontal: 15.0),
-          child: Card(
-            elevation: 4,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: Container(
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
-                gradient: const LinearGradient(
-                  colors: [Color(0xFF16666B), Color(0xFF2193B0)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
+      body: PopScope(
+        canPop: false,
+        onPopInvoked: (didPop) {
+          if (didPop) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const CustomBottomNavigationBar(),
               ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Center(
-                    child: Text(
-                      'Your MIDAS score is: $score',
-                      style: const TextStyle(
-                        fontSize: 22.0,
-                        color: Colors.white,
+            );
+          }
+        },
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 50.0, horizontal: 15.0),
+            child: Card(
+              elevation: 4,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Container(
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                  gradient: const LinearGradient(
+                    colors: [Color(0xFF16666B), Color(0xFF2193B0)],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Center(
+                      child: Text(
+                        'Your MIDAS score is: $score',
+                        style: const TextStyle(
+                          fontSize: 22.0,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 20),
-                  Center(
-                    child: Text(
-                      'Severity Level: $severityLevel',
-                      style: const TextStyle(
-                        fontSize: 22.0,
-                        color: Colors.white,
+                    const SizedBox(height: 20),
+                    Center(
+                      child: Text(
+                        'Severity Level: $severityLevel',
+                        style: const TextStyle(
+                          fontSize: 22.0,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
+                    const SizedBox(height: 20),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                              builder: (context) =>
-                              const CustomBottomNavigationBar()));
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white,
-                      foregroundColor: const Color(0xFF16666B),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 12),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
+                            builder: (context) => const CustomBottomNavigationBar(),
+                          ),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        foregroundColor: const Color(0xFF16666B),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 12),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      child: const Text(
+                        'Go back to home page',
+                        style: TextStyle(
+                          fontSize: 17,
+                          color: Color(0xFF16666B),
+                        ),
                       ),
                     ),
-                    child: const Text(
-                      'Go back to home page',
-                      style: TextStyle(
-                        fontSize: 17,
-                        color: Color(0xFF16666B),
-                      ),
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
