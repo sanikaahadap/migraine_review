@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:neurooooo/user_home/nav_bar.dart';
 import 'dart:async';
 import 'package:neurooooo/user_home/midas_notifs.dart';
+import 'package:intl/intl.dart';
 
 class MIDASAssessmentPage extends StatefulWidget {
   const MIDASAssessmentPage({Key? key}) : super(key: key);
@@ -14,9 +15,11 @@ class MIDASAssessmentPage extends StatefulWidget {
 }
 
 class MIDASAssessmentPageState extends State<MIDASAssessmentPage> {
-  bool _canFillQuestionnaire = true; // Indicates whether the user can fill the questionnaire
+  bool _canFillQuestionnaire =
+      true; // Indicates whether the user can fill the questionnaire
   final String _uid = FirebaseAuth.instance.currentUser!.uid;
   late Timer _dailyCheckTimer;
+  String _nextFillDate = '';
 
   @override
   void initState() {
@@ -32,31 +35,36 @@ class MIDASAssessmentPageState extends State<MIDASAssessmentPage> {
   }
 
   Future<void> _checkQuestionnaireStatus() async {
-    DocumentSnapshot userDoc =
-    await FirebaseFirestore.instance.collection('users').doc(_uid).get();
+    DocumentSnapshot userDoc = await FirebaseFirestore.instance
+        .collection('midas_scores')
+        .doc(_uid)
+        .get();
     if (userDoc.exists) {
       Map<String, dynamic>? data = userDoc.data() as Map<String, dynamic>?;
       Timestamp? lastFilledTimestamp =
-      data?['lastMIDASFilledTimestamp'] as Timestamp?;
+          data?['lastMIDASFilledTimestamp'] as Timestamp?;
       if (lastFilledTimestamp != null) {
-        DateTime threeMonthsAgo =
-        DateTime.now().subtract(const Duration(days: 179));
         DateTime lastFilledDateTime = lastFilledTimestamp.toDate();
-        if (lastFilledDateTime.isAfter(threeMonthsAgo)) {
+        DateTime nextEligibleDate =
+            lastFilledDateTime.add(const Duration(days: 89));
+        DateTime now = DateTime.now();
+
+        if (now.isBefore(nextEligibleDate)) {
           setState(() {
             _canFillQuestionnaire = false;
+            _nextFillDate = DateFormat('MMMM d, yyyy').format(nextEligibleDate);
           });
         } else {
           setState(() {
             _canFillQuestionnaire = true;
+            _nextFillDate = '';
           });
-          LocalNotifications.scheduleDailyNotification();
         }
       } else {
         setState(() {
           _canFillQuestionnaire = true;
+          _nextFillDate = '';
         });
-        LocalNotifications.scheduleDailyNotification();
       }
     }
   }
@@ -69,12 +77,9 @@ class MIDASAssessmentPageState extends State<MIDASAssessmentPage> {
 
   Future<void> _setQuestionnaireFilled() async {
     Timestamp now = Timestamp.now();
-    await FirebaseFirestore.instance.collection('users').doc(_uid).set({
+    await FirebaseFirestore.instance.collection('midas_scores').doc(_uid).set({
       'lastMIDASFilledTimestamp': now,
     }, SetOptions(merge: true));
-
-    // Schedule the notification for the next day
-    await LocalNotifications.scheduleDailyNotification();
   }
 
   void _showInfoDialog() {
@@ -187,21 +192,22 @@ class MIDASAssessmentPageState extends State<MIDASAssessmentPage> {
               style: TextStyle(
                 color: Color(0xFF16666B),
                 fontSize: 17,
-                fontStyle: FontStyle.italic
+                fontStyle: FontStyle.italic,
               ),
             ),
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: _canFillQuestionnaire
                   ? () {
-                _setQuestionnaireFilled().then((_) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const MIDASQuestions()),
-                  );
-                });
-              }
+                      _setQuestionnaireFilled().then((_) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const MIDASQuestions(),
+                          ),
+                        );
+                      });
+                    }
                   : null,
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF16666B), // Background color
@@ -215,16 +221,27 @@ class MIDASAssessmentPageState extends State<MIDASAssessmentPage> {
             ),
             const SizedBox(height: 20),
             if (!_canFillQuestionnaire)
-              const Text(
-                'We\'ll notify you when its time to fill it again',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.red,
-                ),
-                textAlign: TextAlign.center,
+              Column(
+                children: [
+                  const Text(
+                    'We\'ll notify you when it\'s time to fill it again',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.red,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    'Next eligible date: $_nextFillDate',
+                    style: const TextStyle(
+                      fontSize: 16,
+                      color: Colors.red,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
               ),
-            const SizedBox(height: 20)
-
           ],
         ),
       ),
@@ -375,12 +392,12 @@ class MIDASQuestionsState extends State<MIDASQuestions> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8.0),
                             color: _selectedOptions[_currentPageIndex] ==
-                                _options[index]
+                                    _options[index]
                                 ? const Color(0xFF16666B)
                                 : Colors.white,
                             border: Border.all(
                               color: _selectedOptions[_currentPageIndex] ==
-                                  _options[index]
+                                      _options[index]
                                   ? const Color(0xFF16666B)
                                   : Colors.black,
                             ),
@@ -391,10 +408,10 @@ class MIDASQuestionsState extends State<MIDASQuestions> {
                             },
                             style: TextButton.styleFrom(
                               backgroundColor:
-                              _selectedOptions[_currentPageIndex] ==
-                                  _options[index]
-                                  ? const Color(0xFF16666B)
-                                  : Colors.white,
+                                  _selectedOptions[_currentPageIndex] ==
+                                          _options[index]
+                                      ? const Color(0xFF16666B)
+                                      : Colors.white,
                             ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -404,10 +421,10 @@ class MIDASQuestionsState extends State<MIDASQuestions> {
                                   style: TextStyle(
                                     fontSize: 16,
                                     color:
-                                    _selectedOptions[_currentPageIndex] ==
-                                        _options[index]
-                                        ? Colors.white
-                                        : const Color(0xFF16666B),
+                                        _selectedOptions[_currentPageIndex] ==
+                                                _options[index]
+                                            ? Colors.white
+                                            : const Color(0xFF16666B),
                                   ),
                                 ),
                                 const SizedBox(width: 5),
@@ -415,7 +432,7 @@ class MIDASQuestionsState extends State<MIDASQuestions> {
                                   _getIconForOption(_options[index]),
                                   size: 30,
                                   color: _selectedOptions[_currentPageIndex] ==
-                                      _options[index]
+                                          _options[index]
                                       ? Colors.white
                                       : const Color(0xFF16666B),
                                 ),
@@ -471,13 +488,14 @@ class MIDASOutputPage extends StatelessWidget {
     FirebaseFirestore.instance
         .collection('midas_scores')
         .add({
-      'score': score,
-      'severity': severity,
-      'timestamp': Timestamp.now(),
-      'uid': FirebaseAuth.instance.currentUser!.uid,
-    })
+          'score': score,
+          'severity': severity,
+          'timestamp': Timestamp.now(),
+          'uid': FirebaseAuth.instance.currentUser!.uid,
+        })
         .then((value) => print("Score and Severity added"))
-        .catchError((error) => print("Failed to add score and severity: $error"));
+        .catchError(
+            (error) => print("Failed to add score and severity: $error"));
   }
 
   @override
@@ -502,7 +520,8 @@ class MIDASOutputPage extends StatelessWidget {
         },
         child: Center(
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 50.0, horizontal: 15.0),
+            padding:
+                const EdgeInsets.symmetric(vertical: 50.0, horizontal: 15.0),
             child: Card(
               elevation: 4,
               shape: RoundedRectangleBorder(
@@ -547,7 +566,8 @@ class MIDASOutputPage extends StatelessWidget {
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const CustomBottomNavigationBar(),
+                            builder: (context) =>
+                                const CustomBottomNavigationBar(),
                           ),
                         );
                       },

@@ -5,7 +5,7 @@ import 'package:neurooooo/other_services/validation.dart';
 import 'package:neurooooo/main_features/personal_diary/diary.dart';
 import 'package:neurooooo/main_features/midas_assessment/midas.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:neurooooo/user_home/local_notifs.dart';
+import 'package:neurooooo/user_home/diary_notifs.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
 FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =

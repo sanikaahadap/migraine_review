@@ -4,11 +4,9 @@ import 'package:flutter/material.dart';
 import 'headache_no.dart';
 import 'headache_yes.dart';
 import 'dart:async';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:neurooooo/user_home/local_notifs.dart';
 
 class DiaryPage extends StatefulWidget {
-  const DiaryPage({super.key});
+  const DiaryPage({Key? key}) : super(key: key);
 
   @override
   DiaryPageState createState() => DiaryPageState();
@@ -33,8 +31,6 @@ class DiaryPageState extends State<DiaryPage> {
       _canFillDiary =
           false; // Update _canFillDiary after setting the diary filled
     });
-    LocalNotifications
-        .cancelNotification(); // Cancel the notification after diary is filled
   }
 
   Future<void> _checkDiaryStatus() async {
@@ -45,41 +41,16 @@ class DiaryPageState extends State<DiaryPage> {
       String? lastFilledDate = data?['lastFilledDate'] as String?;
       String today = DateTime.now().toIso8601String().split('T')[0];
 
-      TimeOfDay notificationTime = const TimeOfDay(
-          hour: 18, minute: 0); // Default time for notification at 6 PM
-
-      // Check if the user has set a custom notification time
-      SharedPreferences prefs = await SharedPreferences.getInstance();
+      // Check if the diary has already been filled today
       if (lastFilledDate == today) {
         setState(() {
           _canFillDiary = false;
         });
-        LocalNotifications.cancelNotification();
       } else {
         setState(() {
           _canFillDiary = true;
         });
-        LocalNotifications.scheduleNotificationAtTime();
       }
-
-      if (prefs.containsKey('notificationHour') &&
-          prefs.containsKey('notificationMinute')) {
-        notificationTime = TimeOfDay(
-          hour: prefs.getInt('notificationHour')!,
-          minute: prefs.getInt('notificationMinute')!,
-        );
-      }
-
-      // Construct the scheduled notification time
-      final now = DateTime.now();
-      // ignore: unused_local_variable
-      final scheduledNotificationDateTime = DateTime(
-        now.year,
-        now.month,
-        now.day,
-        notificationTime.hour,
-        notificationTime.minute,
-      );
     }
   }
 
@@ -146,7 +117,7 @@ class DiaryPageState extends State<DiaryPage> {
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.red,
-                    leadingDistribution: TextLeadingDistribution.proportional
+                    leadingDistribution: TextLeadingDistribution.proportional,
                   ),
                   textAlign: TextAlign.center,
                 ),

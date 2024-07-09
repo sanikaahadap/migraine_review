@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:neurooooo/user_home/home.dart';
-import 'package:neurooooo/user_home/trigger_notifi.dart';
+import 'package:neurooooo/user_home/trigger_notifs.dart';
 import 'package:neurooooo/user_home/instruction_manual.dart';
 
 class CustomBottomNavigationBar extends StatefulWidget {
