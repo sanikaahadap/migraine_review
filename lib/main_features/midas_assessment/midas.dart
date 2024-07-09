@@ -183,6 +183,14 @@ class MIDASAssessmentPageState extends State<MIDASAssessmentPage> {
                 fontWeight: FontWeight.bold,
               ),
             ),
+            const Text(
+              '(To be filled only once every 3 months)',
+              style: TextStyle(
+                color: Color(0xFF16666B),
+                fontSize: 17,
+                fontStyle: FontStyle.italic
+              ),
+            ),
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: _canFillQuestionnaire

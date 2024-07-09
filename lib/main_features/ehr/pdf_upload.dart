@@ -126,7 +126,7 @@ class _DocUploadState extends State<DocUpload> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          "Documents",
+          "Medical Reports",
           style: TextStyle(color: Colors.white),
         ),
         centerTitle: true,
