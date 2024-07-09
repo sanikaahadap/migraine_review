@@ -12,107 +12,110 @@ class Features extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-      child: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Container(
-            padding: const EdgeInsets.only(top: 40.0), // Adjust the top padding as needed
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text(
-                  'An app solely designed to elevate your migraine care journey, tailored uniquely for your needs.',
-                  style: TextStyle(fontSize: 14.0, color: Colors.grey[700]),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 16.0),
-                const Text(
-                  'Features Offered',
-                  style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold, color: Color(0xFF16666B)),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 16.0),
-                FeatureButton(
-                  imagePath: 'assets/intro_images/intro_1.png',
-                  buttonText: 'Track & Assess',
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const IntroPage1()), // Navigate to intro_page_1.dart
-                    );
-                  },
-                ),
-                FeatureButton(
-                  imagePath: 'assets/intro_images/intro_2.png',
-                  buttonText: 'Tailored Lifestyle Tips',
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const IntroPage2()), // Navigate to intro_page_2.dart
-                    );
-                  },
-                ),
-                FeatureButton(
-                  imagePath: 'assets/intro_images/intro_3.png',
-                  buttonText: 'Personalized Reminders',
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const IntroPage3()), // Navigate to intro_page_3.dart
-                    );
-                  },
-                ),
-                FeatureButton(
-                  imagePath: 'assets/intro_images/intro_4.png',
-                  buttonText: 'Your Diary',
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const IntroPage4()), // Navigate to intro_page_4.dart
-                    );
-                  },
-                ),
-                FeatureButton(
-                  imagePath: 'assets/intro_images/intro_5.png',
-                  buttonText: 'FAQs',
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const IntroPage5()), // Navigate to intro_page_5.dart
-                    );
-                  },
-                ),
-                const SizedBox(height: 16.0),
-                Text(
-                  'Click the buttons to know more about the features',
-                  style: TextStyle(fontSize: 12.0, color: Colors.grey[700]),
-                  textAlign: TextAlign.center,
-                ),
-                // Added text with a link to 'login_signup' page
-                TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const LoginSignupPage()), // Navigate to login_signup_page.dart
-                    );
-                  },
-                  child: const Text(
-                    'Skip to Login/Signup',
-                    style: TextStyle(
-                      color: Color(0xFF16666B),
-                      fontWeight: FontWeight.bold,
-                      decoration: TextDecoration.none,
+        body: PopScope(
+        canPop: false,
+          child:SingleChildScrollView(
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Container(
+                    padding: const EdgeInsets.only(top: 40.0), // Adjust the top padding as needed
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Text(
+                          'An app solely designed to elevate your migraine care journey, tailored uniquely for your needs.',
+                          style: TextStyle(fontSize: 14.0, color: Colors.grey[700]),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 16.0),
+                        const Text(
+                          'Features Offered',
+                          style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold, color: Color(0xFF16666B)),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 16.0),
+                        FeatureButton(
+                          imagePath: 'assets/intro_images/intro_1.png',
+                          buttonText: 'Track & Assess',
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const IntroPage1()), // Navigate to intro_page_1.dart
+                            );
+                          },
+                        ),
+                        FeatureButton(
+                          imagePath: 'assets/intro_images/intro_2.png',
+                          buttonText: 'Tailored Lifestyle Tips',
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const IntroPage2()), // Navigate to intro_page_2.dart
+                            );
+                          },
+                        ),
+                        FeatureButton(
+                          imagePath: 'assets/intro_images/intro_3.png',
+                          buttonText: 'Personalized Reminders',
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const IntroPage3()), // Navigate to intro_page_3.dart
+                            );
+                          },
+                        ),
+                        FeatureButton(
+                          imagePath: 'assets/intro_images/intro_4.png',
+                          buttonText: 'Your Diary',
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const IntroPage4()), // Navigate to intro_page_4.dart
+                            );
+                          },
+                        ),
+                        FeatureButton(
+                          imagePath: 'assets/intro_images/intro_5.png',
+                          buttonText: 'FAQs',
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const IntroPage5()), // Navigate to intro_page_5.dart
+                            );
+                          },
+                        ),
+                        const SizedBox(height: 16.0),
+                        Text(
+                          'Click the buttons to know more about the features',
+                          style: TextStyle(fontSize: 12.0, color: Colors.grey[700]),
+                          textAlign: TextAlign.center,
+                        ),
+                        // Added text with a link to 'login_signup' page
+                        TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const LoginSignupPage()), // Navigate to login_signup_page.dart
+                            );
+                          },
+                          child: const Text(
+                            'Skip to Login/Signup',
+                            style: TextStyle(
+                              color: Color(0xFF16666B),
+                              fontWeight: FontWeight.bold,
+                              decoration: TextDecoration.none,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
-              ],
+              ),
+             ),
             ),
-          ),
-        ),
-      ),
-    ),
     );
   }
 }
