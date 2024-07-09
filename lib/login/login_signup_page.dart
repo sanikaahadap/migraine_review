@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:neurooooo/login/login.dart';
+import 'package:neurooooo/onboarding/features.dart';
 import 'package:neurooooo/onboarding/user_info_page.dart';
 
 class LoginSignupPage extends StatelessWidget {
@@ -14,11 +15,18 @@ class LoginSignupPage extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const Features(),
+              ),
+            );
           },
         ),
       ),
-      body: Container(
+    body: PopScope(
+    canPop: false,
+    child: Container(
         color: const Color(0x80B2EBF2),
         padding: const EdgeInsets.all(16.0),
         child: Center(
@@ -87,6 +95,7 @@ class LoginSignupPage extends StatelessWidget {
           ),
         ),
       ),
+    ),
     );
   }
 }

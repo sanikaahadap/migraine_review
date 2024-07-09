@@ -254,12 +254,15 @@ class ModelUser {
   final String uid;
   final String email;
   final String dob;
+  final bool admin_role;
 
   ModelUser(
       {required this.name,
       required this.uid,
       required this.dob,
-      required this.email});
+      required this.email,
+        required this.admin_role
+      });
 
   factory ModelUser.fromDocument(DocumentSnapshot doc) {
     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
@@ -267,7 +270,9 @@ class ModelUser {
       name: data['name'] ?? 'No Name',
       uid: data['uid'] ?? 'No UID',
       dob: data['dob'] ?? 'No dob',
-      email: data['email'] ?? 'No email', // Ensure there's a default value
+      email: data['email'] ?? 'No email',
+      admin_role: data['admin_role'] ?? 'false',
+      // Ensure there's a default value
     );
   }
 }
@@ -279,9 +284,10 @@ class UserService {
   Future<List<ModelUser>> getUsers() async {
     try {
       QuerySnapshot querySnapshot = await _firestore.collection('users').get();
-      List<ModelUser> users = querySnapshot.docs.map((doc) {
-        return ModelUser.fromDocument(doc);
-      }).toList();
+      List<ModelUser> users = querySnapshot.docs
+          .map((doc) => ModelUser.fromDocument(doc))
+          .where((user) => user.admin_role==false) // Filter out users where adminRole is true
+          .toList();
       return users;
     } catch (e) {
       throw Exception('Error fetching users: $e');
