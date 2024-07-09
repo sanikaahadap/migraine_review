@@ -44,107 +44,150 @@ class EhrGraphPage extends StatelessWidget {
                 data.dateTime.millisecondsSinceEpoch.toDouble(), data.score))
             .toList();
 
-        // Get the minimum and maximum dates for x-axis
-        final minDate = scoreDataList.first.dateTime;
-        final maxDate = scoreDataList.last.dateTime;
+        // Get unique dates for the x-axis labels
+        final uniqueDates = <DateTime>{};
+        final uniqueSpots = <FlSpot>[];
 
-// Function to get titles for x-axis
+        for (var data in scoreDataList) {
+          if (!uniqueDates.contains(data.dateTime)) {
+            uniqueDates.add(data.dateTime);
+            uniqueSpots.add(FlSpot(
+                data.dateTime.millisecondsSinceEpoch.toDouble(), data.score));
+          }
+        }
+
+        // Calculate the min and max X values with added spacing
+        final minX = uniqueSpots.first.x -
+            86400000; // Subtracting one day in milliseconds
+        final maxX =
+            uniqueSpots.last.x + 86400000; // Adding one day in milliseconds
+
+        // Function to get titles for x-axis
         String getXTitles(double value) {
           final dateTime = DateTime.fromMillisecondsSinceEpoch(value.toInt());
-          if (dateTime.isBefore(minDate) || dateTime.isAfter(maxDate)) {
-            return ''; // Return empty string for dates outside the range
+          if (uniqueDates.contains(dateTime)) {
+            return DateFormat('MMM d').format(dateTime); // Format as Jul 25
           }
-          return DateFormat('MMM d').format(dateTime); // Format dates
+          return '';
         }
 
         return Center(
           child: Container(
-              width: MediaQuery.of(context).size.width *
-                  0.8, // Adjust width as needed
-              height: MediaQuery.of(context).size.height *
-                  0.4, // Adjust height as needed
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8.0),
-                color: Colors.white,
-              ),
-              padding: const EdgeInsets.all(16.0),
-              child: LineChart(
-                LineChartData(
-                  axisTitleData: FlAxisTitleData(
-                    leftTitle: AxisTitle(
-                      margin: 15,
-                      showTitle: true,
-                      titleText: 'Scores',
-                      textStyle: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 20,
-                      ),
-                    ),
-                    bottomTitle: AxisTitle(
-                      margin: 1,
-                      showTitle: true,
-                      titleText: 'Date',
-                      textStyle: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 20,
-                      ),
+            width: MediaQuery.of(context).size.width *
+                0.9, // Adjust width as needed
+            height: MediaQuery.of(context).size.height *
+                0.4, // Adjust height as needed
+
+            padding: const EdgeInsets.all(16.0),
+            child: LineChart(
+              LineChartData(
+                axisTitleData: FlAxisTitleData(
+                  leftTitle: AxisTitle(
+                    margin: 1,
+                    showTitle: true,
+                    titleText: 'Scores',
+                    textStyle: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
-                  titlesData: FlTitlesData(
-                    bottomTitles: SideTitles(
-                      showTitles: true,
-                      reservedSize: 10,
-                      margin: 10,
-                      getTitles: (value) {
-                        // Here we determine which titles to show based on the value
-                        // This is a simple example; adjust logic as needed
-                        int index = value.toInt();
-                        if (index % 5 == 0) {
-                          // Show titles for every 5th index
-                          return DateFormat('MM/dd').format(
-                              DateTime.fromMillisecondsSinceEpoch(
-                                  value.toInt()));
-                        }
-                        return '';
-                      },
-                      getTextStyles: (BuildContext context, double value) {
-                        return const TextStyle(
-                          color: Colors.blue,
-                          fontSize: 12,
-                        );
-                      },
-                    ),
-                    leftTitles: SideTitles(
-                      interval: 5,
-                      showTitles: true,
-                      reservedSize: 10,
-                      getTextStyles: (BuildContext context, double value) {
-                        return const TextStyle(
-                          color: Colors.black,
-                          fontSize: 12,
-                        );
-                      },
+                  bottomTitle: AxisTitle(
+                    margin: 0.02,
+                    showTitle: true,
+                    titleText:
+                        'Oldest\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tLatest',
+                    textStyle: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
-                  borderData: FlBorderData(show: true),
-                  minX: scoreDataList.first.dateTime.millisecondsSinceEpoch
-                      .toDouble(),
-                  maxX: scoreDataList.last.dateTime.millisecondsSinceEpoch
-                      .toDouble(),
-                  minY: 0,
-                  maxY: 30, // Set maximum score value as needed
-                  lineBarsData: [
-                    LineChartBarData(
-                      spots: spots,
-                      isCurved: false,
-                      colors: [const Color.fromARGB(255, 85, 190, 83)],
-                      barWidth: 4,
-                      isStrokeCapRound: true,
-                      belowBarData: BarAreaData(show: false),
-                    ),
-                  ],
                 ),
-              )),
+                titlesData: FlTitlesData(
+                  bottomTitles: SideTitles(
+                    showTitles: true,
+                    reservedSize: 5,
+                    margin: 10,
+                    getTitles: (value) {
+                      return getXTitles(value);
+                    },
+                    getTextStyles: (BuildContext context, double value) {
+                      return const TextStyle(
+                        color: Colors.black,
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      );
+                    },
+                  ),
+                  leftTitles: SideTitles(
+                    interval: 5,
+                    showTitles: true,
+                    reservedSize: 40,
+                    getTextStyles: (BuildContext context, double value) {
+                      return const TextStyle(
+                        color: Colors.black,
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      );
+                    },
+                  ),
+                ),
+                gridData: FlGridData(
+                  show: true,
+                  drawVerticalLine: true,
+                  drawHorizontalLine: true,
+                  getDrawingHorizontalLine: (value) {
+                    return FlLine(
+                      color: Colors.grey.withOpacity(0.5),
+                      strokeWidth: 1,
+                    );
+                  },
+                  getDrawingVerticalLine: (value) {
+                    return FlLine(
+                      color: Colors.grey.withOpacity(0.5),
+                      strokeWidth: 0,
+                    );
+                  },
+                ),
+                borderData: FlBorderData(
+                  show: true,
+                  border: Border.all(color: Colors.grey, width: 1),
+                ),
+                minX: minX,
+                maxX: maxX,
+                minY: 0,
+                maxY: 30, // Set maximum score value as needed
+                lineBarsData: [
+                  LineChartBarData(
+                    spots: uniqueSpots,
+                    isCurved: false,
+                    colors: [Color.fromARGB(255, 83, 245, 102)],
+                    barWidth: 3,
+                    isStrokeCapRound: true,
+                    belowBarData: BarAreaData(
+                      show: false,
+                      colors: [const Color(0xFF539BF5).withOpacity(0.3)],
+                    ),
+                    dotData: FlDotData(
+                      show: true,
+                      getDotPainter: (spot, percent, bar, index) =>
+                          FlDotCirclePainter(
+                        radius: 6,
+                        color: const Color(0xFF539BF5),
+                        strokeWidth: 2,
+                        strokeColor: Colors.white,
+                      ),
+                      checkToShowDot: (spot, barData) {
+                        // Conditionally show dots for specific spots if needed
+                        return true;
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
         );
       },
     );

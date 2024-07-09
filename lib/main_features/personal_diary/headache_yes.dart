@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:neurooooo/user_home/nav_bar.dart';
+import 'package:neurooooo/main_features/personal_diary/diary.dart';
 
 class YesPage extends StatefulWidget {
   const YesPage({super.key});
@@ -28,8 +29,6 @@ class YesPageState extends State<YesPage> {
   String? _migraineDescription;
   Color borderBlueColor = const Color(0xFF16666B);
 
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,12 +41,17 @@ class YesPageState extends State<YesPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              const Text('1. Describe the headache experienced:', style: TextStyle(color: Color(0xFF16666B), fontSize: 18, fontWeight: FontWeight.bold)),
+              const Text('1. Describe the headache experienced:',
+                  style: TextStyle(
+                      color: Color(0xFF16666B),
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold)),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   RadioListTile<String>(
-                    title: const Text('Throbbing', style: TextStyle(color: Color(0xFF16666B))),
+                    title: const Text('Throbbing',
+                        style: TextStyle(color: Color(0xFF16666B))),
                     value: 'Throbbing',
                     groupValue: _headacheDescription,
                     onChanged: (value) {
@@ -58,7 +62,8 @@ class YesPageState extends State<YesPage> {
                     activeColor: const Color(0xFF16666B),
                   ),
                   RadioListTile<String>(
-                    title: const Text('Pulsating', style: TextStyle(color: Color(0xFF16666B))),
+                    title: const Text('Pulsating',
+                        style: TextStyle(color: Color(0xFF16666B))),
                     value: 'Pulsating',
                     groupValue: _headacheDescription,
                     onChanged: (value) {
@@ -69,7 +74,8 @@ class YesPageState extends State<YesPage> {
                     activeColor: const Color(0xFF16666B),
                   ),
                   RadioListTile<String>(
-                    title: const Text('Sharp', style: TextStyle(color: Color(0xFF16666B))),
+                    title: const Text('Sharp',
+                        style: TextStyle(color: Color(0xFF16666B))),
                     value: 'Sharp',
                     groupValue: _headacheDescription,
                     onChanged: (value) {
@@ -80,7 +86,8 @@ class YesPageState extends State<YesPage> {
                     activeColor: const Color(0xFF16666B),
                   ),
                   RadioListTile<String>(
-                    title: const Text('Tight', style: TextStyle(color: Color(0xFF16666B))),
+                    title: const Text('Tight',
+                        style: TextStyle(color: Color(0xFF16666B))),
                     value: 'Tight',
                     groupValue: _headacheDescription,
                     onChanged: (value) {
@@ -91,7 +98,8 @@ class YesPageState extends State<YesPage> {
                     activeColor: const Color(0xFF16666B),
                   ),
                   RadioListTile<String>(
-                    title: const Text('Other', style: TextStyle(color: Color(0xFF16666B))),
+                    title: const Text('Other',
+                        style: TextStyle(color: Color(0xFF16666B))),
                     value: 'Other',
                     groupValue: _headacheDescription,
                     onChanged: (value) {
@@ -104,19 +112,26 @@ class YesPageState extends State<YesPage> {
                 ],
               ),
               const SizedBox(height: 20),
-              const Text('2. What was the severity?', style: TextStyle(color: Color(0xFF16666B), fontSize: 18, fontWeight: FontWeight.bold)),
+              const Text('2. What was the severity?',
+                  style: TextStyle(
+                      color: Color(0xFF16666B),
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold)),
               const SizedBox(height: 7),
               Container(
                 width: 200, // Adjust the width as needed
                 decoration: BoxDecoration(
                   border: Border.all(
-                    color: borderBlueColor, // Use the custom color for the border
+                    color:
+                        borderBlueColor, // Use the custom color for the border
                     width: 1.0, // Choose the border width
                   ),
-                  borderRadius: BorderRadius.circular(8.0), // Optional: Add border radius for rounded corners
+                  borderRadius: BorderRadius.circular(
+                      8.0), // Optional: Add border radius for rounded corners
                 ),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center, // Center the selected value horizontally
+                  mainAxisAlignment: MainAxisAlignment
+                      .center, // Center the selected value horizontally
                   children: [
                     DropdownButton<String>(
                       value: _headacheSeverity,
@@ -143,15 +158,18 @@ class YesPageState extends State<YesPage> {
                   ],
                 ),
               ),
-
-
               const SizedBox(height: 20),
-              const Text('3. What was the headache accompanied by:', style: TextStyle(color: Color(0xFF16666B), fontSize: 18, fontWeight: FontWeight.bold)),
+              const Text('3. What was the headache accompanied by:',
+                  style: TextStyle(
+                      color: Color(0xFF16666B),
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold)),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   CheckboxListTile(
-                    title: const Text('Neck pain', style: TextStyle(color: Color(0xFF16666B))),
+                    title: const Text('Neck pain',
+                        style: TextStyle(color: Color(0xFF16666B))),
                     value: _headacheAccompaniedBy.contains('Neck pain'),
                     onChanged: (value) {
                       setState(() {
@@ -165,7 +183,8 @@ class YesPageState extends State<YesPage> {
                     activeColor: const Color(0xFF16666B),
                   ),
                   CheckboxListTile(
-                    title: const Text('Nausea', style: TextStyle(color: Color(0xFF16666B))),
+                    title: const Text('Nausea',
+                        style: TextStyle(color: Color(0xFF16666B))),
                     value: _headacheAccompaniedBy.contains('Nausea'),
                     onChanged: (value) {
                       setState(() {
@@ -179,7 +198,8 @@ class YesPageState extends State<YesPage> {
                     activeColor: const Color(0xFF16666B),
                   ),
                   CheckboxListTile(
-                    title: const Text('Vomiting', style: TextStyle(color: Color(0xFF16666B))),
+                    title: const Text('Vomiting',
+                        style: TextStyle(color: Color(0xFF16666B))),
                     value: _headacheAccompaniedBy.contains('Vomiting'),
                     onChanged: (value) {
                       setState(() {
@@ -193,8 +213,10 @@ class YesPageState extends State<YesPage> {
                     activeColor: const Color(0xFF16666B),
                   ),
                   CheckboxListTile(
-                    title: const Text('Visual disturbances', style: TextStyle(color: Color(0xFF16666B))),
-                    value: _headacheAccompaniedBy.contains('Visual disturbances'),
+                    title: const Text('Visual disturbances',
+                        style: TextStyle(color: Color(0xFF16666B))),
+                    value:
+                        _headacheAccompaniedBy.contains('Visual disturbances'),
                     onChanged: (value) {
                       setState(() {
                         if (value!) {
@@ -209,26 +231,34 @@ class YesPageState extends State<YesPage> {
                 ],
               ),
               const SizedBox(height: 20),
-              const Text('4. Any symptoms before the headache:', style: TextStyle(color: Color(0xFF16666B), fontSize: 18, fontWeight: FontWeight.bold)),
+              const Text('4. Any symptoms before the headache:',
+                  style: TextStyle(
+                      color: Color(0xFF16666B),
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold)),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   CheckboxListTile(
-                    title: const Text('Visual flickering lights', style: TextStyle(color: Color(0xFF16666B))),
-                    value: _preHeadacheSymptoms.contains('Visual flickering lights'),
+                    title: const Text('Visual flickering lights',
+                        style: TextStyle(color: Color(0xFF16666B))),
+                    value: _preHeadacheSymptoms
+                        .contains('Visual flickering lights'),
                     onChanged: (value) {
                       setState(() {
                         if (value!) {
                           _preHeadacheSymptoms.add('Visual flickering lights');
                         } else {
-                          _preHeadacheSymptoms.remove('Visual flickering lights');
+                          _preHeadacheSymptoms
+                              .remove('Visual flickering lights');
                         }
                       });
                     },
                     activeColor: const Color(0xFF16666B),
                   ),
                   CheckboxListTile(
-                    title: const Text('Colored lights', style: TextStyle(color: Color(0xFF16666B))),
+                    title: const Text('Colored lights',
+                        style: TextStyle(color: Color(0xFF16666B))),
                     value: _preHeadacheSymptoms.contains('Colored lights'),
                     onChanged: (value) {
                       setState(() {
@@ -242,7 +272,8 @@ class YesPageState extends State<YesPage> {
                     activeColor: const Color(0xFF16666B),
                   ),
                   CheckboxListTile(
-                    title: const Text('Tunnel-like vision', style: TextStyle(color: Color(0xFF16666B))),
+                    title: const Text('Tunnel-like vision',
+                        style: TextStyle(color: Color(0xFF16666B))),
                     value: _preHeadacheSymptoms.contains('Tunnel-like vision'),
                     onChanged: (value) {
                       setState(() {
@@ -258,12 +289,17 @@ class YesPageState extends State<YesPage> {
                 ],
               ),
               const SizedBox(height: 20),
-              const Text('5. Is the headache triggered by:', style: TextStyle(color: Color(0xFF16666B), fontSize: 18, fontWeight: FontWeight.bold)),
+              const Text('5. Is the headache triggered by:',
+                  style: TextStyle(
+                      color: Color(0xFF16666B),
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold)),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   CheckboxListTile(
-                    title: const Text('Cold drinks', style: TextStyle(color: Color(0xFF16666B))),
+                    title: const Text('Cold drinks',
+                        style: TextStyle(color: Color(0xFF16666B))),
                     value: _headacheTriggers.contains('Cold drinks'),
                     onChanged: (value) {
                       setState(() {
@@ -277,7 +313,8 @@ class YesPageState extends State<YesPage> {
                     activeColor: const Color(0xFF16666B),
                   ),
                   CheckboxListTile(
-                    title: const Text('Tea', style: TextStyle(color: Color(0xFF16666B))),
+                    title: const Text('Tea',
+                        style: TextStyle(color: Color(0xFF16666B))),
                     value: _headacheTriggers.contains('Tea'),
                     onChanged: (value) {
                       setState(() {
@@ -291,7 +328,8 @@ class YesPageState extends State<YesPage> {
                     activeColor: const Color(0xFF16666B),
                   ),
                   CheckboxListTile(
-                    title: const Text('Coffee', style: TextStyle(color: Color(0xFF16666B))),
+                    title: const Text('Coffee',
+                        style: TextStyle(color: Color(0xFF16666B))),
                     value: _headacheTriggers.contains('Coffee'),
                     onChanged: (value) {
                       setState(() {
@@ -305,7 +343,8 @@ class YesPageState extends State<YesPage> {
                     activeColor: const Color(0xFF16666B),
                   ),
                   CheckboxListTile(
-                    title: const Text('Strong smells', style: TextStyle(color: Color(0xFF16666B))),
+                    title: const Text('Strong smells',
+                        style: TextStyle(color: Color(0xFF16666B))),
                     value: _headacheTriggers.contains('Strong smells'),
                     onChanged: (value) {
                       setState(() {
@@ -319,7 +358,8 @@ class YesPageState extends State<YesPage> {
                     activeColor: const Color(0xFF16666B),
                   ),
                   CheckboxListTile(
-                    title: const Text('Traveling', style: TextStyle(color: Color(0xFF16666B))),
+                    title: const Text('Traveling',
+                        style: TextStyle(color: Color(0xFF16666B))),
                     value: _headacheTriggers.contains('Traveling'),
                     onChanged: (value) {
                       setState(() {
@@ -333,7 +373,8 @@ class YesPageState extends State<YesPage> {
                     activeColor: const Color(0xFF16666B),
                   ),
                   CheckboxListTile(
-                    title: const Text('Mobile phone usage', style: TextStyle(color: Color(0xFF16666B))),
+                    title: const Text('Mobile phone usage',
+                        style: TextStyle(color: Color(0xFF16666B))),
                     value: _headacheTriggers.contains('Mobile phone usage'),
                     onChanged: (value) {
                       setState(() {
@@ -347,7 +388,8 @@ class YesPageState extends State<YesPage> {
                     activeColor: const Color(0xFF16666B),
                   ),
                   CheckboxListTile(
-                    title: const Text('Allergy', style: TextStyle(color: Color(0xFF16666B))),
+                    title: const Text('Allergy',
+                        style: TextStyle(color: Color(0xFF16666B))),
                     value: _headacheTriggers.contains('Allergy'),
                     onChanged: (value) {
                       setState(() {
@@ -361,7 +403,8 @@ class YesPageState extends State<YesPage> {
                     activeColor: const Color(0xFF16666B),
                   ),
                   CheckboxListTile(
-                    title: const Text('Excess/lack of sleep', style: TextStyle(color: Color(0xFF16666B))),
+                    title: const Text('Excess/lack of sleep',
+                        style: TextStyle(color: Color(0xFF16666B))),
                     value: _headacheTriggers.contains('Excess/lack of sleep'),
                     onChanged: (value) {
                       setState(() {
@@ -375,7 +418,8 @@ class YesPageState extends State<YesPage> {
                     activeColor: const Color(0xFF16666B),
                   ),
                   CheckboxListTile(
-                    title: const Text('Not sure', style: TextStyle(color: Color(0xFF16666B))),
+                    title: const Text('Not sure',
+                        style: TextStyle(color: Color(0xFF16666B))),
                     value: _headacheTriggers.contains('Not sure'),
                     onChanged: (value) {
                       setState(() {
@@ -391,7 +435,12 @@ class YesPageState extends State<YesPage> {
                 ],
               ),
               const SizedBox(height: 20),
-              const Text('6. Did the headache cause you to avoid routine activities:', style: TextStyle(color: Color(0xFF16666B), fontSize: 18, fontWeight: FontWeight.bold)),
+              const Text(
+                  '6. Did the headache cause you to avoid routine activities:',
+                  style: TextStyle(
+                      color: Color(0xFF16666B),
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold)),
               Row(
                 children: <Widget>[
                   Radio<String>(
@@ -419,7 +468,11 @@ class YesPageState extends State<YesPage> {
                 ],
               ),
               const SizedBox(height: 20),
-              const Text('7. Describe the migraine you experienced today:', style: TextStyle(color: Color(0xFF16666B), fontSize: 18, fontWeight: FontWeight.bold)),
+              const Text('7. Describe the migraine you experienced today:',
+                  style: TextStyle(
+                      color: Color(0xFF16666B),
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold)),
               const SizedBox(height: 10),
               TextField(
                 onChanged: (value) {
@@ -441,7 +494,11 @@ class YesPageState extends State<YesPage> {
                 style: const TextStyle(color: Color(0xFF16666B)),
               ),
               const SizedBox(height: 20),
-              const Text('Did you miss meals?', style: TextStyle(color: Color(0xFF16666B), fontSize: 18, fontWeight: FontWeight.bold)),
+              const Text('Did you miss meals?',
+                  style: TextStyle(
+                      color: Color(0xFF16666B),
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold)),
               Row(
                 children: <Widget>[
                   Radio<String>(
@@ -472,7 +529,11 @@ class YesPageState extends State<YesPage> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('How much water did you drink today?:', style: TextStyle(color: Color(0xFF16666B), fontSize: 18, fontWeight: FontWeight.bold)),
+                  const Text('How much water did you drink today?:',
+                      style: TextStyle(
+                          color: Color(0xFF16666B),
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold)),
                   Slider(
                     value: _glassesOfWater,
                     min: 0,
@@ -492,7 +553,9 @@ class YesPageState extends State<YesPage> {
                     children: List.generate(10, (index) {
                       return Icon(
                         Icons.local_drink,
-                        color: index <= _glassesOfWater ? const Color(0xFF16666B) : Colors.grey,
+                        color: index <= _glassesOfWater
+                            ? const Color(0xFF16666B)
+                            : Colors.grey,
                         size: 25,
                       );
                     }),
@@ -507,7 +570,11 @@ class YesPageState extends State<YesPage> {
                 ],
               ),
               const SizedBox(height: 20),
-              const Text('Did you exercise today?', style: TextStyle(color: Color(0xFF16666B), fontSize: 18, fontWeight: FontWeight.bold)),
+              const Text('Did you exercise today?',
+                  style: TextStyle(
+                      color: Color(0xFF16666B),
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold)),
               Row(
                 children: <Widget>[
                   Radio<bool>(
@@ -535,7 +602,11 @@ class YesPageState extends State<YesPage> {
                 ],
               ),
               const SizedBox(height: 20),
-              const Text('Are you facing any obstacles in being productive?', style: TextStyle(color: Color(0xFF16666B), fontSize: 18, fontWeight: FontWeight.bold)),
+              const Text('Are you facing any obstacles in being productive?',
+                  style: TextStyle(
+                      color: Color(0xFF16666B),
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold)),
               Row(
                 children: <Widget>[
                   Radio<bool>(
@@ -563,16 +634,22 @@ class YesPageState extends State<YesPage> {
                 ],
               ),
               const SizedBox(height: 20),
-              const Text('How much sleep did you get?', style: TextStyle(color: Color(0xFF16666B), fontSize: 18, fontWeight: FontWeight.bold)),
+              const Text('How much sleep did you get?',
+                  style: TextStyle(
+                      color: Color(0xFF16666B),
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold)),
               const SizedBox(height: 7),
               Container(
                 width: 200,
                 decoration: BoxDecoration(
                   border: Border.all(
-                    color: borderBlueColor, // Use the custom color for the border
+                    color:
+                        borderBlueColor, // Use the custom color for the border
                     width: 1.0, // Choose the border width
                   ),
-                  borderRadius: BorderRadius.circular(8.0), // Optional: Add border radius for rounded corners
+                  borderRadius: BorderRadius.circular(
+                      8.0), // Optional: Add border radius for rounded corners
                 ),
                 child: DropdownButton<String>(
                   value: _sleepDuration,
@@ -599,16 +676,22 @@ class YesPageState extends State<YesPage> {
                 ),
               ),
               const SizedBox(height: 20),
-              const Text('For how long did you exercise? (in hours/minutes)', style: TextStyle(color: Color(0xFF16666B), fontSize: 18, fontWeight: FontWeight.bold)),
+              const Text('For how long did you exercise? (in hours/minutes)',
+                  style: TextStyle(
+                      color: Color(0xFF16666B),
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold)),
               const SizedBox(height: 7),
               Container(
                 width: 200,
                 decoration: BoxDecoration(
                   border: Border.all(
-                    color: borderBlueColor, // Use the custom color for the border
+                    color:
+                        borderBlueColor, // Use the custom color for the border
                     width: 1.0, // Choose the border width
                   ),
-                  borderRadius: BorderRadius.circular(8.0), // Optional: Add border radius for rounded corners
+                  borderRadius: BorderRadius.circular(
+                      8.0), // Optional: Add border radius for rounded corners
                 ),
                 child: DropdownButton<String>(
                   value: _exerciseDuration,
@@ -634,18 +717,24 @@ class YesPageState extends State<YesPage> {
                   }).toList(),
                 ),
               ),
-
               const SizedBox(height: 20),
-              const Text('How long do you work on mobile phones or computers? (in hours)', style: TextStyle(color: Color(0xFF16666B), fontSize: 18, fontWeight: FontWeight.bold)),
+              const Text(
+                  'How long do you work on mobile phones or computers? (in hours)',
+                  style: TextStyle(
+                      color: Color(0xFF16666B),
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold)),
               const SizedBox(height: 7),
               Container(
                 width: 200,
                 decoration: BoxDecoration(
                   border: Border.all(
-                    color: borderBlueColor, // Use the custom color for the border
+                    color:
+                        borderBlueColor, // Use the custom color for the border
                     width: 1.0, // Choose the border width
                   ),
-                  borderRadius: BorderRadius.circular(8.0), // Optional: Add border radius for rounded corners
+                  borderRadius: BorderRadius.circular(
+                      8.0), // Optional: Add border radius for rounded corners
                 ),
                 child: DropdownButton<String>(
                   value: _screenTime,
@@ -671,7 +760,6 @@ class YesPageState extends State<YesPage> {
                   }).toList(),
                 ),
               ),
-
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
@@ -682,7 +770,8 @@ class YesPageState extends State<YesPage> {
                     'headacheAccompaniedBy': _headacheAccompaniedBy,
                     'preHeadacheSymptoms': _preHeadacheSymptoms,
                     'headacheTriggers': _headacheTriggers,
-                    'avoidRoutineActivitiesAnswer': _avoidRoutineActivitiesAnswer,
+                    'avoidRoutineActivitiesAnswer':
+                        _avoidRoutineActivitiesAnswer,
                     'missedMeals': _missedMeals,
                     'glassesOfWater': _glassesOfWater,
                     'didExerciseToday': _didExerciseToday,
@@ -692,11 +781,13 @@ class YesPageState extends State<YesPage> {
                     'screenTime': _screenTime,
                     'migraineDescription': _migraineDescription,
                     'timestamp': Timestamp.now(),
-                    'uid' : FirebaseAuth.instance.currentUser!.uid,
+                    'uid': FirebaseAuth.instance.currentUser!.uid,
                   };
 
                   // Add data to Firestore
-                  FirebaseFirestore.instance.collection('headache_occurence_entries').add(formData)
+                  FirebaseFirestore.instance
+                      .collection('headache_occurence_entries')
+                      .add(formData)
                       .then((value) {
                     log("Data added successfully");
                     // Show success message
@@ -705,7 +796,8 @@ class YesPageState extends State<YesPage> {
                       builder: (BuildContext context) {
                         return AlertDialog(
                           title: const Text("Confirmation"),
-                          content: const Text("Are you sure you want to submit this response?"),
+                          content: const Text(
+                              "Are you sure you want to submit this response?"),
                           actions: <Widget>[
                             TextButton(
                               onPressed: () {
@@ -714,7 +806,9 @@ class YesPageState extends State<YesPage> {
                                 // Navigate to the new page
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => const CustomBottomNavigationBar()),
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const CustomBottomNavigationBar()),
                                 );
                               },
                               child: const Text("Yes"),
@@ -735,10 +829,11 @@ class YesPageState extends State<YesPage> {
                     // Handle errors appropriately, such as showing an error message to the user.
                   });
                 },
-                style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF16666B)),
-                child: const Text('Submit', style: TextStyle(color: Colors.white)),
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF16666B)),
+                child:
+                    const Text('Submit', style: TextStyle(color: Colors.white)),
               ),
-
             ],
           ),
         ),

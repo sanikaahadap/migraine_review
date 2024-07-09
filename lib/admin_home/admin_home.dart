@@ -2,11 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:neurooooo/admin_home/users_info.dart';
 import 'package:neurooooo/login/login_signup_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class AdminHomePage extends StatelessWidget {
   final UserService userService = UserService();
 
   AdminHomePage({super.key});
+
+  Future<void> _logout(BuildContext context) async {
+    await FirebaseAuth.instance.signOut();
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const LoginSignupPage()),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +84,6 @@ class AdminHomePage extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 20),
-
                   ElevatedButton(
                     onPressed: () {
                       Navigator.push(
@@ -103,15 +111,12 @@ class AdminHomePage extends StatelessWidget {
                 bottom: 20), // Add some space from the bottom
             child: ElevatedButton.icon(
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const LoginSignupPage()),
-                );
+                _logout(context);
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF16666B),
-                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 25),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 25),
               ),
               icon: const Icon(Icons.logout,
                   color: Colors.white), // Set the icon color to white
@@ -249,9 +254,9 @@ class ModelUser {
 
   ModelUser(
       {required this.name,
-        required this.uid,
-        required this.dob,
-        required this.email});
+      required this.uid,
+      required this.dob,
+      required this.email});
 
   factory ModelUser.fromDocument(DocumentSnapshot doc) {
     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
