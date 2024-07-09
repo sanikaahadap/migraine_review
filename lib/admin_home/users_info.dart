@@ -56,6 +56,12 @@ class UserDetailsPage extends StatelessWidget {
 
           _buildSectionTitle('Patient Documents'),
           _buildPatientDocuments(user.uid), // Display patient documents
+
+          const SizedBox(height: 20),
+
+          _buildSectionTitle('Migraine Logs'),
+          _buildSectionSubtitle('(Tap to view details)'),
+          _buildMigraineLogs(user.uid), // Display migraine logs
         ],
       ),
     );
@@ -78,8 +84,7 @@ class UserDetailsPage extends StatelessWidget {
 
     if (snapshot.exists) {
       final data = snapshot.data()!;
-      return data['gender'] ??
-          'N/A'; // Provide default value if gender is missing
+      return data['gender'] ?? 'N/A'; // Provide default value if gender is missing
     } else {
       return 'Error: User info not found';
     }
@@ -111,6 +116,19 @@ class UserDetailsPage extends StatelessWidget {
         style: const TextStyle(
           fontSize: 18,
           fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSectionSubtitle(String title) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 2.0),
+      child: Text(
+        title,
+        style: const TextStyle(
+          fontSize: 15,
+          fontStyle: FontStyle.italic,
         ),
       ),
     );
@@ -158,12 +176,12 @@ class UserDetailsPage extends StatelessWidget {
           itemCount: documents.length,
           itemBuilder: (context, index) {
             Map<String, dynamic> data =
-                documents[index].data() as Map<String, dynamic>;
+            documents[index].data() as Map<String, dynamic>;
 
             int score = data['score']?.toInt() ??
                 0; // Provide a default value if score is null
             Timestamp timestamp = data['timestamp']
-                as Timestamp; // Ensure timestamp is cast correctly
+            as Timestamp; // Ensure timestamp is cast correctly
             DateTime dateTime = timestamp.toDate();
             String formattedDate = DateFormat.yMMMd().add_jm().format(dateTime);
 
@@ -217,7 +235,7 @@ class UserDetailsPage extends StatelessWidget {
           itemCount: documents.length,
           itemBuilder: (context, index) {
             Map<String, dynamic> data =
-                documents[index].data() as Map<String, dynamic>;
+            documents[index].data() as Map<String, dynamic>;
             String pdfName = data['pdf_name'] ?? 'Unnamed Document';
             String pdfUrl = data['download_url'] ?? '';
 
@@ -225,12 +243,70 @@ class UserDetailsPage extends StatelessWidget {
               margin: const EdgeInsets.symmetric(vertical: 8.0),
               child: ListTile(
                 leading:
-                    const Icon(Icons.picture_as_pdf, color: Colors.redAccent),
+                const Icon(Icons.picture_as_pdf, color: Colors.redAccent),
                 title: Text(pdfName),
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (context) => PDFViewerScreen(pdfUrl: pdfUrl),
+                    ),
+                  );
+                },
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Widget _buildMigraineLogs(String uid) {
+    return FutureBuilder<QuerySnapshot>(
+      future: FirebaseFirestore.instance
+          .collection('migraine_logs')
+          .where('uid', isEqualTo: uid)
+          .orderBy('timestamp', descending: true)
+          .limit(5) // Limit the number of results to 5
+          .get(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        }
+
+        if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+          return const Center(child: Text('No migraine logs available'));
+        }
+
+        List<QueryDocumentSnapshot> documents = snapshot.data!.docs;
+
+        return ListView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: documents.length,
+          itemBuilder: (context, index) {
+            Map<String, dynamic> data =
+            documents[index].data() as Map<String, dynamic>;
+
+            Timestamp timestamp = data['timestamp']
+            as Timestamp; // Ensure timestamp is cast correctly
+            DateTime dateTime = timestamp.toDate();
+            String formattedDate = DateFormat.yMMMd().add_jm().format(dateTime);
+
+            return Card(
+              margin: const EdgeInsets.symmetric(vertical: 8.0),
+              child: ListTile(
+                leading: const Icon(Icons.psychology, color: Colors.deepPurple),
+                title: Text(formattedDate),
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => MigraineLogDetailsPage(
+                        data: data,
+                      ),
                     ),
                   );
                 },
@@ -274,6 +350,75 @@ class _PDFViewerScreenState extends State<PDFViewerScreen> {
       body: document != null
           ? PDFViewer(document: document!)
           : const Center(child: CircularProgressIndicator()),
+    );
+  }
+}
+
+class MigraineLogDetailsPage extends StatelessWidget {
+  final Map<String, dynamic> data;
+
+  const MigraineLogDetailsPage({super.key, required this.data});
+
+  @override
+  Widget build(BuildContext context) {
+    // Filter out 'uid' and 'timestamp' keys
+    Map<String, dynamic> filteredData = Map.from(data);
+    filteredData.remove('uid');
+    filteredData.remove('timestamp');
+
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: const Color(0xFF16666B),
+        title: const Text(
+          'Migraine Log Details',
+          style: TextStyle(color: Colors.white),
+        ),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Card(
+          elevation: 4.0,
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: filteredData.entries.map((entry) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 4.0),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          flex: 2,
+                          child: Text(
+                            '${entry.key}: ',
+                            style: const TextStyle(
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF16666B),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: Text(
+                            entry.value.toString(),
+                            style: const TextStyle(
+                              color: Colors.black87,
+                              fontSize: 14.0,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                }).toList(),
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
