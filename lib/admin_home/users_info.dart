@@ -447,46 +447,62 @@ class MigraineLogDetailsPage extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Card(
-          elevation: 4.0,
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: filteredData.entries.map((entry) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 4.0),
-                    child: Row(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Card(
+                elevation: 4.0,
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: SingleChildScrollView(
+                    child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          flex: 2,
-                          child: Text(
-                            '${entry.key}: ',
-                            style: const TextStyle(
-                              fontSize: 14.0,
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xFF16666B),
-                            ),
+                      children: filteredData.entries.map((entry) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 3.0),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                flex: 2,
+                                child: Text(
+                                  '${entry.key}: ',
+                                  style: const TextStyle(
+                                    fontSize: 14.0,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFF16666B),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                flex: 1,
+                                child: Text(
+                                  entry.value.toString(),
+                                  style: const TextStyle(
+                                    color: Colors.black87,
+                                    fontSize: 14.0,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                        Expanded(
-                          flex: 1,
-                          child: Text(
-                            entry.value.toString(),
-                            style: const TextStyle(
-                              color: Colors.black87,
-                              fontSize: 14.0,
-                            ),
-                          ),
-                        ),
-                      ],
+                        );
+                      }).toList(),
                     ),
-                  );
-                }).toList(),
+                  ),
+                ),
               ),
-            ),
+              const SizedBox(height: 16.0),
+              const Text(
+                'true : yes \nfalse : no \nnull : not available',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.pink,
+                  fontSize: 14.5,
+                ),
+                textAlign: TextAlign.justify,
+              ),
+            ],
           ),
         ),
       ),
