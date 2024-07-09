@@ -21,8 +21,8 @@ class UserDetailsPage extends StatelessWidget {
               const TextSpan(
                 text: 'Patient : ',
                 style: TextStyle(
-                  fontSize: 20.0, // Adjust the font size to fit the screen
-                  color: Colors.white70, // Make sure the text color is visible
+                  fontSize: 20.0,
+                  color: Colors.white70,
                 ),
               ),
               TextSpan(
@@ -42,6 +42,10 @@ class UserDetailsPage extends StatelessWidget {
           _buildDetailItem('Name', user.name, Icons.person),
           _buildDetailItem('Age', _calculateAge(user.dob), Icons.cake),
           _buildGenderDetailItem(user.uid), // Use FutureBuilder for gender
+
+          const SizedBox(height: 20),
+
+          _buildMedicalHistory(user.uid),
 
           const SizedBox(height: 20),
 
@@ -68,7 +72,7 @@ class UserDetailsPage extends StatelessWidget {
   }
 
   String _calculateAge(String dobTimestamp) {
-    DateTime dob = DateTime.parse(dobTimestamp); // Parsing string to DateTime
+    DateTime dob = DateTime.parse(dobTimestamp);
     DateTime now = DateTime.now();
     int age = now.year - dob.year;
     if (now.month < dob.month ||
@@ -79,16 +83,72 @@ class UserDetailsPage extends StatelessWidget {
   }
 
   Future<String> _fetchGender(String uid) async {
-    final docRef = FirebaseFirestore.instance.collection('user_info').doc(uid);
+    final docRef =
+    FirebaseFirestore.instance.collection('user_info').doc(uid);
     final snapshot = await docRef.get();
 
     if (snapshot.exists) {
       final data = snapshot.data()!;
-      return data['gender'] ?? 'N/A'; // Provide default value if gender is missing
+      return data['gender'] ?? 'N/A';
     } else {
       return 'Error: User info not found';
     }
   }
+
+  Future<Map<String, String>> _fetchMedicalHistory(String uid) async {
+    final docRef =
+    FirebaseFirestore.instance.collection('user_info').doc(uid);
+    final snapshot = await docRef.get();
+
+    if (snapshot.exists) {
+      final data = snapshot.data()!;
+      return {
+        'Existing Medical Conditions': data['medicalCondition'] ?? 'N/A',
+        'Current Medications': data['medications'] ?? 'N/A',
+        'Surgeries/Hospitalizations': data['surgeries'] ?? 'N/A',
+      };
+    } else {
+      return {
+        'Medical Conditions': 'Error: User info not found',
+        'Current Medications': 'Error: User info not found',
+        'Surgeries/Hospitalizations': 'Error: User info not found',
+      };
+    }
+  }
+
+  Widget _buildMedicalHistory(String uid) {
+    return FutureBuilder<Map<String, String>>(
+      future: _fetchMedicalHistory(uid),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        }
+
+        final medicalHistory = snapshot.data!;
+
+        return Card(
+          margin: const EdgeInsets.symmetric(vertical: 8.0),
+          child: ExpansionTile(
+            tilePadding: const EdgeInsets.all(8.0),
+            leading: const Icon(Icons.history, color: Colors.pink), // Icon added here
+            title: const Text(
+              'Medical History',
+              style: TextStyle(fontWeight: FontWeight.bold,
+              fontSize: 16.0),
+            ),
+            children: medicalHistory.entries.map((entry) {
+              return _buildDetailItem2(entry.key, entry.value, Icons.info);
+            }).toList(),
+          ),
+        );
+      },
+    );
+  }
+
 
   Widget _buildGenderDetailItem(String uid) {
     return FutureBuilder<String>(
@@ -148,6 +208,20 @@ class UserDetailsPage extends StatelessWidget {
     );
   }
 
+  Widget _buildDetailItem2(String label, String value, IconData icon) {
+    return Card(
+      margin: const EdgeInsets.symmetric(vertical: 8.0),
+      child: ListTile(
+        leading: Icon(icon, color: Colors.brown),
+        title: Text(
+          label,
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
+        subtitle: Text(value.isNotEmpty ? value : 'N/A'),
+      ),
+    );
+  }
+
   Widget _buildEhrScores(String uid) {
     return FutureBuilder<QuerySnapshot>(
       future: FirebaseFirestore.instance
@@ -178,10 +252,8 @@ class UserDetailsPage extends StatelessWidget {
             Map<String, dynamic> data =
             documents[index].data() as Map<String, dynamic>;
 
-            int score = data['score']?.toInt() ??
-                0; // Provide a default value if score is null
-            Timestamp timestamp = data['timestamp']
-            as Timestamp; // Ensure timestamp is cast correctly
+            int score = data['score']?.toInt() ?? 0;
+            Timestamp timestamp = data['timestamp'] as Timestamp;
             DateTime dateTime = timestamp.toDate();
             String formattedDate = DateFormat.yMMMd().add_jm().format(dateTime);
 
@@ -291,15 +363,15 @@ class UserDetailsPage extends StatelessWidget {
             Map<String, dynamic> data =
             documents[index].data() as Map<String, dynamic>;
 
-            Timestamp timestamp = data['timestamp']
-            as Timestamp; // Ensure timestamp is cast correctly
+            Timestamp timestamp = data['timestamp'] as Timestamp;
             DateTime dateTime = timestamp.toDate();
             String formattedDate = DateFormat.yMMMd().add_jm().format(dateTime);
 
             return Card(
               margin: const EdgeInsets.symmetric(vertical: 8.0),
               child: ListTile(
-                leading: const Icon(Icons.psychology, color: Colors.deepPurple),
+                leading:
+                const Icon(Icons.psychology, color: Colors.deepPurple),
                 title: Text(formattedDate),
                 onTap: () {
                   Navigator.of(context).push(
@@ -361,7 +433,6 @@ class MigraineLogDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Filter out 'uid' and 'timestamp' keys
     Map<String, dynamic> filteredData = Map.from(data);
     filteredData.remove('uid');
     filteredData.remove('timestamp');
