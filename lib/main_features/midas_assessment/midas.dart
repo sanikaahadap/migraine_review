@@ -83,10 +83,7 @@ class MIDASAssessmentPageState extends State<MIDASAssessmentPage> {
 
   Future<void> _setQuestionnaireFilled() async {
     Timestamp now = Timestamp.now();
-    await FirebaseFirestore.instance.collection('midas_scores').add({
-      'uid': _uid,
-      'timestamp': now,
-    });
+
     _checkQuestionnaireStatus();
   }
 
