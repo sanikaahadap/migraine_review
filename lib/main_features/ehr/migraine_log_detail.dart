@@ -38,7 +38,7 @@ class MigraineLogDetailPage extends StatelessWidget {
             ),
             const SizedBox(width: 8.0),
             Expanded(
-              flex: 4,
+              flex: 8,
               child: Text(
                 value,
                 style: const TextStyle(fontSize: 16.0, color: Color(0xFF16666B)),
@@ -78,6 +78,7 @@ class MigraineLogDetailPage extends StatelessWidget {
               buildDetailCard('CT/MRI Scan', displayValue(log['ctMriScan'])),
               buildDetailCard('Pain Killers per Month', log['painKillersPerMonth'] != null ? log['painKillersPerMonth'].toString() : 'Not available'),
               buildDetailCard('Months of Painkiller Use', log['monthsOfPainkillerUse'] != null ? log['monthsOfPainkillerUse'].toString() : 'Not available'),
+              buildDetailCard('Migraine Description', log['migraineDescription'] != null ? log['migraineDescription'].toString() : 'Not available'),
               buildDetailCard('Timestamp', (log['timestamp'] as Timestamp).toDate().toString()),
             ],
           ),

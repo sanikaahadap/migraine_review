@@ -31,6 +31,7 @@ class MigraineLogsPageState extends State<MigraineLogsPage> {
   bool _ctMriScan = false; // Track CT/MRI scan
   int _painKillersPerMonth = 0; // Track pain killers per month
   int _monthsOfPainkillerUse = 0; // Track months of painkiller use
+  String? _migraineDescription;
   final String _uid = FirebaseAuth.instance.currentUser!.uid;
 
   Future<void> _submitMigraineLog() async {
@@ -53,6 +54,7 @@ class MigraineLogsPageState extends State<MigraineLogsPage> {
       'ctMriScan': _ctMriScan,
       'painKillersPerMonth': _painKillersPerMonth,
       'monthsOfPainkillerUse': _monthsOfPainkillerUse,
+      'migraineDescription': _migraineDescription,
       'timestamp': DateTime.now(),
       'uid': _uid,
     };
@@ -169,21 +171,6 @@ class MigraineLogsPageState extends State<MigraineLogsPage> {
               style: TextStyle(color: Color(0xFF16666B), fontSize: 18.0),
             ),
             const SizedBox(height: 8.0),
-            // DropdownButton<int>(
-            //   value: _durationIndex,
-            //   onChanged: (int? newValue) {
-            //     setState(() {
-            //       _durationIndex = newValue!;
-            //     });
-            //   },
-            //   items: _durationOptions.map((String value) {
-            //     return DropdownMenuItem<int>(
-            //       value: _durationOptions.indexOf(value),
-            //       child: Text(value,
-            //           style: const TextStyle(color: Color(0xFF16666B))),
-            //     );
-            //   }).toList(),
-            // ),
             DropdownButton<String>(
               value: _durationOfHeadache,
               onChanged: (String? value) {
@@ -636,6 +623,31 @@ class MigraineLogsPageState extends State<MigraineLogsPage> {
               ),
             ),
             const SizedBox(height: 20.0),
+            const Text('7. Describe the migraine you experienced today:',
+                style: TextStyle(
+                    color: Color(0xFF16666B),
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold)),
+            const SizedBox(height: 10),
+            TextField(
+              onChanged: (value) {
+                setState(() {
+                  _migraineDescription = value;
+                });
+              },
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(
+                  borderSide: BorderSide(color: Color(0xFF16666B)),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Color(0xFF16666B)),
+                ),
+                hintText: 'Enter your description here',
+              ),
+              cursorColor: const Color(0xFF16666B),
+              maxLines: 5,
+              style: const TextStyle(color: Color(0xFF16666B)),
+            ),
           ],
         ),
       ),
