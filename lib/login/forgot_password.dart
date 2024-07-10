@@ -108,7 +108,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                   children: [
 
                     Text(
-                      'Your password should have',
+                      'Your password should be as follows',
                       textAlign: TextAlign.start,
                       style: TextStyle(
                         color: Colors.redAccent,
@@ -116,12 +116,17 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                       ),
                     ),
                     Text(
-                      '• At least 8 characters',
+                      '• Password length should be 8 or greater',
                       textAlign: TextAlign.start,
                       style: TextStyle(color: Colors.redAccent),
                     ),
                     Text(
-                      '• At least 1 number',
+                      '• Consist of lowercase letters and numbers',
+                      textAlign: TextAlign.start,
+                      style: TextStyle(color: Colors.redAccent),
+                    ),
+                    Text(
+                      '• Contains at least 1 number',
                       textAlign: TextAlign.start,
                       style: TextStyle(color: Colors.redAccent),
                     ),

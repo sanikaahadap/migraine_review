@@ -98,7 +98,7 @@ class _DocUploadState extends State<DocUpload> {
   void showPreUploadAlert() {
     showAlert(
       "Attention",
-      "File size shouldn't exceed 1 mb and please rename the file as report type_your name.",
+      "File size shouldn't exceed 1 mb and please rename the file in the following format:\n'report type_your name'.",
       onOkPressed: pickFile,
     );
   }

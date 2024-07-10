@@ -286,7 +286,8 @@ class SignUpPageState extends State<SignUpPage> {
                                       content: const SingleChildScrollView(
                                         child: ListBody(
                                           children: [
-                                            Text('• At least 8 characters', textAlign: TextAlign.start),
+                                            Text('• Password length should be 8 or greater', textAlign: TextAlign.start),
+                                            Text('• Consist of lowercase letters and numbers', textAlign: TextAlign.start),
                                             Text('• Contains at least one number', textAlign: TextAlign.start),
                                           ],
                                         ),
