@@ -10,7 +10,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class MidasNotifs extends StatefulWidget {
-  const MidasNotifs({super.key});
+  const MidasNotifs({Key? key}) : super(key: key);
 
   @override
   State<MidasNotifs> createState() => _MidasNotifsState();
@@ -50,9 +50,10 @@ class _MidasNotifsState extends State<MidasNotifs> {
   }
 
   Future<void> _checkAndScheduleNotification() async {
-    // Fetch the latest MIDAS score entry
+    // Fetch the latest MIDAS score entry for the current user
     QuerySnapshot midasScores = await FirebaseFirestore.instance
         .collection('midas_scores')
+        .where('uid', isEqualTo: _uid)
         .orderBy('timestamp', descending: true)
         .limit(1)
         .get();
@@ -66,9 +67,12 @@ class _MidasNotifsState extends State<MidasNotifs> {
       DateTime nextMidasDate = lastMidasDateTime.add(const Duration(days: 89));
 
       // Format the next MIDAS date
+      String formattedNextMidasDate =
+          "${nextMidasDate.day} ${_monthToString(nextMidasDate.month)} ${nextMidasDate.year}";
+
+      // Set the next MIDAS date to be displayed
       setState(() {
-        _nextMIDASDate =
-            "${nextMidasDate.day} ${_monthToString(nextMidasDate.month)} ${nextMidasDate.year}";
+        _nextMIDASDate = formattedNextMidasDate;
       });
 
       // Schedule the notification for the calculated date at 7 PM
@@ -87,6 +91,9 @@ class _MidasNotifsState extends State<MidasNotifs> {
 
       // Schedule the notification
       await LocalNotifications.scheduleDailyNotification(scheduledDate);
+
+      // Print the scheduled date and time for verification
+      print('Scheduled MIDAS Notification for: $scheduledDate');
     } else {
       log('No MIDAS score entries found.');
     }
@@ -97,8 +104,7 @@ class _MidasNotifsState extends State<MidasNotifs> {
         await FirebaseFirestore.instance.collection('users').doc(_uid).get();
     if (userDoc.exists) {
       Map<String, dynamic>? data = userDoc.data() as Map<String, dynamic>?;
-      Timestamp? lastFilledTimestamp =
-          data?['lastMIDASFilledTimestamp'] as Timestamp?;
+      Timestamp? lastFilledTimestamp = data?['timestamp'] as Timestamp?;
       if (lastFilledTimestamp != null) {
         DateTime lastFilledDateTime = lastFilledTimestamp.toDate();
         DateTime nextMIDASDate =
@@ -136,32 +142,56 @@ class _MidasNotifsState extends State<MidasNotifs> {
       children: [
         Card(
           color: const Color(0xFF16666B),
-          margin: const EdgeInsets.all(16.0),
+          margin: EdgeInsets.all(16.0),
           child: Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: EdgeInsets.all(16.0),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const Icon(Icons.notifications_outlined, color: Colors.white),
-                const SizedBox(height: 8.0),
                 const Text(
-                  "MIDAS Notification",
-                  style: TextStyle(fontSize: 16.0, color: Colors.white),
+                  'MIDAS Notification',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-                const SizedBox(height: 8.0),
-                const Text(
-                  "Scheduled at 7:00 PM",
-                  style: TextStyle(fontSize: 14.0, color: Colors.white),
-                ),
-                const SizedBox(height: 8.0),
+                SizedBox(height: 12.0),
                 Text(
-                    _nextMIDASDate.isNotEmpty
-                        ? "Next MIDAS test can be filled on $_nextMIDASDate"
-                        : "Fetching next MIDAS test date...",
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontSize: 17.0,
-                      color: Colors.white,
-                    )),
+                  _nextMIDASDate.isNotEmpty
+                      ? 'Scheduled for $_nextMIDASDate at 7:00 PM'
+                      : 'Please attempt your MIDAS Assessment Test',
+                  style: TextStyle(
+                    fontSize: 12.0,
+                    color: Colors.white,
+                  ),
+                ),
+                SizedBox(height: 12.0),
+                ElevatedButton.icon(
+                  icon: Icon(Icons.notifications_outlined),
+                  onPressed: () {
+                    _checkAndScheduleNotification();
+
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          'MIDAS notification scheduled for $_nextMIDASDate',
+                          style: TextStyle(fontSize: 10),
+                        ),
+                        duration: Duration(seconds: 3),
+                        action: SnackBarAction(
+                          label: 'OK',
+                          onPressed: () {},
+                        ),
+                      ),
+                    );
+                  },
+                  label: Text("Enable MIDAS notification"),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    foregroundColor: Color(0xFF16666B),
+                  ),
+                ),
               ],
             ),
           ),
@@ -238,4 +268,14 @@ class LocalNotifications {
       log('Error scheduling notification: $error');
     });
   }
+}
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await LocalNotifications.init();
+  runApp(const MaterialApp(
+    home: Scaffold(
+      body: MidasNotifs(),
+    ),
+  ));
 }

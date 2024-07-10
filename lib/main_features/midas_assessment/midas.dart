@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 // import 'dart:developer';
 import 'package:neurooooo/user_home/nav_bar.dart';
 import 'dart:async';
-import 'package:neurooooo/user_home/midas_notifs.dart';
 import 'package:intl/intl.dart';
 
 class MIDASAssessmentPage extends StatefulWidget {
@@ -35,14 +34,16 @@ class MIDASAssessmentPageState extends State<MIDASAssessmentPage> {
   }
 
   Future<void> _checkQuestionnaireStatus() async {
-    DocumentSnapshot userDoc = await FirebaseFirestore.instance
+    QuerySnapshot userDocs = await FirebaseFirestore.instance
         .collection('midas_scores')
-        .doc(_uid)
+        .where('uid', isEqualTo: _uid)
+        .orderBy('timestamp', descending: true)
+        .limit(1)
         .get();
-    if (userDoc.exists) {
-      Map<String, dynamic>? data = userDoc.data() as Map<String, dynamic>?;
-      Timestamp? lastFilledTimestamp =
-          data?['lastMIDASFilledTimestamp'] as Timestamp?;
+
+    if (userDocs.docs.isNotEmpty) {
+      DocumentSnapshot latestDoc = userDocs.docs.first;
+      Timestamp? lastFilledTimestamp = latestDoc['timestamp'] as Timestamp?;
       if (lastFilledTimestamp != null) {
         DateTime lastFilledDateTime = lastFilledTimestamp.toDate();
         DateTime nextEligibleDate =
@@ -66,6 +67,11 @@ class MIDASAssessmentPageState extends State<MIDASAssessmentPage> {
           _nextFillDate = '';
         });
       }
+    } else {
+      setState(() {
+        _canFillQuestionnaire = true;
+        _nextFillDate = '';
+      });
     }
   }
 
@@ -77,9 +83,11 @@ class MIDASAssessmentPageState extends State<MIDASAssessmentPage> {
 
   Future<void> _setQuestionnaireFilled() async {
     Timestamp now = Timestamp.now();
-    await FirebaseFirestore.instance.collection('midas_scores').doc(_uid).set({
-      'lastMIDASFilledTimestamp': now,
-    }, SetOptions(merge: true));
+    await FirebaseFirestore.instance.collection('midas_scores').add({
+      'uid': _uid,
+      'timestamp': now,
+    });
+    _checkQuestionnaireStatus();
   }
 
   void _showInfoDialog() {
