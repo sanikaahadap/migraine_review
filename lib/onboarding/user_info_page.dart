@@ -208,15 +208,15 @@ class DisclaimerPage extends StatelessWidget {
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 24.0),
               child: Text(
-                'The app is designed to help you keep track of your headache and coordinate with your physician. Your data will be kept confidential. It will be accessible to no one except you and your doctor.',
+                'The app is designed to help you keep track of your headache and coordinate with your neurologist. Your data will be completely confidential. We do not keep the patient\'s data.',
                 style: TextStyle(
                   color: Color(0xFF16666B),
                   fontSize: 15.0,
                 ),
-                textAlign: TextAlign.center, // Center the text
+                textAlign: TextAlign.justify, // Center the text
               ),
             ),
-            const SizedBox(height: 70.0),
+            const SizedBox(height: 40.0),
 
             ElevatedButton(
               onPressed: () {

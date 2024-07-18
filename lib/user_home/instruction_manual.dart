@@ -26,10 +26,9 @@ class InstructionManualPage extends StatelessWidget {
               title: 'Other Instructions to Use the App:',
               instructions: [
                 'Your data can be viewed using the profile button on the top right corner of the home page.',
-                'Use the EHR feature to check your migraine assessment records and to upload any medical documents.',
+                'Use the EHR feature to checkyour migraine assessment records and to upload any medical documents.',
                 'The YouTube Tips feature can be used to watch migraine care videos by Dr. Bindu Menon.',
-                "The FAQs will answer your doubts about migraine. If the doubts aren't addressed through the FAQs feature, you can reach out to Dr. Bindu Menon at xyz@email.com.",
-                'The side bar contains information about your doctor, features of the app, and the privacy policy.',
+                "The FAQs will answer your doubts about migraine. For further clarification, kindly contact your doctor.",
               ],
             ),
           ],
