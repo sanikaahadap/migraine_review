@@ -17,6 +17,7 @@ class _NotifsState extends State<Notifs> {
   void initState() {
     super.initState();
     requestPermissions();
+    LocalNotifications.init();
   }
 
   requestPermissions() async {
@@ -88,26 +89,32 @@ class _NotifsState extends State<Notifs> {
 class LocalNotifications {
   static final FlutterLocalNotificationsPlugin
       _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
   static final onClickNotification = BehaviorSubject<String>();
 
   // Initialize the local notifications
+
   static Future<void> init() async {
     tz.initializeTimeZones();
+
     tz.setLocalLocation(
         tz.getLocation('Asia/Kolkata')); // Set your local time zone here
 
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('@mipmap/notif_icon');
+
     final DarwinInitializationSettings initializationSettingsDarwin =
         DarwinInitializationSettings(
       onDidReceiveLocalNotification: (id, title, body, payload) => null,
     );
+
     final LinuxInitializationSettings initializationSettingsLinux =
         LinuxInitializationSettings(defaultActionName: 'Open notification');
+
     final InitializationSettings initializationSettings =
         InitializationSettings(
       android: initializationSettingsAndroid,
-      iOS: null, // No iOS initialization for this example
+      iOS: initializationSettingsDarwin,
       linux: initializationSettingsLinux,
     );
 
@@ -119,29 +126,38 @@ class LocalNotifications {
   }
 
   // Schedule a daily notification at 6 PM
+
   static Future<void> scheduleDailyNotification() async {
     final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
+
     tz.TZDateTime scheduledDate = tz.TZDateTime(
       tz.local,
+
       now.year,
+
       now.month,
+
       now.day,
+
       18, // 6 PM
+
       00,
     );
 
     if (scheduledDate.isBefore(now)) {
-      scheduledDate = scheduledDate.add(Duration(days: 1));
+      scheduledDate = scheduledDate.add(const Duration(days: 1));
     }
 
     const AndroidNotificationDetails androidNotificationDetails =
         AndroidNotificationDetails(
       'daily_notification',
       'Daily Notification',
+      channelDescription: 'Channel for daily notifications',
       importance: Importance.max,
       priority: Priority.high,
       ticker: 'ticker',
     );
+
     const NotificationDetails notificationDetails =
         NotificationDetails(android: androidNotificationDetails);
 
@@ -165,6 +181,7 @@ class LocalNotifications {
   }
 
   // Handle tap on any notification
+
   static void onNotificationTap(NotificationResponse notificationResponse) {
     onClickNotification.add(notificationResponse.payload!);
   }

@@ -90,7 +90,7 @@ class _MidasNotifsState extends State<MidasNotifs> {
       );
 
       // Schedule the notification
-      await LocalNotifications.scheduleDailyNotification(scheduledDate);
+      await LocalNotifications.scheduleNotification(scheduledDate);
 
       // Print the scheduled date and time for verification
       print('Scheduled MIDAS Notification for: $scheduledDate');
@@ -236,13 +236,8 @@ class LocalNotifications {
         onDidReceiveBackgroundNotificationResponse: onNotificationTap);
   }
 
-  // schedule a daily notification
-  static Future<void> scheduleDailyNotification(
-      tz.TZDateTime scheduledDate) async {
-    final int hour = 19; // Default to 7 PM
-    final int minute = 0; // Default to 0 minutes
-
-    // Schedule the notification
+  // schedule a one-time notification
+  static Future<void> scheduleNotification(tz.TZDateTime scheduledDate) async {
     await _flutterLocalNotificationsPlugin
         .zonedSchedule(
       0,
@@ -262,20 +257,9 @@ class LocalNotifications {
       androidAllowWhileIdle: true,
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
-      matchDateTimeComponents: DateTimeComponents.time,
     )
         .catchError((error) {
       log('Error scheduling notification: $error');
     });
   }
-}
-
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await LocalNotifications.init();
-  runApp(const MaterialApp(
-    home: Scaffold(
-      body: MidasNotifs(),
-    ),
-  ));
 }
