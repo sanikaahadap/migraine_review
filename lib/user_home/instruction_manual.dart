@@ -28,7 +28,7 @@ class InstructionManualPage extends StatelessWidget {
                 'Your data can be viewed using the profile button on the top right corner of the home page.',
                 'Use the EHR feature to checkyour migraine assessment records and to upload any medical documents.',
                 'The YouTube Tips feature can be used to watch migraine care videos by Dr. Bindu Menon.',
-                "The FAQs will answer your doubts about migraine. For further clarification, kindly contact your doctor.",
+                'The FAQs will answer your doubts about migraine. For further clarification, kindly contact your doctor.',
               ],
             ),
           ],

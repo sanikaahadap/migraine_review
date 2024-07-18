@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:neurooooo/admin_home/admin_home.dart';
 import 'package:neurooooo/login/forgot_password.dart';
 import 'package:neurooooo/login/login_signup_page.dart';
 import 'package:neurooooo/login/signup.dart';
@@ -248,15 +247,10 @@ class _LoginPageState extends State<LoginPage> {
             .get();
 
         // Check if user has admin_role set to true
-        if (userDoc.exists && userDoc['admin_role'] == true) {
+        if (userDoc.exists && userDoc['admin_role'] == false) {
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => AdminHomePage()),
-          );
-        } else {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => CustomBottomNavigationBar()),
+            MaterialPageRoute(builder: (context) => const CustomBottomNavigationBar()),
           );
         }
       } catch (e) {
