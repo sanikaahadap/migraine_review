@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class DoctorInfoPage extends StatelessWidget {
-  const DoctorInfoPage({super.key});
+class NeedOfTheApp extends StatelessWidget {
+  const NeedOfTheApp({super.key});
 
   // Function to launch URL
   void _launchURL() async {
@@ -19,7 +19,7 @@ class DoctorInfoPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Know Your Doctor'),
+        title: const Text('Need of the NeuroCare app'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

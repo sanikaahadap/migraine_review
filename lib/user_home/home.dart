@@ -5,7 +5,7 @@ import 'package:neurooooo/login/login_signup_page.dart';
 import 'package:neurooooo/main_features/ehr/ehr_main_page.dart';
 import 'package:neurooooo/main_features/midas_assessment/midas.dart';
 import 'package:neurooooo/sidebar/salient_features.dart';
-import 'package:neurooooo/sidebar/doctor_info_page.dart';
+import 'package:neurooooo/sidebar/need_of_the_app.dart';
 import 'package:neurooooo/main_features/faqs/faqs.dart';
 import 'package:neurooooo/sidebar/privacy_policy.dart';
 import 'package:neurooooo/user_home/profile.dart';
@@ -360,11 +360,11 @@ class HomePageState extends State<HomePage> {
             ),
             ListTile(
               leading: const Icon(Icons.healing, color: Color(0xFF16666B)), // Icon for Know Your Doctor
-              title: const Text('Know Your Doctor'),
+              title: const Text('Need of the NeuroCare app'),
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const DoctorInfoPage()),
+                  MaterialPageRoute(builder: (context) => const NeedOfTheApp()),
                 );
               },
             ),
