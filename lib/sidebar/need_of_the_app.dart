@@ -19,122 +19,83 @@ class NeedOfTheApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Need of the NeuroCare app'),
+        title: const Text(
+          'Need of the NeuroCare App',
+          style: TextStyle(
+            fontSize: 20,
+            color: Colors.black,
+          ),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            // Doctor's Photo
-            const Center(
-              child: CircleAvatar(
-                radius: 70,
-                backgroundImage: AssetImage('assets/doctor_photo.jpg'),
+            // App photo
+            Container(
+              width: 250,
+              height: 100,
+              decoration: BoxDecoration(
+                image: const DecorationImage(
+                  image: AssetImage('assets/images/bmf_logo.jpg'),
+                  fit: BoxFit.cover,
+                ),
+                borderRadius: BorderRadius.circular(8),
               ),
             ),
-            const SizedBox(height: 8),
-            // Doctor's Name
+            const SizedBox(height: 28),
             const Text(
-              'Dr. Bindu Menon',
+              'Migraine is a disabling disease. It is important for patients to understand the disease and to assist their treating doctors.',
               style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-
-            // Doctor's field of study
-            const Text(
-              'Neurologist',
-              style: TextStyle(
-                fontSize: 16,
-              ),
-            ),
-
-            const SizedBox(height: 4),
-            // Doctor's Specialty
-            const Text(
-              'MBBS, MD (Medicine), DM (Neuro), DNB (Neuro)',
-              style: TextStyle(
-                fontSize: 12,
-                fontStyle: FontStyle.italic,
-              ),
-            ),
-            const SizedBox(height: 8),
-            // Achievements Title
-            const Text(
-              'Awards',
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-                decoration: TextDecoration.underline,
-              ),
-            ),
-            const SizedBox(height: 4),
-            // Achievements List
-            Expanded(
-              child: ListView(
-                children: const <Widget>[
-                  ListTile(
-                    leading: Icon(Icons.star, color: Color(0xFF16666B)),
-                    title: Text(
-                      'Mridha Spirit of Neurology Humanitarian Award (2022) by American Academy of Neurology',
-                      style: TextStyle(fontSize: 12),
-                      textAlign: TextAlign.justify,
-                    ),
-                  ),
-                  ListTile(
-                    leading: Icon(Icons.star, color: Color(0xFF16666B)),
-                    title: Text(
-                      'A. B. Baker Teacher Recognition Award (2022) by American Academy of Neurology',
-                      style: TextStyle(fontSize: 12),
-                      textAlign: TextAlign.justify,
-                    ),
-                  ),
-                  ListTile(
-                    leading: Icon(Icons.star, color: Color(0xFF16666B)),
-                    title: Text(
-                      'J J Rao Oration Award (2019) by the Geriatric Society of India',
-                      style: TextStyle(fontSize: 12),
-                      textAlign: TextAlign.justify,
-                    ),
-                  ),
-                  ListTile(
-                    leading: Icon(Icons.star, color: Color(0xFF16666B)),
-                    title: Text(
-                      'H. C. Bajoria oration Award (2016) by Indian Epilepsy Association and Indian Epilepsy Society',
-                      style: TextStyle(fontSize: 12),
-                      textAlign: TextAlign.justify,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            //Contact
-            const Text(
-              'Email : bindu.epilepsycare@gmail.com',
-              style: TextStyle(
-                fontSize: 16,
+                fontSize: 21,
                 fontWeight: FontWeight.w500,
+                color: Colors.black,
+                height: 1.5, // Better line height for readability
               ),
+              textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 4),
-            // Hyperlink
-            InkWell(
-              onTap: _launchURL,
-              child: const Text(
-                'Visit Dr. Bindu Menon\'s Official Website',
+            const SizedBox(height: 16),
+            Divider(
+              color: Colors.grey[300],
+              thickness: 1,
+              height: 40,
+            ),
+            const SizedBox(height: 16),
+            const Text(
+              'This app is made by \n Dr. Bindu Menon Foundation \n in collaboration with \n VESIT, Mumbai.',
+              style: TextStyle(
+                fontSize: 19,
+                fontWeight: FontWeight.w400,
+                color: Colors.black,
+                height: 1.5, // Better line height for readability
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 32),
+            ElevatedButton(
+              onPressed: _launchURL,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color(0xFFB22222), // button color
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 24,
+                  vertical: 12,
+                ),
+                textStyle: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              child: const Text('Learn More',
                 style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  color: Color(0xFF16666B),
-                  decoration: TextDecoration.underline,
+                  color: Colors.white,
                 ),
               ),
             ),
           ],
         ),
       ),
+      backgroundColor: Colors.white, // White background
     );
   }
 }

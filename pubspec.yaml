@@ -107,6 +107,8 @@ flutter:
     - assets/doctor_photo.jpg
     - assets/images/launcher_icon.png
     - assets/images/neurocare_icon.svg
+    - assets/images/red_logo.jpg
+    - assets/images/bmf_logo.jpg
 
   # To add assets to your application, add an assets section, like this:
   # assets:
