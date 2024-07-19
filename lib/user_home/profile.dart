@@ -12,6 +12,7 @@ class ProfilePage extends StatefulWidget {
 
 class ProfilePageState extends State<ProfilePage> {
   late Future<Map<String, dynamic>> _userData;
+  bool _isDeleting = false; // To track the deletion state
 
   @override
   void initState() {
@@ -22,8 +23,12 @@ class ProfilePageState extends State<ProfilePage> {
   Future<Map<String, dynamic>> _getUserData() async {
     final String? uid = FirebaseAuth.instance.currentUser?.uid;
     if (uid != null) {
-      final userDocSnapshot = await FirebaseFirestore.instance.collection('users').doc(uid).get();
-      final userInfoDocSnapshot = await FirebaseFirestore.instance.collection('user_info').doc(uid).get();
+      final userDocSnapshot =
+          await FirebaseFirestore.instance.collection('users').doc(uid).get();
+      final userInfoDocSnapshot = await FirebaseFirestore.instance
+          .collection('user_info')
+          .doc(uid)
+          .get();
 
       if (userDocSnapshot.exists && userInfoDocSnapshot.exists) {
         final userData = userDocSnapshot.data() as Map<String, dynamic>;
@@ -34,7 +39,8 @@ class ProfilePageState extends State<ProfilePage> {
         DateTime dob = DateTime.parse(dobString); // Parsing string to DateTime
         DateTime now = DateTime.now();
         int age = now.year - dob.year;
-        if (now.month < dob.month || (now.month == dob.month && now.day < dob.day)) {
+        if (now.month < dob.month ||
+            (now.month == dob.month && now.day < dob.day)) {
           age--;
         }
 
@@ -44,7 +50,8 @@ class ProfilePageState extends State<ProfilePage> {
           'dob': userData['dob'],
           'age': age,
           'gender': userInfo['gender'],
-          'profilePicture': userInfo['profilePicture'], // Assuming there's a profile picture URL
+          'profilePicture': userInfo[
+              'profilePicture'], // Assuming there's a profile picture URL
         };
 
         return combinedData;
@@ -100,34 +107,46 @@ class ProfilePageState extends State<ProfilePage> {
                   children: [
                     userData['profilePicture'] != null
                         ? CircleAvatar(
-                      radius: 50,
-                      backgroundImage: NetworkImage(userData['profilePicture']),
-                    )
+                            radius: 50,
+                            backgroundImage:
+                                NetworkImage(userData['profilePicture']),
+                          )
                         : CircleAvatar(
-                      radius: 50,
-                      backgroundColor: Colors.grey,
-                      child: Text(
-                        _getInitials(userData['name']),
-                        style: const TextStyle(fontSize: 40, color: Colors.white),
-                      ),
-                    ),
+                            radius: 50,
+                            backgroundColor: Colors.grey,
+                            child: Text(
+                              _getInitials(userData['name']),
+                              style: const TextStyle(
+                                  fontSize: 40, color: Colors.white),
+                            ),
+                          ),
                     const SizedBox(height: 20),
                     _buildInfoCard('Name', userData['name'], Icons.person),
-                    _buildInfoCard('Date of Birth', userData['dob'], Icons.cake),
-                    _buildInfoCard('Age', '${userData['age']} years', Icons.calendar_today),
-                    _buildInfoCard('Gender', userData['gender'], Icons.person_outline),
+                    _buildInfoCard(
+                        'Date of Birth', userData['dob'], Icons.cake),
+                    _buildInfoCard('Age', '${userData['age']} years',
+                        Icons.calendar_today),
+                    _buildInfoCard(
+                        'Gender', userData['gender'], Icons.person_outline),
                     // Add more fields here as needed
-                    const SizedBox(height: 20), // Add some spacing before the button
+                    const SizedBox(
+                        height: 20), // Add some spacing before the button
                     ElevatedButton(
                       onPressed: () => _showDeleteAccountDialog(context),
                       style: ElevatedButton.styleFrom(
-                        foregroundColor: Colors.red, backgroundColor: Colors.white, // Text color
+                        foregroundColor: Colors.red,
+                        backgroundColor: Colors.white, // Text color
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8), // Rounded corners
+                          borderRadius:
+                              BorderRadius.circular(8), // Rounded corners
                         ),
                       ),
                       child: const Text('Delete Account'),
                     ),
+                    if (_isDeleting)
+                      const Center(
+                          child:
+                              CircularProgressIndicator()), // Show progress indicator when deleting
                   ],
                 ),
               ),
@@ -144,7 +163,8 @@ class ProfilePageState extends State<ProfilePage> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('Delete Account'),
-          content: const Text('Are you sure you want to delete your account? This action cannot be undone.'),
+          content: const Text(
+              'Are you sure you want to delete your account? This action cannot be undone.'),
           actions: <Widget>[
             TextButton(
               child: const Text('Cancel'),
@@ -156,7 +176,7 @@ class ProfilePageState extends State<ProfilePage> {
               child: const Text('Delete'),
               onPressed: () {
                 Navigator.of(context).pop();
-                _deleteAccount(context);
+                _deleteAccount(context, _onAccountDeleted); // Pass callback
               },
             ),
           ],
@@ -168,7 +188,8 @@ class ProfilePageState extends State<ProfilePage> {
   Future<void> _reauthenticateUser(BuildContext context) async {
     User? user = FirebaseAuth.instance.currentUser;
     if (user != null) {
-      String? password = await _getUserPassword(context); // Implement this function to get password from user
+      String? password = await _getUserPassword(
+          context); // Implement this function to get password from user
 
       if (password != null) {
         AuthCredential credential = EmailAuthProvider.credential(
@@ -214,14 +235,23 @@ class ProfilePageState extends State<ProfilePage> {
     return password;
   }
 
-  Future<void> _deleteAccount(BuildContext context) async {
+  Future<void> _deleteAccount(BuildContext context, Function onSuccess) async {
+    if (!mounted) return; // Check if the widget is still mounted
+
     try {
+      setState(() {
+        _isDeleting = true; // Show progress indicator
+      });
+
       await _reauthenticateUser(context);
       User? user = FirebaseAuth.instance.currentUser;
 
       if (user != null) {
         // Delete user data from Firestore
-        await FirebaseFirestore.instance.collection('users').doc(user.uid).delete();
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(user.uid)
+            .delete();
 
         // Delete user account
         await user.delete();
@@ -229,10 +259,22 @@ class ProfilePageState extends State<ProfilePage> {
         // Sign out the user
         await FirebaseAuth.instance.signOut();
 
-        // Show confirmation dialog
-        _showAccountDeletedDialog(context);
+        // Hide progress indicator
+        setState(() {
+          _isDeleting = false;
+        });
+
+        // Use callback to handle dialog
+        if (mounted) {
+          await Future.delayed(
+              const Duration(milliseconds: 500)); // Optional delay
+          onSuccess();
+        }
       }
     } catch (e) {
+      setState(() {
+        _isDeleting = false; // Hide progress indicator in case of error
+      });
       print(e);
       String errorMessage = 'Error deleting account. Please try again.';
       if (e is FirebaseAuthException) {
@@ -247,33 +289,37 @@ class ProfilePageState extends State<ProfilePage> {
             errorMessage = 'An unexpected error occurred. Please try again.';
         }
       }
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(errorMessage)),
-      );
+
+      // Use a safe way to show a SnackBar
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(errorMessage)),
+        );
+      }
     }
   }
 
-  void _showAccountDeletedDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Account Deleted'),
-          content: const Text('Your account has been successfully deleted.'),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pushReplacementNamed('/login');
-              },
-            ),
-          ],
-        );
-      },
-    );
+  void _onAccountDeleted() {
+    if (mounted) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Account Deleted'),
+            content: const Text('Your account has been successfully deleted.'),
+            actions: <Widget>[
+              TextButton(
+                child: const Text('OK'),
+                onPressed: () {
+                  Navigator.of(context).pushReplacementNamed('/login');
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
   }
-
-
 
   Widget _buildInfoCard(String label, String value, IconData icon) {
     return Card(
@@ -289,7 +335,10 @@ class ProfilePageState extends State<ProfilePage> {
               children: [
                 Text(
                   label,
-                  style: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold, color: Color(0xFF16666B)),
+                  style: const TextStyle(
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF16666B)),
                 ),
                 const SizedBox(height: 5),
                 Text(
