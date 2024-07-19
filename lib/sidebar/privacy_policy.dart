@@ -28,7 +28,7 @@ class PrivacyPolicyDescription extends StatelessWidget {
             Expanded(
               child: SingleChildScrollView(
                 child: Text(
-                  'At NeuroCare, your privacy and confidentiality are our top priorities. All data you share with us is strictly between you and your doctor. We guarantee that your information will never be viewed or used by anyone else. Our app is committed to keeping your data secure and confidential. The information collected is solely used to provide you with personalized notifications and updates regarding your migraine health. Rest assured, your data is in safe hands with us.',
+                  'At NeuroCare, your privacy and confidentiality are our top priorities. All data you share with us is strictly confidential. We guarantee that your information will never be viewed or used by anyone else. The information collected is solely used to provide you with personalized notifications and updates regarding your migraine health.',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 18,
