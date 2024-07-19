@@ -12,7 +12,7 @@ class ProfilePage extends StatefulWidget {
 
 class ProfilePageState extends State<ProfilePage> {
   late Future<Map<String, dynamic>> _userData;
-  bool _isDeleting = false; // To track the deletion state
+  bool _isDeleting = false; // Track deletion state
 
   @override
   void initState() {
@@ -81,78 +81,82 @@ class ProfilePageState extends State<ProfilePage> {
           },
         ),
       ),
-      body: FutureBuilder(
-        future: _userData,
-        builder: (context, AsyncSnapshot<Map<String, dynamic>> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          } else if (!snapshot.hasData) {
-            return const Center(child: Text('User data not found'));
-          } else {
-            var userData = snapshot.data!;
-            return Container(
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [Color(0xFF16666B), Color(0xFF2C8C92)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    userData['profilePicture'] != null
-                        ? CircleAvatar(
-                            radius: 50,
-                            backgroundImage:
-                                NetworkImage(userData['profilePicture']),
-                          )
-                        : CircleAvatar(
-                            radius: 50,
-                            backgroundColor: Colors.grey,
-                            child: Text(
-                              _getInitials(userData['name']),
-                              style: const TextStyle(
-                                  fontSize: 40, color: Colors.white),
+      body: Stack(
+        children: [
+          FutureBuilder(
+            future: _userData,
+            builder: (context, AsyncSnapshot<Map<String, dynamic>> snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (snapshot.hasError) {
+                return Center(child: Text('Error: ${snapshot.error}'));
+              } else if (!snapshot.hasData) {
+                return const Center(child: Text('User data not found'));
+              } else {
+                var userData = snapshot.data!;
+                return Container(
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [Color(0xFF16666B), Color(0xFF2C8C92)],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        userData['profilePicture'] != null
+                            ? CircleAvatar(
+                                radius: 50,
+                                backgroundImage:
+                                    NetworkImage(userData['profilePicture']),
+                              )
+                            : CircleAvatar(
+                                radius: 50,
+                                backgroundColor: Colors.grey,
+                                child: Text(
+                                  _getInitials(userData['name']),
+                                  style: const TextStyle(
+                                      fontSize: 40, color: Colors.white),
+                                ),
+                              ),
+                        const SizedBox(height: 20),
+                        _buildInfoCard('Name', userData['name'], Icons.person),
+                        _buildInfoCard(
+                            'Date of Birth', userData['dob'], Icons.cake),
+                        _buildInfoCard('Age', '${userData['age']} years',
+                            Icons.calendar_today),
+                        _buildInfoCard(
+                            'Gender', userData['gender'], Icons.person_outline),
+                        // Add more fields here as needed
+                        const SizedBox(
+                            height: 20), // Add some spacing before the button
+                        ElevatedButton(
+                          onPressed: () => _showDeleteAccountDialog(context),
+                          style: ElevatedButton.styleFrom(
+                            foregroundColor: Colors.red,
+                            backgroundColor: Colors.white, // Text color
+                            shape: RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.circular(8), // Rounded corners
                             ),
                           ),
-                    const SizedBox(height: 20),
-                    _buildInfoCard('Name', userData['name'], Icons.person),
-                    _buildInfoCard(
-                        'Date of Birth', userData['dob'], Icons.cake),
-                    _buildInfoCard('Age', '${userData['age']} years',
-                        Icons.calendar_today),
-                    _buildInfoCard(
-                        'Gender', userData['gender'], Icons.person_outline),
-                    // Add more fields here as needed
-                    const SizedBox(
-                        height: 20), // Add some spacing before the button
-                    ElevatedButton(
-                      onPressed: () => _showDeleteAccountDialog(context),
-                      style: ElevatedButton.styleFrom(
-                        foregroundColor: Colors.red,
-                        backgroundColor: Colors.white, // Text color
-                        shape: RoundedRectangleBorder(
-                          borderRadius:
-                              BorderRadius.circular(8), // Rounded corners
+                          child: const Text('Delete Account'),
                         ),
-                      ),
-                      child: const Text('Delete Account'),
+                      ],
                     ),
-                    if (_isDeleting)
-                      const Center(
-                          child:
-                              CircularProgressIndicator()), // Show progress indicator when deleting
-                  ],
-                ),
-              ),
-            );
-          }
-        },
+                  ),
+                );
+              }
+            },
+          ),
+          if (_isDeleting)
+            const Center(
+              child: CircularProgressIndicator(),
+            ),
+        ],
       ),
     );
   }
@@ -176,7 +180,7 @@ class ProfilePageState extends State<ProfilePage> {
               child: const Text('Delete'),
               onPressed: () {
                 Navigator.of(context).pop();
-                _deleteAccount(context, _onAccountDeleted); // Pass callback
+                _deleteAccount(context, _showAccountDeletedDialog);
               },
             ),
           ],
@@ -247,11 +251,31 @@ class ProfilePageState extends State<ProfilePage> {
       User? user = FirebaseAuth.instance.currentUser;
 
       if (user != null) {
-        // Delete user data from Firestore
-        await FirebaseFirestore.instance
-            .collection('users')
-            .doc(user.uid)
-            .delete();
+        final uid = user.uid;
+
+        // Define a function to delete documents from a collection
+        Future<void> deleteUserDataFromCollection(String collectionName) async {
+          final collectionRef =
+              FirebaseFirestore.instance.collection(collectionName);
+          final querySnapshot =
+              await collectionRef.where('uid', isEqualTo: uid).get();
+          for (var doc in querySnapshot.docs) {
+            await doc.reference.delete();
+          }
+        }
+
+        // Delete user data from each collection
+        await Future.wait([
+          deleteUserDataFromCollection('docs'),
+          deleteUserDataFromCollection('headache_occurence_entries'),
+          deleteUserDataFromCollection('midas_scores'),
+          deleteUserDataFromCollection('migraine_logs'),
+          deleteUserDataFromCollection('no_headache_entries'),
+          deleteUserDataFromCollection('user_info'),
+        ]);
+
+        // Delete the user document from the 'users' collection
+        await FirebaseFirestore.instance.collection('users').doc(uid).delete();
 
         // Delete user account
         await user.delete();
@@ -299,7 +323,7 @@ class ProfilePageState extends State<ProfilePage> {
     }
   }
 
-  void _onAccountDeleted() {
+  void _showAccountDeletedDialog() {
     if (mounted) {
       showDialog(
         context: context,
