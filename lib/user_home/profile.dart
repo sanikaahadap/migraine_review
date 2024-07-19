@@ -117,6 +117,17 @@ class ProfilePageState extends State<ProfilePage> {
                     _buildInfoCard('Age', '${userData['age']} years', Icons.calendar_today),
                     _buildInfoCard('Gender', userData['gender'], Icons.person_outline),
                     // Add more fields here as needed
+                    const SizedBox(height: 20), // Add some spacing before the button
+                    ElevatedButton(
+                      onPressed: () => _showDeleteAccountDialog(context),
+                      style: ElevatedButton.styleFrom(
+                        foregroundColor: Colors.red, backgroundColor: Colors.white, // Text color
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8), // Rounded corners
+                        ),
+                      ),
+                      child: const Text('Delete Account'),
+                    ),
                   ],
                 ),
               ),
@@ -126,6 +137,143 @@ class ProfilePageState extends State<ProfilePage> {
       ),
     );
   }
+
+  void _showDeleteAccountDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Delete Account'),
+          content: const Text('Are you sure you want to delete your account? This action cannot be undone.'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('Delete'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                _deleteAccount(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _reauthenticateUser(BuildContext context) async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      String? password = await _getUserPassword(context); // Implement this function to get password from user
+
+      if (password != null) {
+        AuthCredential credential = EmailAuthProvider.credential(
+          email: user.email!,
+          password: password,
+        );
+        await user.reauthenticateWithCredential(credential);
+      }
+    }
+  }
+
+  Future<String?> _getUserPassword(BuildContext context) async {
+    String? password;
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        TextEditingController passwordController = TextEditingController();
+        return AlertDialog(
+          title: const Text('Reauthenticate'),
+          content: TextField(
+            controller: passwordController,
+            obscureText: true,
+            decoration: const InputDecoration(labelText: 'Password'),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('Submit'),
+              onPressed: () {
+                password = passwordController.text;
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+    return password;
+  }
+
+  Future<void> _deleteAccount(BuildContext context) async {
+    try {
+      await _reauthenticateUser(context);
+      User? user = FirebaseAuth.instance.currentUser;
+
+      if (user != null) {
+        // Delete user data from Firestore
+        await FirebaseFirestore.instance.collection('users').doc(user.uid).delete();
+
+        // Delete user account
+        await user.delete();
+
+        // Sign out the user
+        await FirebaseAuth.instance.signOut();
+
+        // Show confirmation dialog
+        _showAccountDeletedDialog(context);
+      }
+    } catch (e) {
+      print(e);
+      String errorMessage = 'Error deleting account. Please try again.';
+      if (e is FirebaseAuthException) {
+        switch (e.code) {
+          case 'requires-recent-login':
+            errorMessage = 'Please reauthenticate to delete your account.';
+            break;
+          case 'network-request-failed':
+            errorMessage = 'Network error. Please check your connection.';
+            break;
+          default:
+            errorMessage = 'An unexpected error occurred. Please try again.';
+        }
+      }
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(errorMessage)),
+      );
+    }
+  }
+
+  void _showAccountDeletedDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Account Deleted'),
+          content: const Text('Your account has been successfully deleted.'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pushReplacementNamed('/login');
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+
 
   Widget _buildInfoCard(String label, String value, IconData icon) {
     return Card(

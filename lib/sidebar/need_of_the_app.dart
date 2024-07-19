@@ -46,7 +46,7 @@ class NeedOfTheApp extends StatelessWidget {
             ),
             const SizedBox(height: 28),
             const Text(
-              'Migraine is a disabling disease. It is important for patients to understand the disease and to assist their treating doctors.',
+              'Migraine is a disabling disease. \n It is important for patients to understand the disease and to assist their treating doctors.',
               style: TextStyle(
                 fontSize: 21,
                 fontWeight: FontWeight.w500,
@@ -63,7 +63,8 @@ class NeedOfTheApp extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             const Text(
-              'This app is made by \n Dr. Bindu Menon Foundation \n in collaboration with \n VESIT, Mumbai.',
+              'This app, created by the Dr. Bindu Menon Foundation,'
+                  ' is designed to help patients understand and manage their migraines.',
               style: TextStyle(
                 fontSize: 19,
                 fontWeight: FontWeight.w400,
