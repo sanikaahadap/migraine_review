@@ -25,8 +25,7 @@ class HomePage extends StatefulWidget {
 
 class HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  ModelUser user = ModelUser(
-      email: '', name: '', uid: '', phone: '', dob: '');
+  ModelUser user = ModelUser(email: '', name: '', uid: '', phone: '', dob: '');
   // String _userName = '';
   Timer? _timer;
   int _currentIndex = 0;
@@ -58,7 +57,6 @@ class HomePageState extends State<HomePage> {
     });
   }
 
-
   void getDetails() async {
     user = await getUserDetails();
     setState(() {});
@@ -81,6 +79,7 @@ class HomePageState extends State<HomePage> {
     log('Email :  ${snap["email"]}');
     return ModelUser.fromSnap(snap);
   }
+
   Widget _buildCard({
     required BuildContext context,
     required VoidCallback onPressed,
@@ -88,8 +87,10 @@ class HomePageState extends State<HomePage> {
     required String label,
   }) {
     return SizedBox(
-      width: MediaQuery.of(context).size.width * 0.35, // Adjust the width as needed
-      height: MediaQuery.of(context).size.height * 0.15, // Adjust the height as needed
+      width: MediaQuery.of(context).size.width *
+          0.35, // Adjust the width as needed
+      height: MediaQuery.of(context).size.height *
+          0.15, // Adjust the height as needed
       child: Card(
         color: const Color(0xFF16666B),
         child: InkWell(
@@ -112,7 +113,6 @@ class HomePageState extends State<HomePage> {
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 14, // Adjust the font size as needed
-
                     ),
                     textAlign: TextAlign.center,
                     overflow: TextOverflow.ellipsis,
@@ -127,14 +127,12 @@ class HomePageState extends State<HomePage> {
     );
   }
 
-
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color(0x00bfdad8).withOpacity(0.49), // Set the background color with opacity
+        backgroundColor: const Color(0x00bfdad8)
+            .withOpacity(0.49), // Set the background color with opacity
         title: Text(
           'Hello ${user.name}',
           style: const TextStyle(
@@ -174,7 +172,6 @@ class HomePageState extends State<HomePage> {
           ),
         ],
       ),
-
       key: _scaffoldKey,
       body: Stack(
         children: [
@@ -186,12 +183,7 @@ class HomePageState extends State<HomePage> {
               ),
             ),
           ),
-
-
-
-
           Center(
-
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -209,9 +201,11 @@ class HomePageState extends State<HomePage> {
                     child: AnimatedSwitcher(
                       duration: const Duration(milliseconds: 1500),
                       child: FutureBuilder<void>(
-                        future: Future.delayed(const Duration(seconds: 3), () {}),
+                        future:
+                            Future.delayed(const Duration(seconds: 3), () {}),
                         builder: (context, snapshot) {
-                          if (snapshot.connectionState == ConnectionState.waiting) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
                             return Text(
                               _texts[_currentIndex],
                               key: ValueKey<int>(_currentIndex),
@@ -249,7 +243,8 @@ class HomePageState extends State<HomePage> {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const EhrMainPage()),
+                          MaterialPageRoute(
+                              builder: (context) => EhrMainPage()),
                         );
                       },
                       icon: const Icon(Icons.assignment, color: Colors.white),
@@ -261,7 +256,8 @@ class HomePageState extends State<HomePage> {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const DiaryPage()),
+                          MaterialPageRoute(
+                              builder: (context) => const DiaryPage()),
                         );
                       },
                       icon: const Icon(Icons.book, color: Colors.white),
@@ -280,7 +276,9 @@ class HomePageState extends State<HomePage> {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const MIDASAssessmentPage()),
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  const MIDASAssessmentPage()),
                         );
                       },
                       icon: const Icon(Icons.assessment, color: Colors.white),
@@ -292,10 +290,12 @@ class HomePageState extends State<HomePage> {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const MigraineLogsPage()),
+                          MaterialPageRoute(
+                              builder: (context) => const MigraineLogsPage()),
                         );
                       },
-                      icon: const Icon(Icons.assignment_turned_in, color: Colors.white),
+                      icon: const Icon(Icons.assignment_turned_in,
+                          color: Colors.white),
                       label: 'Migraine Logs',
                     ),
                   ],
@@ -312,7 +312,8 @@ class HomePageState extends State<HomePage> {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const FAQsPage()),
+                          MaterialPageRoute(
+                              builder: (context) => const FAQsPage()),
                         );
                       },
                       icon: const Icon(Icons.help_outline, color: Colors.white),
@@ -324,7 +325,8 @@ class HomePageState extends State<HomePage> {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const YoutubeTips()),
+                          MaterialPageRoute(
+                              builder: (context) => const YoutubeTips()),
                         );
                       },
                       icon: const Icon(Icons.videocam, color: Colors.white),
@@ -359,7 +361,8 @@ class HomePageState extends State<HomePage> {
               ),
             ),
             ListTile(
-              leading: const Icon(Icons.healing, color: Color(0xFF16666B)), // Icon for Know Your Doctor
+              leading: const Icon(Icons.healing,
+                  color: Color(0xFF16666B)), // Icon for Know Your Doctor
               title: const Text('Need of the NeuroCare app'),
               onTap: () {
                 Navigator.push(
@@ -369,30 +372,35 @@ class HomePageState extends State<HomePage> {
               },
             ),
             ListTile(
-              leading: const Icon(Icons.app_shortcut_sharp, color: Color(0xFF16666B)), // Icon for FAQs
+              leading: const Icon(Icons.app_shortcut_sharp,
+                  color: Color(0xFF16666B)), // Icon for FAQs
               title: const Text('Salient Features'),
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => SalientFeaturesPage()),
+                  MaterialPageRoute(
+                      builder: (context) => SalientFeaturesPage()),
                 );
               },
             ),
             ListTile(
-              leading: const Icon(Icons.privacy_tip, color: Color(0xFF16666B)), // Icon for YT videos
+              leading: const Icon(Icons.privacy_tip,
+                  color: Color(0xFF16666B)), // Icon for YT videos
               title: const Text('Privacy Policy'),
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const PrivacyPolicyDescription()),
+                  MaterialPageRoute(
+                      builder: (context) => const PrivacyPolicyDescription()),
                 );
               },
             ),
             const Divider(),
             ListTile(
-              leading: const Icon(Icons.logout, color: Color(0xFF16666B)), // Icon for Log Out
+              leading: const Icon(Icons.logout,
+                  color: Color(0xFF16666B)), // Icon for Log Out
               title: const Text('Log Out'),
-              onTap:()=> signUserOut(context),
+              onTap: () => signUserOut(context),
             ),
           ],
         ),
@@ -436,4 +444,3 @@ class CustomButton extends StatelessWidget {
     );
   }
 }
-

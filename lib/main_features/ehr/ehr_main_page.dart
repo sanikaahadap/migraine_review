@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:neurooooo/main_features/ehr/diary_details.dart';
 import 'package:neurooooo/main_features/ehr/ehr_midas_records.dart';
 import 'package:neurooooo/main_features/ehr/pdf_upload.dart';
 import 'migraine_logs_list.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class EhrMainPage extends StatelessWidget {
-  const EhrMainPage({Key? key});
+  EhrMainPage({Key? key});
+  String currentUserUID = FirebaseAuth.instance.currentUser!.uid;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('EHR (Electronic Health Records)',
-            style: TextStyle(color: Colors.white,
-                fontSize: 17.25),
+        title: const Text(
+          'EHR (Electronic Health Records)',
+          style: TextStyle(color: Colors.white, fontSize: 17.25),
         ),
         backgroundColor: const Color(0xFF16666B),
       ),
@@ -30,7 +33,7 @@ class EhrMainPage extends StatelessWidget {
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF16666B),
                 padding:
-                const EdgeInsets.symmetric(horizontal: 60, vertical: 20),
+                    const EdgeInsets.symmetric(horizontal: 60, vertical: 20),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
@@ -43,7 +46,8 @@ class EhrMainPage extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const EhrRecordsPage()),
+                  MaterialPageRoute(
+                      builder: (context) => const EhrRecordsPage()),
                 );
               },
               style: ElevatedButton.styleFrom(
@@ -62,13 +66,14 @@ class EhrMainPage extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const MigraineLogsListPage()),
+                  MaterialPageRoute(
+                      builder: (context) => const MigraineLogsListPage()),
                 );
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF16666B),
                 padding:
-                const EdgeInsets.symmetric(horizontal: 60, vertical: 20),
+                    const EdgeInsets.symmetric(horizontal: 60, vertical: 20),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
@@ -76,7 +81,28 @@ class EhrMainPage extends StatelessWidget {
               child: const Text('View Migraine Logs',
                   style: TextStyle(fontSize: 18, color: Colors.white)),
             ),
-
+            const SizedBox(height: 40),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => DiaryDetailsPage(
+                            uid: currentUserUID,
+                          )),
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF16666B),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 60, vertical: 20),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+              ),
+              child: const Text('View Diary Entries',
+                  style: TextStyle(fontSize: 18, color: Colors.white)),
+            ),
           ],
         ),
       ),
