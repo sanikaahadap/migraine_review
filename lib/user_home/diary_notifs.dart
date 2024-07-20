@@ -20,11 +20,11 @@ class _NotifsState extends State<Notifs> {
     LocalNotifications.init();
   }
 
-  requestPermissions() async {
-    if (await Permission.scheduleExactAlarm.request().isGranted) {
-      print("Exact alarm permission granted");
+  Future<void> requestPermissions() async {
+    if (await Permission.notification.isGranted) {
+      print("Notification permission granted");
     } else {
-      print("Exact alarm permission denied");
+      print("Notification permission denied");
     }
   }
 
@@ -32,9 +32,9 @@ class _NotifsState extends State<Notifs> {
   Widget build(BuildContext context) {
     return Card(
       color: const Color(0xFF16666B),
-      margin: EdgeInsets.all(16.0),
+      margin: const EdgeInsets.all(16.0),
       child: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -46,26 +46,26 @@ class _NotifsState extends State<Notifs> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: 12.0),
-            Text(
+            const SizedBox(height: 12.0),
+            const Text(
               'Scheduled daily at 6:00 PM',
               style: TextStyle(
                 fontSize: 16.0,
                 color: Colors.white,
               ),
             ),
-            SizedBox(height: 12.0),
+            const SizedBox(height: 12.0),
             ElevatedButton.icon(
-              icon: Icon(Icons.notifications_outlined),
+              icon: const Icon(Icons.notifications_outlined),
               onPressed: () {
                 LocalNotifications.scheduleDailyNotification();
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: Text(
+                    content: const Text(
                       'Daily notification scheduled at 6:00 PM',
                       style: TextStyle(fontSize: 12),
                     ),
-                    duration: Duration(seconds: 3),
+                    duration: const Duration(seconds: 3),
                     action: SnackBarAction(
                       label: 'OK',
                       onPressed: () {},
@@ -73,10 +73,10 @@ class _NotifsState extends State<Notifs> {
                   ),
                 );
               },
-              label: Text("Enable daily notifications"),
+              label: const Text("Enable daily notifications"),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.white,
-                foregroundColor: Color(0xFF16666B),
+                foregroundColor: const Color(0xFF16666B),
               ),
             ),
           ],
@@ -89,28 +89,22 @@ class _NotifsState extends State<Notifs> {
 class LocalNotifications {
   static final FlutterLocalNotificationsPlugin
       _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-
   static final onClickNotification = BehaviorSubject<String>();
 
   // Initialize the local notifications
-
   static Future<void> init() async {
     tz.initializeTimeZones();
-
     tz.setLocalLocation(
         tz.getLocation('Asia/Kolkata')); // Set your local time zone here
 
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('@mipmap/notif_icon');
-
     final DarwinInitializationSettings initializationSettingsDarwin =
         DarwinInitializationSettings(
       onDidReceiveLocalNotification: (id, title, body, payload) => null,
     );
-
     final LinuxInitializationSettings initializationSettingsLinux =
         LinuxInitializationSettings(defaultActionName: 'Open notification');
-
     final InitializationSettings initializationSettings =
         InitializationSettings(
       android: initializationSettingsAndroid,
@@ -126,23 +120,10 @@ class LocalNotifications {
   }
 
   // Schedule a daily notification at 6 PM
-
   static Future<void> scheduleDailyNotification() async {
     final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
-
-    tz.TZDateTime scheduledDate = tz.TZDateTime(
-      tz.local,
-
-      now.year,
-
-      now.month,
-
-      now.day,
-
-      18, // 6 PM
-
-      00,
-    );
+    tz.TZDateTime scheduledDate =
+        tz.TZDateTime(tz.local, now.year, now.month, now.day, 06, 00); // 6 PM
 
     if (scheduledDate.isBefore(now)) {
       scheduledDate = scheduledDate.add(const Duration(days: 1));
@@ -173,7 +154,8 @@ class LocalNotifications {
       androidAllowWhileIdle: true,
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
-      matchDateTimeComponents: DateTimeComponents.time,
+      matchDateTimeComponents:
+          DateTimeComponents.time, // Repeats daily at the same time
     )
         .catchError((error) {
       print('Error scheduling daily notification: $error');
@@ -181,8 +163,7 @@ class LocalNotifications {
   }
 
   // Handle tap on any notification
-
   static void onNotificationTap(NotificationResponse notificationResponse) {
-    onClickNotification.add(notificationResponse.payload!);
+    onClickNotification.add(notificationResponse.payload ?? 'no_payload');
   }
 }
