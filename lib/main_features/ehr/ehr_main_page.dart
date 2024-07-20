@@ -23,85 +23,93 @@ class EhrMainPage extends StatelessWidget {
         child: Column(
           children: [
             const SizedBox(height: 90),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const DocUpload()),
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF16666B),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 60, vertical: 20),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15),
+            SizedBox(
+              width: 250, // Set a fixed width for the buttons
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const DocUpload()),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF16666B),
+                  padding: const EdgeInsets.symmetric(vertical: 20),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
                 ),
+                child: const Text('Upload Medical Reports',
+                    style: TextStyle(fontSize: 18, color: Colors.white)),
               ),
-              child: const Text('Upload Medical Reports',
-                  style: TextStyle(fontSize: 18, color: Colors.white)),
             ),
             const SizedBox(height: 40),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const EhrRecordsPage()),
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF16666B),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 60, vertical: 20),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15),
+            SizedBox(
+              width: 250, // Set a fixed width for the buttons
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const EhrRecordsPage()),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF16666B),
+                  padding: const EdgeInsets.symmetric(vertical: 20),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
                 ),
+                child: const Text('View MIDAS Records',
+                    style: TextStyle(fontSize: 18, color: Colors.white)),
               ),
-              child: const Text('View MIDAS Records',
-                  style: TextStyle(fontSize: 18, color: Colors.white)),
             ),
             const SizedBox(height: 40),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const MigraineLogsListPage()),
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF16666B),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 60, vertical: 20),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15),
+            SizedBox(
+              width: 250, // Set a fixed width for the buttons
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const MigraineLogsListPage()),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF16666B),
+                  padding: const EdgeInsets.symmetric(vertical: 20),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
                 ),
+                child: const Text('View Migraine Logs',
+                    style: TextStyle(fontSize: 18, color: Colors.white)),
               ),
-              child: const Text('View Migraine Logs',
-                  style: TextStyle(fontSize: 18, color: Colors.white)),
             ),
             const SizedBox(height: 40),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => DiaryDetailsPage(
-                            uid: currentUserUID,
-                          )),
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF16666B),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 60, vertical: 20),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15),
+            SizedBox(
+              width: 250, // Set a fixed width for the buttons
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => DiaryDetailsPage(
+                              uid: currentUserUID,
+                            )),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF16666B),
+                  padding: const EdgeInsets.symmetric(vertical: 20),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
                 ),
+                child: const Text('View Diary Entries',
+                    style: TextStyle(fontSize: 18, color: Colors.white)),
               ),
-              child: const Text('View Diary Entries',
-                  style: TextStyle(fontSize: 18, color: Colors.white)),
             ),
           ],
         ),

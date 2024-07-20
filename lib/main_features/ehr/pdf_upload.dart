@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'dart:io';
+import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_pdf_viewer/easy_pdf_viewer.dart';
 import 'package:file_picker/file_picker.dart';
@@ -19,10 +20,11 @@ class _DocUploadState extends State<DocUpload> {
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
   List<Map<String, dynamic>> pdfData = [];
   bool isLoading = false;
+  late StreamSubscription<QuerySnapshot> _pdfSubscription;
 
   Future<String> uploadPDF(String fileName, File file) async {
     final reference =
-    FirebaseStorage.instance.ref().child("pdfs/$fileName.pdf");
+        FirebaseStorage.instance.ref().child("pdfs/$fileName.pdf");
     final uploadTask = reference.putFile(file);
     await uploadTask.whenComplete(() {});
     final downloadLink = await reference.getDownloadURL();
@@ -88,8 +90,6 @@ class _DocUploadState extends State<DocUpload> {
       showAlert("Success", "PDF Uploaded successfully.");
     }
 
-    getAllPdf();
-
     setState(() {
       isLoading = false;
     });
@@ -103,22 +103,29 @@ class _DocUploadState extends State<DocUpload> {
     );
   }
 
-  void getAllPdf() async {
-    String currentUserUID = FirebaseAuth.instance.currentUser!.uid;
-    final results = await _firebaseFirestore
-        .collection("docs")
-        .where('uid', isEqualTo: currentUserUID)
-        .get();
-    pdfData = results.docs.map((e) => e.data()).toList();
-    // Sort by timestamp in descending order
-    pdfData.sort((a, b) => b['timestamp'].compareTo(a['timestamp']));
-    setState(() {});
-  }
-
   @override
   void initState() {
     super.initState();
-    getAllPdf();
+    _initializePdfListener();
+  }
+
+  @override
+  void dispose() {
+    _pdfSubscription.cancel();
+    super.dispose();
+  }
+
+  void _initializePdfListener() {
+    String currentUserUID = FirebaseAuth.instance.currentUser!.uid;
+    _pdfSubscription = _firebaseFirestore
+        .collection("docs")
+        .where('uid', isEqualTo: currentUserUID)
+        .snapshots()
+        .listen((snapshot) {
+      pdfData = snapshot.docs.map((e) => e.data()).toList();
+      pdfData.sort((a, b) => b['timestamp'].compareTo(a['timestamp']));
+      setState(() {});
+    });
   }
 
   @override
@@ -137,57 +144,56 @@ class _DocUploadState extends State<DocUpload> {
               Icons.refresh,
               color: Colors.white,
             ),
-            onPressed: getAllPdf,
+            onPressed: () {},
           ),
         ],
       ),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
           : pdfData.isEmpty
-          ? const Center(child: Text('No PDFs uploaded yet.'))
-          : ListView.builder(
-        itemCount: pdfData.length,
-        itemBuilder: (context, index) {
-          // Format timestamp to readable date
-          DateTime uploadedDate =
-          pdfData[index]['timestamp'].toDate();
-          String formattedDate =
-          DateFormat('dd MMM yyyy').format(uploadedDate);
-          return Padding(
-            padding: const EdgeInsets.symmetric(
-                vertical: 8.0, horizontal: 16.0),
-            child: InkWell(
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        PDFViewerScreen(
-                          pdfurl: pdfData[index]['download_url'],
+              ? const Center(child: Text('No PDFs uploaded yet.'))
+              : ListView.builder(
+                  itemCount: pdfData.length,
+                  itemBuilder: (context, index) {
+                    // Format timestamp to readable date
+                    DateTime uploadedDate =
+                        pdfData[index]['timestamp'].toDate();
+                    String formattedDate =
+                        DateFormat('dd MMM yyyy').format(uploadedDate);
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 8.0, horizontal: 16.0),
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => PDFViewerScreen(
+                                pdfurl: pdfData[index]['download_url'],
+                              ),
+                            ),
+                          );
+                        },
+                        child: Card(
+                          child: ListTile(
+                            leading: Image.asset(
+                              "assets/images/pdf.png",
+                              height: 40,
+                              width: 32,
+                            ),
+                            title: Text(
+                              pdfData[index]['pdf_name'],
+                              style: const TextStyle(fontSize: 14),
+                            ),
+                            subtitle: Text(
+                              formattedDate,
+                              style: const TextStyle(fontSize: 12),
+                            ),
+                          ),
                         ),
-                  ),
-                );
-              },
-              child: Card(
-                child: ListTile(
-                  leading: Image.asset(
-                    "assets/images/pdf.png",
-                    height: 40,
-                    width: 32,
-                  ),
-                  title: Text(
-                    pdfData[index]['pdf_name'],
-                    style: const TextStyle(fontSize: 14),
-                  ),
-                  subtitle: Text(
-                    formattedDate,
-                    style: const TextStyle(fontSize: 12),
-                  ),
+                      ),
+                    );
+                  },
                 ),
-              ),
-            ),
-          );
-        },
-      ),
       floatingActionButton: FloatingActionButton(
         onPressed: showPreUploadAlert,
         backgroundColor: const Color(0xFF16666B),
