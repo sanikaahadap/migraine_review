@@ -1,4 +1,4 @@
-package com.example.neurooooo
+package com.neurocare.neurooooo
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -52,7 +52,7 @@ dependencies:
   easy_pdf_viewer:
   rxdart: ^0.27.7
   timezone: ^0.9.3
-
+  change_app_package_name: ^1.1.0
   firebase_storage: ^11.6.6
   gallery_picker: ^0.4.7
   file_picker: ^6.2.0
